@@ -70,17 +70,17 @@ D = dN - E - \frac{d(d+1)}{2}.
 \end{align*}
 
 \subsection{Dynamical Systems}
-Additionally, consider a one-dimensional discrete-time dynamical system with state variable $y_n \in \real$ at some time $n \in \mathbb{Z}_{\geq 0}$ that evolves according to
+Additionally, consider a one-dimensional discrete-time dynamical system with state variable $r_n \in \real$ at some time $n \in \mathbb{Z}_{\geq 0}$ that evolves according to
 \begin{align*}
-y_{n+1} = f(y_n). 
+r_{n+1} = f(r_n). 
 \end{align*}
 This iterated map exists in a $k$-cycle if
 \begin{align*}
-y_{n+k} = f^k(y_n),
+r_{n+k} = f^k(r_n),
 \end{align*}
-where $f^k$ implies the application of the map $k$-times. This $k$-cycle is stable if the product of slopes evaluated along the cycle $y_{n+1},\dotsm,y_{n+k}$
+where $f^k$ implies the application of the map $k$-times. This $k$-cycle is stable if the product of slopes evaluated along the cycle $r_{n+1},\dotsm,r_{n+k}$
 \begin{align*}
-s = \prod_{i=1}^k \frac{d}{dy}f(y)\bigg|_{y_{n+i}},
+s = \prod_{i=1}^k \frac{d}{dr}f(r)\bigg|_{r_{n+i}},
 \end{align*}
 has magnitude less than $|s| < 1$. 
 
@@ -159,6 +159,7 @@ We show the $D=1$ conformational motion by slowly stretching $r_1$, the distance
 	\caption{\textbf{Aperiodic Network.} \textbf{(Left):} Same networks starting at different initial conditions (distances $r_1$ between the left-most red nodes), with \textbf{(Right):} corresponding cobweb plot.}
 	\label{fig:aperiod_sim2}
 \end{figure}
+
 
 
 \end{document}
