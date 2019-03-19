@@ -23,8 +23,10 @@ if(d==2)
     line([Xs(1,conn(:,1)); Xu(1,conn(:,2))],...
          [Xs(2,conn(:,1)); Xu(2,conn(:,2))],...
          'linewidth', lw, 'color', [0 0 0 ea]);
-    plot(Xs(1,:), Xs(2,:), 'o', 'linewidth', ms, 'markersize', ms, 'color', C_SN)
-    plot(Xu(1,:), Xu(2,:), 'o', 'linewidth', ms, 'markersize', ms, 'color', C_UN(1,:));
+%     plot(Xs(1,:), Xs(2,:), 'o', 'linewidth', ms, 'markersize', ms, 'color', C_SN)
+%     plot(Xu(1,:), Xu(2,:), 'o', 'linewidth', ms, 'markersize', ms, 'color', C_UN(1,:));
+    scatter(Xs(1,:), Xs(2,:), ms*16, C_SN, 'filled'); alpha(1);
+    scatter(Xu(1,:), Xu(2,:), ms*16, C_UN, 'filled'); alpha(1);
     set(gca,'visible',0);
     set(gcf,'color','w');
 elseif(d==3)

@@ -22,8 +22,12 @@ ns = size(Xs,2);
 nu = size(Xu,2);
 X = [Xs Xu];
 N = ns + nu;
-LVal = sqrt((Xs(1,conn(:,1)) - Xu(1,conn(:,2))).^2 +...
-            (Xs(2,conn(:,1)) - Xu(2,conn(:,2))).^2);
+LVal = [];
+
+if(size(conn,1) > 0)
+    LVal = sqrt((Xs(1,conn(:,1)) - Xu(1,conn(:,2))).^2 +...
+                (Xs(2,conn(:,1)) - Xu(2,conn(:,2))).^2);
+end
         
 if(size(connS,1) > 0)
     LVal = [LVal sqrt((Xs(1,connS(:,1)) - Xs(1,connS(:,2))).^2 +...
@@ -50,8 +54,10 @@ Jf = matlabFunction(J, 'Optimize', false, 'Sparse', true);
 disp('3');
 
 % Energy
-E = (LVal(1) - sqrt((XS(conn(1,1)) - XS(conn(1,2)+ns))^2 + (YS(conn(1,1)) - YS(conn(1,2)+ns))^2))^2;
-for i = 2:size(conn,1)
+if(size(conn,1)>0)
+    E = (LVal(1) - sqrt((XS(conn(1,1)) - XS(conn(1,2)+ns))^2 + (YS(conn(1,1)) - YS(conn(1,2)+ns))^2))^2;
+end
+for i = 1:size(conn,1)
     E = E + (LVal(i) - sqrt((XS(conn(i,1)) - XS(conn(i,2)+ns))^2 + (YS(conn(i,1)) - YS(conn(i,2)+ns))^2))^2;
 end
 for i = 1:size(connS,1)
@@ -138,9 +144,11 @@ C_UN = [100 100 255]/255;       % Color of Unspecified Node
 
 if(pV ~= 0)
     hold on;
-    line([XC(1,conn(:,1),1); XC(1,conn(:,2)+ns,1)],...
-         [XC(2,conn(:,1),1); XC(2,conn(:,2)+ns,1)],...
-         'linewidth', lw, 'color', [0 0 0 ea]);
+    if(size(conn,1)>0)
+        line([XC(1,conn(:,1),1); XC(1,conn(:,2)+ns,1)],...
+             [XC(2,conn(:,1),1); XC(2,conn(:,2)+ns,1)],...
+             'linewidth', lw, 'color', [0 0 0 ea]);
+    end
     if(size(connS,1) > 0)
         line([XC(1,connS(:,1),1); XC(1,connS(:,2),1)],...
              [XC(2,connS(:,1),1); XC(2,connS(:,2),1)],...
