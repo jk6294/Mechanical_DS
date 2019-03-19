@@ -4,8 +4,5 @@
 *.out
 *.gz
 
-# Images
-*.gif
-
 # Matlab
 *.asv
