@@ -70,7 +70,7 @@ X = [Xs Xu(1:d,:)];
 if(pV == 1)
     % Plot Parameters
     ms = 4;         % Marker Size
-    lw = 1;         % Line Width
+    lw = 2;         % Line Width
     ea = .5;        % Edge Transparency
 
     hold on

@@ -19,7 +19,7 @@ C_SN = [255 100 100]/255;       % Color of Specified Node
 C_UN = [100 100 255]/255;       % Color of Unspecified Node
 d = size(Xs,1);                 % Number of Dimensions
 ms = 4*sC;                      % Marker Size
-lw = 1*sC;                      % Line Width
+lw = 2*sC;                      % Line Width
 ea = .5;                        % Edge Transparency
 
 hold on
