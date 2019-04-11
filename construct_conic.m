@@ -1,10 +1,12 @@
-function [Q, W, v0, err] = construct_conic(Xs, Xsdot)
-% Code for generating points along the solution space given specified nodes
-% Able to construct conic in any dimension for any number of nodes
+function [Q, W, v0, err] = construct_conic(Xs, dXs, a)
+% Code for generating points along the solution space given specified 
+% nodes, and infinitesimal or finite motions. If z is not 0 or 1,
+% default to infinitesimal
 % 
 % Inputs
-% Xs:       d x n matrix of specified node positions
-% Xsdot:    d x n matrix of specified node motions
+% Xs:       d x n matrix of specified node initial positions
+% dXs:      d x n matrix of specified node motions or final positions
+% a:        1 x 1 scalar as 0 (infinitesimal) or 1 (finite)
 %
 % Outputs
 % Q:    m+1 x m+1       conic matrix for the m-dimensional solution space
@@ -15,12 +17,22 @@ function [Q, W, v0, err] = construct_conic(Xs, Xsdot)
 % Initialize Values and Matrices
 d = size(Xs,1);                         % Dimensions
 n = size(Xs,2);                         % Nodes
-M = sym([Xsdot' Xs' -ones(n,1)]);       % Linearized matrix M from main
-O = [zeros(d) eye(d) zeros(d,1);...     % O from supplement 
-     eye(d)   zeros(d,d+1);...
-     zeros(1,2*d+1)]/2;
-b = sum(sym(Xs.*Xsdot))';
 p = [zeros([2*d, 1]); 1];               % Inidicator vector
+
+% Nonlinear constraint and constant based on infinitesimal or finite
+if(a==1)
+    M = sym([2*Xs', -2*dXs', -ones(n,1)]);  % M from main text
+    O = [eye(d)   zeros(d) zeros(d,1);...   % Finite nonlinear constraint
+         zeros(d)  -eye(d) zeros(d,1);...
+         zeros(1,2*d+1)];
+    b = sum(Xs.^2 - dXs.^2)';
+else
+    M = sym([dXs' Xs' -ones(n,1)]);     % Linearized matrix M from main
+    O = [zeros(d) eye(d) zeros(d,1);... % Infinitesimal constraint
+         eye(d)   zeros(d,d+1);...
+         zeros(1,2*d+1)]/2;
+    b = sum(sym(Xs.*dXs))';
+end
 
 % Find homogeneous and non-homogenous solutions to linear problem
 W = null(M);           % Nullspace gives homogeneous solutions
