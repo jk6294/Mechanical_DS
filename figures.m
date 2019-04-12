@@ -239,3 +239,111 @@ fig.PaperSize = [14 8.8];
 saveas(fig, ['Figures/' fName], 'pdf');
 
 
+
+%% Figure 2
+% Prepare Space
+clear; clc;
+
+% Plot
+cCob = [200 200 100]/255;
+
+% Subplot Indices
+nRow = [6 6 12];     NRow = sum(nRow);   nR = [0 cumsum(nRow)];
+nCol = [4 4 4 4];   NCol = sum(nCol);   nC = [0 cumsum(nCol)];
+figM = reshape(1:(NRow*NCol), [NCol, NRow])';
+cellM = cell(length(nRow)*length(nCol),1);
+for i = 1:length(nRow)
+    for j = 1:length(nCol)
+        cP = figM((nR(i)+1):(nR(i+1)-1), (nC(j)+1):(nC(j+1)-1));
+        cellM(i+(j-1)*length(nRow)) = {cP(:)};
+    end
+end
+
+fig = figure(2); clf;
+
+% Two Modules
+subplot(NRow,NCol,cellM{1});
+tSx = .7;
+tSy = .1;
+Xs1 = [-2 -2  2  2;...
+       -1  1 -1  1];
+conn1 = [1 3; 1 4; 2 3; 2 4];
+visualize_network(Xs1-[3;0],[],conn1);
+visualize_network(Xs1+[3;0],[],conn1);
+text(-5-tSx, tSy, 'd_1','fontsize',10);
+text(-1-tSx, tSy, 'd_2','fontsize',10);
+text(1-tSx, tSy, 'd_2*','fontsize',10);
+text(5-tSx, tSy, 'd_3','fontsize',10);
+axis([-5 5 -2 2]);
+
+subplot(NRow,NCol,cellM{2});
+[Xs1a,conn1a] = tesselate_network(Xs1,conn1,[4;0],[2;1]);
+visualize_network(Xs1a,[],conn1a);
+text(-2-tSx, tSy, 'd_1','fontsize',10);
+text(2-tSx, tSy, 'd_2','fontsize',10);
+text(6-tSx, tSy, 'd_3','fontsize',10);
+axis([-5 5 -2 2]+[2 2 0 0]);
+
+% Cobweb Plot
+subplot(NRow,NCol,cellM{3});
+% Simulate Single Module for Cobweb
+dX1 = [0 0 0 0; -1 1 1 -1];
+[XCa,~] = sim_motion(Xs1,[],conn1,.01,170,dX1,0);   % Simulate
+[XCb,~] = sim_motion(Xs1,[],conn1,.01,170,-dX1,0);  % Simulate
+XC = cat(3,flip(XCa,3),XCb);
+d1 = sqrt(squeeze(sum((diff(XC(:,1:2,:),[],2)).^2)));
+d2 = sqrt(squeeze(sum((diff(XC(:,3:4,:),[],2)).^2)));
+% Simulate Combined Network for Propagation
+[XC1a,~] = sim_motion(Xs1a,[],conn1a,.01,140,Xs1a,0);
+D1 = sqrt(squeeze(sum(diff(XC1a,1,2).^2)));
+D1 = D1(1:2:end,:);
+plot(d1,d2);
+hold on;
+plot([1 4],[1 4], '--', 'color', [200 200 200]/255);
+% Cobweb 1
+pInd = 140;
+dP = [D1(:,pInd)';D1(:,pInd)']; dP = dP(:);
+line(dP,[0;dP(1:end-1)],'color',cCob);
+visualize_network(XC1a(:,:,pInd)/8+[2.5;3.6],[],conn1a,.3);
+% Cobweb 2
+pInd = 20;
+dP = [D1(:,pInd)';D1(:,pInd)']; dP = dP(:);
+line(dP,[0;dP(1:end-1)],'color',cCob);
+visualize_network(XC1a(:,:,pInd)/8+[2.2;2.4],[],conn1a,.3);
+hold off;
+set(gca,'visible',1,'XTick',[1 2.5 4],'YTick',[1 2.5 4],'fontsize',10,...
+        'xticklabel',{'1','d_k','4'},'yticklabel',{'1','d_{k+1}','4'});
+axis([1 4 1 4]);
+
+
+
+
+subplot(NRow,NCol,cellM{4});
+
+subplot(NRow,NCol,cellM{5});
+
+subplot(NRow,NCol,cellM{6});
+
+subplot(NRow,NCol,cellM{7});
+
+
+
+
+subplot(NRow,NCol,cellM{12});
+
+
+
+
+% Size and Save Figure
+fName = 'figure2';
+set(gcf, 'Renderer', 'painters'); 
+fig.PaperPositionMode = 'manual';
+fig.PaperUnits = 'centimeters';
+fig.PaperPosition = [-2.3 -0.6 24.7 9];
+fig.PaperSize = [19 8];
+saveas(fig, ['Figures/' fName], 'pdf');
+
+
+
+
+
