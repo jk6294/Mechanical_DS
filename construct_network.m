@@ -72,6 +72,7 @@ if(pV == 1)
     ms = 4;         % Marker Size
     lw = 2;         % Line Width
     ea = .5;        % Edge Transparency
+    bw = 0.5;       % Border width
 
     hold on
     if(d==2)
@@ -81,8 +82,10 @@ if(pV == 1)
              'linewidth', lw, 'color', [0 0 0 ea]);
         % Specified Nodes
         plot(Xs(1,:), Xs(2,:), 'o', 'linewidth', ms, 'markersize', ms, 'color', C_SN)
+        plot(Xs(1,:), Xs(2,:), 'ko', 'linewidth', bw, 'markersize', 2*ms)
         % Unspecified Nodes
         plot(Xu(1,:), Xu(2,:), 'o', 'linewidth', ms, 'markersize', ms, 'color', C_UN);
+        plot(Xu(1,:), Xu(2,:), 'ko', 'linewidth', bw, 'markersize', 2*ms);
         set(gca,'visible',0);
         set(gcf,'color','w');
     elseif(d==3)

@@ -1,4 +1,4 @@
-function [] = visualize_conic_finite(X0, XF, R, nC, nP, vS, vU)
+function [] = visualize_conic_finite(X0, XF, R, nC, nP, vS, vU, oV)
 % Function for visualizing solution spaces in 2D and 3D spatial coordinates
 % Solution space dimension must be between 1 and d
 %
@@ -10,13 +10,20 @@ function [] = visualize_conic_finite(X0, XF, R, nC, nP, vS, vU)
 % nP: Number of points to sample to show displacements
 % vS: Scalar: scales the specified arrows by this amount
 % vU: Scalar: scales the unspecified arrows by this amount
+% oV:    1 x 1 scalar: Optional if plotting for overlay
+
+% Optional Arguments
+if(nargin==7)
+    oV = 1;
+end
 
 % Visualization Parameters
 LW_SA = 2;                      % Line Width of Specified Arrow
 LW_UA = .7;                     % Line Width of Unspecified Arrows
 LW_SS = 1;                      % Line Width of Solution Space
-MS_SN = 4;                      % Marker Size of Specified Node
-MS_UN = 2;                      % Marker Size of Unspecified Node
+BW = 0.5;                       % Width of marker border
+MS_SN = 3;                      % Marker Size of Specified Node
+MS_UN = 1.5;                    % Marker Size of Unspecified Node
 C_SN = [255 100 100]/255;       % Color of Specified Node
 C_SA = [76 187 23;...           % Color of Specified Arrow
         50 255 50]/255;         
@@ -88,8 +95,8 @@ for j = 1:z
                  2*Q2(3,1)*xx + 2*Q2(3,2)*yy;
             % Generate contour along conic solution at 0
             hold on;
-            C = contour(xx,yy,F1,[0 0], 'linewidth', LW_SS, 'color', C_SS(1,:));
-            contour(xx,yy,F2,[0 0], 'linewidth', LW_SS, 'color', C_SS(2,:));
+            C = contour(xx,yy,F1,[0 0], 'linewidth', LW_SS, 'color', C_SS(1,:).^oV);
+            contour(xx,yy,F2,[0 0], 'linewidth', LW_SS, 'color', C_SS(2,:).^oV);
             Cu = C(:,floor(linspace(ceil(size(C,2)/nP),size(C,2)-1,nP)));
             % Generate displacements along curve
             S = [W v0] * P1 * [Cu; ones(1, size(Cu,2))];
@@ -103,17 +110,20 @@ for j = 1:z
         quiver(Cu(1,pInds), Cu(2,pInds), Uu(1,pInds)*vU, Uu(2,pInds)*vU, 0, 'linewidth', LW_UA, 'color', C_SS(j,:));
         % Specified Displacement
         quiver(X0(1,:), X0(2,:), Us(1,:,j)*vS, Us(2,:,j)*vS, 0, 'linewidth', LW_SA/3, 'color', C_SA(j,:));
-%         quiver(X0(1,:), X0(2,:), Us(1,:,j)*vS, Us(2,:,j)*vS, 0, 'linewidth', LW_SA/3, 'color', [1 1 1]);
-        % Unspecified Node Initial Position
-        plot(Cu(1,pInds), Cu(2,pInds), 'o', 'markersize', MS_UN, 'linewidth', MS_UN, 'color', C_SS(1,:));
-        % Unspecified Node Final Position
-        plot(Cup(1,pInds), Cup(2,pInds), 'o', 'markersize', MS_UN, 'linewidth', MS_UN, 'color', [1 1 1]);
-        plot(Cup(1,pInds), Cup(2,pInds), 'o', 'markersize', MS_UN+1, 'linewidth', MS_UN-1, 'color', C_SS(2,:));
-        % Specified Node Initial Position
-        plot(X0(1,:), X0(2,:), 'o', 'linewidth', MS_SN, 'markersize', MS_SN, 'color', C_SN);
-        % Specified Node Final Position
-        plot(XF(1,:), XF(2,:), 'o', 'linewidth', MS_SN, 'markersize', MS_SN, 'color', [1 1 1]);
-        plot(XF(1,:), XF(2,:), 'o', 'linewidth', MS_SN-3, 'markersize', MS_SN+3, 'color', C_SN);
+        if(oV==1)
+            % Unspecified Node Initial Position
+            plot(Cu(1,pInds), Cu(2,pInds), 'o', 'markersize', MS_UN, 'linewidth', MS_UN, 'color', C_SS(1,:));
+            plot(Cu(1,pInds), Cu(2,pInds), 'ko', 'markersize', 2*MS_UN, 'linewidth', BW);
+            % Unspecified Node Final Position
+            plot(Cup(1,pInds), Cup(2,pInds), 'o', 'markersize', MS_UN, 'linewidth', MS_UN, 'color', [1 1 1]);
+            plot(Cup(1,pInds), Cup(2,pInds), 'o', 'markersize', MS_UN+1, 'linewidth', MS_UN-1, 'color', C_SS(2,:));
+            % Specified Node Initial Position
+            plot(X0(1,:), X0(2,:), 'o', 'linewidth', MS_SN, 'markersize', MS_SN, 'color', C_SN);
+            plot(X0(1,:), X0(2,:), 'ko', 'linewidth', BW, 'markersize', 2*MS_SN);
+            % Specified Node Final Position
+            plot(XF(1,:), XF(2,:), 'o', 'linewidth', MS_SN, 'markersize', MS_SN, 'color', [1 1 1]);
+            plot(XF(1,:), XF(2,:), 'o', 'linewidth', MS_SN-2, 'markersize', MS_SN+2, 'color', C_SN);
+        end
         hold off;
         set(gca,'visible',0);
         set(gcf,'color','w');

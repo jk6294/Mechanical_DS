@@ -1,4 +1,4 @@
-function [] = visualize_conic(Xs, Xsdot, R, nC, nP, vS, vU)
+function [] = visualize_conic(Xs, Xsdot, R, nC, nP, vS, vU, oV)
 % Function for visualizing solution spaces in 2D and 3D spatial coordinates
 % Solution space must be 1 or 2 dimensional
 %
@@ -10,13 +10,20 @@ function [] = visualize_conic(Xs, Xsdot, R, nC, nP, vS, vU)
 % nP:    1 x 1 Number of points to sample to show displacements
 % vS:    1 x 1 scalar: scales the specified arrows by this amount
 % vU:    1 x 1 scalar: scales the unspecified arrows by this amount
+% oV:    1 x 1 scalar: Optional if plotting for overlay
+
+% Optional Arguments
+if(nargin==7)
+    oV = 1;
+end
 
 % Visualization Parameters
-LW_SA = 2;                      % Line Width of Specified Arrow
-LW_UA = .7;                     % Line Width of Unspecified Arrows
+LW_SA = 1;                      % Line Width of Specified Arrow
+LW_UA = 1;                     % Line Width of Unspecified Arrows
 LW_SS = 1;                      % Line Width of Solution Space
-MS_SN = 4;                      % Marker Size of Specified Node
-MS_UN = 2;                      % Marker Size of Unspecified Node
+BW = 0.5;                       % Width of marker border
+MS_SN = 3;                      % Marker Size of Specified Node
+MS_UN = 1.5;                      % Marker Size of Unspecified Node
 C_SN = [255 100 100]/255;       % Color of Specified Node
 C_SA = [76 187 23;...           % Color of Specified Arrow
         50 255 50]/255;         
@@ -59,7 +66,8 @@ for j = 1:z
                 2*Q(3,1)*xx + 2*Q(3,2)*yy;
             % Generate contour along conic solution at 0
             hold on;
-            C = contour(xx,yy,F,[0 0], 'linewidth', LW_SS, 'color', C_SS(j,:));
+            C = contour(xx,yy,F,[0 0], 'linewidth', LW_SS, 'color', C_SS(j,:).^oV);
+            contour(xx,yy,F,[0 0], 'linewidth', LW_SS/4, 'color', [1 1 1]);
             Cu = C(:,floor(linspace(ceil(size(C,2)/nP),size(C,2)-1,nP)));
             % Generate motions along curve
             Uu = zeros([2, nP, z]);
@@ -73,16 +81,22 @@ for j = 1:z
         hold on;
         % Unspecified Arrows
         quiver(Cu(1,pInd), Cu(2,pInd), Uu(1,pInd,j)*vU, Uu(2,pInd,j)*vU, 0,...
-            'linewidth', LW_UA, 'color', C_SS(j,:));
-        % Unspecified Nodes
-        plot(Cu(1,pInd), Cu(2,pInd), 'o', 'linewidth', MS_UN, 'markersize', MS_UN, 'color', C_SS(j,:));
+            'linewidth', LW_UA, 'color', C_SA(j,:));
+        quiver(Cu(1,pInd), Cu(2,pInd), Uu(1,pInd,j)*vU, Uu(2,pInd,j)*vU, 0,...
+            'linewidth', LW_UA/4, 'color', [1 1 1]);
         % Specified Arrows
         quiver(Xs(1,:), Xs(2,:), Xsdot(1,:,j)*vS, Xsdot(2,:,j)*vS, 0, 'filled',...
             'linewidth', LW_SA, 'color', C_SA(j,:));
         quiver(Xs(1,:), Xs(2,:), Xsdot(1,:,j)*vS, Xsdot(2,:,j)*vS, 0, 'filled',...
-            'linewidth', LW_SA/3, 'color', [1 1 1]);
-        % Specified Nodes
-        plot(Xs(1,:), Xs(2,:), 'o', 'linewidth', MS_SN, 'markersize', MS_SN, 'color', C_SN);
+            'linewidth', LW_SA/4, 'color', [1 1 1]);
+        if(oV==1)
+            % Unspecified Nodes
+            plot(Cu(1,pInd), Cu(2,pInd), 'o', 'linewidth', MS_UN, 'markersize', MS_UN, 'color', C_SS(j,:));
+            plot(Cu(1,pInd), Cu(2,pInd), 'ko', 'linewidth', BW, 'markersize', 2*MS_UN);
+            % Specified Nodes
+            plot(Xs(1,:), Xs(2,:), 'o', 'linewidth', MS_SN, 'markersize', MS_SN, 'color', C_SN);
+            plot(Xs(1,:), Xs(2,:), 'ko', 'linewidth', BW, 'markersize', 2*MS_SN);
+        end
         hold off;
         set(gca,'visible',0);
         set(gcf,'color','w');
