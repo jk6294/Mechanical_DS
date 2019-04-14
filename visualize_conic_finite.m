@@ -109,7 +109,7 @@ for j = 1:z
         % Unspecified Displacement
         quiver(Cu(1,pInds), Cu(2,pInds), Uu(1,pInds)*vU, Uu(2,pInds)*vU, 0, 'linewidth', LW_UA, 'color', C_SS(j,:));
         % Specified Displacement
-        quiver(X0(1,:), X0(2,:), Us(1,:,j)*vS, Us(2,:,j)*vS, 0, 'linewidth', LW_SA/3, 'color', C_SA(j,:));
+        quiver(X0(1,:), X0(2,:), Us(1,:,j)*vS, Us(2,:,j)*vS, 0, 'linewidth', LW_SA/3, 'color', C_SN(j,:));
         if(oV==1)
             % Unspecified Node Initial Position
             plot(Cu(1,pInds), Cu(2,pInds), 'o', 'markersize', MS_UN, 'linewidth', MS_UN, 'color', C_SS(1,:));

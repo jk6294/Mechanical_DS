@@ -81,12 +81,12 @@ for j = 1:z
         hold on;
         % Unspecified Arrows
         quiver(Cu(1,pInd), Cu(2,pInd), Uu(1,pInd,j)*vU, Uu(2,pInd,j)*vU, 0,...
-            'linewidth', LW_UA, 'color', C_SA(j,:));
+            'linewidth', LW_UA, 'color', C_SS(j,:));
         quiver(Cu(1,pInd), Cu(2,pInd), Uu(1,pInd,j)*vU, Uu(2,pInd,j)*vU, 0,...
             'linewidth', LW_UA/4, 'color', [1 1 1]);
         % Specified Arrows
         quiver(Xs(1,:), Xs(2,:), Xsdot(1,:,j)*vS, Xsdot(2,:,j)*vS, 0, 'filled',...
-            'linewidth', LW_SA, 'color', C_SA(j,:));
+            'linewidth', LW_SA, 'color', C_SN(j,:));
         quiver(Xs(1,:), Xs(2,:), Xsdot(1,:,j)*vS, Xsdot(2,:,j)*vS, 0, 'filled',...
             'linewidth', LW_SA/4, 'color', [1 1 1]);
         if(oV==1)
