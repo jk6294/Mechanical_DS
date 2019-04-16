@@ -549,45 +549,97 @@ text(.47,-.18,'d_k','Units','normalized');
 text(-.18,.4,'d_{k+1}','Units','normalized','rotation',90);
 
 
+% g: Limit Cycle
+subplot(NRow,NCol,cellM{7});
+Xs3 = [-s/2  0.0  s/2;...
+        -0.5  1.0 -0.5];
+Xu3 = [ 0.10 -0.30;...
+       -0.25 -0.90];
+Xs3p = [Xs3(1,:); -Xs3(2,:)];
+Xu3p = [Xu3(1,:); -Xu3(2,:)];
+conn3 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
+visualize_network(Xs3,Xu3,conn3);
+visualize_network(Xs3p+[3.5;.5],Xu3p+[3.5;.5],conn3);
+visualize_network(Xs3+[7;0],Xu3+[7;0],conn3);
+text(-1.2-tSx, .4+tSy, 'd_1','fontsize',10);
+text(1-tSx, .4+tSy, 'd_2','fontsize',10);
+text(2.3-tSx,-.1+tSy, 'd_1','fontsize',10);
+text(4.5-tSx,-.1+tSy, 'd_2','fontsize',10);
+text(5.8-tSx, .4+tSy, 'd_1','fontsize',10);
+text(8.0-tSx, .4+tSy, 'd_2','fontsize',10);
+axis([-1 8 -1.5 2]);
+
+
+% h: Tesselate Limit Cycle
+subplot(NRow,NCol,cellM{8});
+Xs3c = [-s/2  0  s/2  s;...
+        -1/2  1 -1/2  1];
+Xu3c = [Xu3 Xu3p+[s/2;.5]];
+conn3c = [1 5; 1 6; 2 5; 2 6; 2 7; 2 8; 3 5; 3 6; 3 7; 3 8; 4 7; 4 8];
+[Xs3a,Xu3a,conn3a] = tesselate_network_old(Xs3c,Xu3c,conn3c,[s;0],[4;1]);
+visualize_network(Xs3a,Xu3a,conn3a);
+axis([-1 8 -1.5 2]);
+text(-1.2-tSx, .4+tSy, 'd_1','fontsize',10);
+text(7.3-tSx,-.1+tSy, 'd_9','fontsize',10);
+
+
+%% i: Dynamics
+
+
+%% Size and Save Figure
+fName = 'figure2';
+set(gcf, 'Renderer', 'painters'); 
+fig.PaperPositionMode = 'manual';
+fig.PaperUnits = 'centimeters';
+fig.PaperPosition = [-2.3 -0.45 24.7 9];
+fig.PaperSize = [19 8];
+saveas(fig, ['Figures/' fName], 'pdf');
+
+
+
 
 %% Isolated Limit Cycle
 % subplot(NRow,NCol,cellM{7});
 figure(3); clf;
-Xs30 = [-s/4  0.0  s/1.5;...
-        -0.2  1.0 -1.2];
-Xs3T = [-s/1.5  0.0  s/4;...
-        -1.2  1.0  -0.2];
-dXs3 = [-2.0  0.0  0.0;...
-        -2.0  0.0  0.0]/5;
-subplot(3,3,1);
-visualize_conic_finite(Xs30,Xs3T,[-1 1;-1 1]*2,[100;100],0,1,1);
-visualize_conic(Xs30,dXs3,[-1 1;-1 1]*2,[100;100],0,1,1);
+Xs30 = [-s/2  0.0  s/2;...
+        -0.0  1.0 -1.0];
+Xs3T = [-s/2  0.0  s/2;...
+        -1.0  1.0 -0.0];
+dXs3 = [-1.5  0.0 -1.5;...
+        -1.0  0.0  1.0]/2;
+subplot(2,3,1);
+visualize_conic_finite(Xs30,Xs3T,[-1 1;-1 1]*2,[300;300],0,1,1);
+visualize_conic(Xs30,dXs3,[-1 1;-1 1]*2,[300;300],0,1,1);
+
+
+
 % Four Points
-% Xu3a = [-0.000;  1.434];
-% Xu3b = [-1.500; -0.5];
-% Xu3c = [ 1.600; -0.300];
-% Xu3d = [-0.215; -0.200];
+Xs30 = [-s/2  0.0  s/2;...
+        -0.5  1.0 -0.5];
+Xs3T = [-s/2  0.0  s/2;...
+        -0.5  1.0 -0.5];
+    
+% Good Limit Cycle
+% Xu3b = [.2;-0.4];
+% Xu3c = [-.2;-0.9];
 
-% Tent
-% Xu3a = [0.3030;  0.7071];
-% Xu3b = [0.0000; -0.5858];
-% Xu3c = [0.4242; -0.7071];
+% Better limit cycle
+Xu3b = [.1;-0.3];
+Xu3c = [-.25;-0.9];
 
-Xu3a = [0.6666;-0.22227];
-Xu3b = [0.8687;-0.5859];
-Xu3c = [0.1414;-0.8474];
-Xu3d = [0.2626;-0.8686];
+% attempt
+% Xu3b = [.05;-0.45];
+% Xu3c = [-.10;-0.9];
 
-
-Xu3 = [Xu3c Xu3d];
-subplot(3,3,2);
+Xu3 = [Xu3b Xu3c];
+subplot(2,3,2);
 conn3 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
 visualize_network(Xs30,Xu3,conn3);
-subplot(3,3,3);
-[XCa,fC] = sim_motion(Xs30,Xu3,conn3,.01,30,  -[Xs30 Xu3],1);
-[XCb,fC] = sim_motion(Xs30,Xu3,conn3,.001,2400,[Xs30 Xu3],1);
+subplot(2,3,3);
+[XCa,fC] = sim_motion(Xs30,Xu3,conn3,.01,400,  -[Xs30 Xu3],1);
+[XCb,fC] = sim_motion(Xs30,Xu3,conn3,.01,400,[Xs30 Xu3],1);
 XC = cat(3,flip(XCa,3),XCb);
-subplot(3,3,4);
+subplot(2,3,4);
 d10 = sqrt(sum(diff(Xs30,1,2).^2));
 d1T = sqrt(sum(diff(Xs3T,1,2).^2));
 d1 = sqrt(squeeze(sum((diff(XC(:,1:2,:),[],2)).^2)));
@@ -595,7 +647,7 @@ d2 = sqrt(squeeze(sum((diff(XC(:,2:3,:),[],2)).^2)));
 
 % Distance difference
 ddiff = abs(d1-d2);
-dInd = find(ddiff == min(ddiff));
+dInd = find(ddiff == min(ddiff),1);
 XM = XC(:,:,dInd);
 % Center and Rotate
 Xs = XC(:,1:3,dInd);
@@ -619,43 +671,16 @@ plot([1.3 3], [1.3 3]);
 plot(d10(1),d10(2), 'rx');
 plot(d1T(1),d1T(2), 'gx');
 hold off;
-subplot(3,3,5);
+drawnow;
+subplot(2,3,5);
 % Xs3c = [-s/2 0 s/2  s;...
 %         -1/2 1 -1/2 1];
 % Xu3c = [Xu3 [Xu3(1,:)+s/2; -Xu3(2,:)+.5]];
 connc = [1 5; 1 6; 2 5; 2 6; 2 7; 2 8; 3 5; 3 6; 3 7; 3 8; 4 7; 4 8];
-[Xs3a,Xu3a,conna] = tesselate_network_old(Xs3c,Xu3c,connc,[xSh*2;0],[5;1]);
+[Xs3a,Xu3a,conna] = tesselate_network_old(Xs3c,Xu3c,connc,[xSh*2;0],[10;1]);
 visualize_network(Xs3a,Xu3a,conna);
-subplot(3,3,6);
-% [XC,fC] = sim_motion(Xs3a,Xu3a,conna,.04,2000,-[Xs3a Xu3a],0);
-subplot(3,3,7);
-
-%%
-caF = 1;
-cla;
-D1 = sqrt(squeeze(sum(diff(XC,1,2).^2)));
-D1 = D1(1:21,:);
-hold on;
-% Cobweb 3
-pInd3 = 500;
-for i = 1:10:size(XC,3)
-    cla;
-    plot(d1,d2,'k-');
-    plot(d2,d1,'r-');
-    plot([1 2],[1 2], '--', 'color', [200 200 200]/255);
-    pInd3 = i;
-    dP = [D1(:,pInd3)';D1(:,pInd3)']; dP = dP(:);
-    dPa = dP(1:end-1); dPb = [1;dP(3:end)];
-    line(dP(1:end-1),[1;dP(3:end)],'color',[.5 .5 .5]);
-    drawnow;
-end
-% for i = 1:length(dP)-2
-%     ah = annotation('arrow','HeadLength',3,'HeadWidth',3,'color',cTr3);
-%     set(ah,'parent',gca);
-%     set(ah,'position',[dPa(i) dPb(i) diff(dPa(i:i+1))*caF diff(dPb(i:i+1))*caF]);
-%     pause(.1);
-% end
-
+subplot(2,3,6);
+% [XC,fC] = sim_motion(Xs3a,Xu3a,conna,.04,1000,[Xs3a Xu3a],0);
 
 
 %% Animate
@@ -669,11 +694,11 @@ nSV = 1;
 dT = 0.03;
 nV = [1:3];
 nS = 2;
-for i = 1:10:size(XCP,3)
+for i = 1:10:401
     cla;
     hold on;
     plot(d1,d2,'k-');
-    plot(d2,d1);
+%     plot(d2,d1);
 %     plot(d2,d1,'k-');
 %     plot(d1,d2);
     plot([1 2],[1 2], '--', 'color', [200 200 200]/255);
@@ -681,9 +706,9 @@ for i = 1:10:size(XCP,3)
     dP = [D1(:,pInd3)';D1(:,pInd3)']; dP = dP(:);
     dPa = dP(1:end-1); dPb = [0;dP(3:end)];
     line(dP(1:end-1),[0;dP(3:end)],'color',cTr3);
-    visualize_network(XCP(:,1:max(conna(:,1)),i)/12 + [1.1;1.4],...
-                      XCP(:,[(max(conna(:,1))+1):max(conna(:,2))],i)/12 + [1.1;1.4], conna,.5);
-    axis([1 4 1 4]);
+    visualize_network(XCP(:,1:max(conna(:,1)),i)/13 + [1.1;1.4],...
+                      XCP(:,[(max(conna(:,1))+1):max(conna(:,2))],i)/13 + [1.1;1.4], conna,1);
+    axis([1 2.5 1 2.5]);
     hold off;
 %     axis([min(min(min(XCP(1,:)))) max(max(max(XCP(1,:)))) min(min(min(XCP(2,:))))  max(max(max(XCP(2,:))))]);
     drawnow;
@@ -709,14 +734,7 @@ end
 
 
 
-%% Size and Save Figure
-fName = 'figure2';
-set(gcf, 'Renderer', 'painters'); 
-fig.PaperPositionMode = 'manual';
-fig.PaperUnits = 'centimeters';
-fig.PaperPosition = [-2.3 -0.45 24.7 9];
-fig.PaperSize = [19 8];
-saveas(fig, ['Figures/' fName], 'pdf');
+
 
 
 
