@@ -1,5 +1,5 @@
 % Figure 1: Designing a Single Module
-% Prepare Space
+%% Prepare Space
 clear; clc;
 
 % Plot Preliminaries
