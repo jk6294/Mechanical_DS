@@ -93,16 +93,22 @@ d2 = sqrt(squeeze(sum((diff(XC(:,3:4,:),[],2)).^2)));
 diff1 = abs(d1-2) + abs(d2-2);       dInd1 = find(diff1==min(diff1),1);
 diff2 = abs(d1-1.143) + abs(d2-3.5); dInd2 = find(diff2==min(diff2),1);
 diff3 = abs(d1-3.5) + abs(d2-1.143); dInd3 = find(diff3==min(diff3),1);
+diff4 = abs(d1-1.5) + abs(d2-2.66); dInd4 = find(diff4==min(diff4),1);
+diff5 = abs(d1-2.66) + abs(d2-1.5); dInd5 = find(diff5==min(diff5),1);
 plot(d1,d2,'k-','linewidth',.4);
 hold on;
 plot([1 4],[1 4], '--', 'color', [200 200 200]/255);
 plot(d1(dInd1),d2(dInd1),'ko','markersize',ms,'linewidth',lw);
 plot(d1(dInd2),d2(dInd2),'ko','markersize',ms,'linewidth',lw);
 plot(d1(dInd3),d2(dInd3),'ko','markersize',ms,'linewidth',lw);
+plot(d1(dInd4),d2(dInd4),'ko','markersize',ms,'linewidth',lw);
+plot(d1(dInd5),d2(dInd5),'ko','markersize',ms,'linewidth',lw);
 hold off;
-visualize_network(XC(:,:,dInd1)/8+[d1(dInd1)+.5 d2(dInd1)+.3]',[],conn1,netSc);
-visualize_network(XC(:,:,dInd2)/8+[d1(dInd2)+.5 d2(dInd2)+0]',[],conn1,netSc);
-visualize_network(XC(:,:,dInd3)/8+[d1(dInd3)+0 d2(dInd3)+.5]',[],conn1,netSc);
+visualize_network(XC(:,:,dInd1)/8+[d1(dInd1)+.3 d2(dInd1)+.4]',[],conn1,netSc);
+visualize_network(XC(:,:,dInd2)/8+[d1(dInd2)+.5 d2(dInd2)+.1]',[],conn1,netSc);
+visualize_network(XC(:,:,dInd3)/8+[d1(dInd3)+.1 d2(dInd3)+.4]',[],conn1,netSc);
+visualize_network(XC(:,:,dInd4)/8+[d1(dInd4)+.4 d2(dInd4)+.3]',[],conn1,netSc);
+visualize_network(XC(:,:,dInd5)/8+[d1(dInd5)+.2 d2(dInd5)+.35]',[],conn1,netSc);
 set(gca,'visible',1,'XTick',[1 4],'YTick',[1 4],'fontsize',10);
 xlabel('d_1', 'Position', [2.5,.6]);
 ylabel('d_2', 'Position', [.6 2.5]);
@@ -155,9 +161,10 @@ subplot(NRow,NCol,cellM{6});
 [XC2,~] = sim_motion(Xs2,Xu2,conn2,.005,920,[Xs2,Xu2],0);   % Simulate
 d1 = sqrt(squeeze(sum((diff(XC2(:,1:2,:),[],2)).^2)));
 d2 = sqrt(squeeze(sum((diff(XC2(:,2:3,:),[],2)).^2)));
-diff1 = abs(d1-s) + abs(d2-s);       dInd1 = find(diff1==min(diff1),1);
-diff2 = abs(d1-1.96) + abs(d2-2.74); dInd2 = find(diff2==min(diff2),1);
-diff3 = abs(d1-1.24) + abs(d2-2.48); dInd3 = find(diff3==min(diff3),1);
+diff1 = abs(d1-s) + abs(d2-s);        dInd1 = find(diff1==min(diff1),1);
+diff2 = abs(d1-1.99) + abs(d2-2.27); dInd2 = find(diff2==min(diff2),1);
+diff3 = abs(d1-1.94) + abs(d2-2.81);  dInd3 = find(diff3==min(diff3),1);
+diff4 = abs(d1-1.45) + abs(d2-2.81);  dInd4 = find(diff4==min(diff4),1);
 plot(d1,d2,'k-','linewidth',.4);
 hold on;
 plot([1 4],[1 4], '--', 'color', [200 200 200]/255);
@@ -166,13 +173,16 @@ plot(d1(dInd1),d2(dInd1),'o','markersize',ms,'linewidth',lw,'color',cArrow);
 plot(d1(dInd1),d2(dInd1),'ko','markersize',2*ms);
 plot(d1(dInd2),d2(dInd2),'ko','markersize',ms,'linewidth',lw);
 plot(d1(dInd3),d2(dInd3),'ko','markersize',ms,'linewidth',lw);
+plot(d1(dInd4),d2(dInd4),'ko','markersize',ms,'linewidth',lw);
 hold off;
 visualize_network(XC2(:,1:3,dInd1)/8+[d1(dInd1)+.2 d2(dInd1)-.2]',...
                   XC2(:,4:5,dInd1)/8+[d1(dInd1)+.2 d2(dInd1)-.2]',conn2,netSc);
 visualize_network(XC2(:,1:3,dInd2)/8+[d1(dInd2)+.3 d2(dInd2)+0]',...
                   XC2(:,4:5,dInd2)/8+[d1(dInd2)+.3 d2(dInd2)+0]',conn2,netSc);
-visualize_network(XC2(:,1:3,dInd3)/8+[d1(dInd3)-.1 d2(dInd3)+.3]',...
-                  XC2(:,4:5,dInd3)/8+[d1(dInd3)-.1 d2(dInd3)+.3]',conn2,netSc);
+visualize_network(XC2(:,1:3,dInd3)/8+[d1(dInd3)+.3 d2(dInd3)+.0]',...
+                  XC2(:,4:5,dInd3)/8+[d1(dInd3)+.3 d2(dInd3)+.0]',conn2,netSc);
+visualize_network(XC2(:,1:3,dInd4)/8+[d1(dInd4)-.3 d2(dInd4)+.0]',...
+                  XC2(:,4:5,dInd4)/8+[d1(dInd4)-.3 d2(dInd4)+.0]',conn2,netSc);
 set(gca,'visible',1,'XTick',[1 3],'YTick',[1 3],'fontsize',10);
 xlabel('d_1', 'Position', [2,.6]);
 ylabel('d_2', 'Position', [.6 2]);
@@ -215,23 +225,27 @@ dMT = sqrt(sum(diff(Xs3T,1,2).^2));
 d1 = sqrt(squeeze(sum((diff(XC3(:,1:2,:),[],2)).^2)));
 d2 = sqrt(squeeze(sum((diff(XC3(:,2:3,:),[],2)).^2)));
 diff1 = abs(d1-dM0(1)) + abs(d2-dM0(2));    dInd1 = find(diff1==min(diff1),1);
-diff2 = abs(d1-2.27) + abs(d2-2.00);        dInd2 = find(diff2==min(diff2),1);
-diff3 = abs(d1-dMT(1)) + abs(d2-dMT(2));    dInd3 = find(diff3==min(diff3),1);
+diff2 = abs(d1-2.16) + abs(d2-1.93);        dInd2 = find(diff2==min(diff2),1);
+diff3 = abs(d1-2.50) + abs(d2-2.25);        dInd3 = find(diff3==min(diff3),1);
+diff4 = abs(d1-dMT(1)) + abs(d2-dMT(2));    dInd4 = find(diff4==min(diff4),1);
 plot(d1,d2,'k-','linewidth',.4);
 hold on;
 plot([1 4],[1 4], '--', 'color', [200 200 200]/255);
 plot(d1(dInd1),d2(dInd1),'o','markersize',ms,'linewidth',lw,'color',cArrow);
 plot(d1(dInd1),d2(dInd1),'ko','markersize',2*ms);
 plot(d1(dInd2),d2(dInd2),'ko','markersize',ms,'linewidth',lw);
-plot(d1(dInd3),d2(dInd3),'o','markersize',ms,'linewidth',lw,'color',cArrow);
-plot(d1(dInd3),d2(dInd3),'ko','markersize',2*ms);
+plot(d1(dInd3),d2(dInd3),'ko','markersize',ms,'linewidth',lw);
+plot(d1(dInd4),d2(dInd4),'o','markersize',ms,'linewidth',lw,'color',cArrow);
+plot(d1(dInd4),d2(dInd4),'ko','markersize',2*ms);
 hold off;
 visualize_network(XC3(:,1:3,dInd1)/8+[d1(dInd1)+.1 d2(dInd1)-.4]',...
                   XC3(:,4:5,dInd1)/8+[d1(dInd1)+.1 d2(dInd1)-.4]',conn3,netSc);
-visualize_network(XC3(:,1:3,dInd2)/8+[d1(dInd2)+.2 d2(dInd2)-.3]',...
-                  XC3(:,4:5,dInd2)/8+[d1(dInd2)+.2 d2(dInd2)-.3]',conn3,netSc);
+visualize_network(XC3(:,1:3,dInd2)/8+[d1(dInd2)+.15 d2(dInd2)-.35]',...
+                  XC3(:,4:5,dInd2)/8+[d1(dInd2)+.15 d2(dInd2)-.35]',conn3,netSc);
 visualize_network(XC3(:,1:3,dInd3)/8+[d1(dInd3)+.2 d2(dInd3)-.3]',...
                   XC3(:,4:5,dInd3)/8+[d1(dInd3)+.2 d2(dInd3)-.3]',conn3,netSc);
+visualize_network(XC3(:,1:3,dInd4)/8+[d1(dInd4)+.2 d2(dInd4)-.3]',...
+                  XC3(:,4:5,dInd4)/8+[d1(dInd4)+.2 d2(dInd4)-.3]',conn3,netSc);
 set(gca,'visible',1,'XTick',[1 3],'YTick',[1 3],'fontsize',10);
 xlabel('d_1', 'Position', [2,.6]);
 ylabel('d_2', 'Position', [.6 2]);
@@ -275,8 +289,9 @@ dMT = sqrt(sum(diff(Xs4T,1,2).^2));
 d1 = sqrt(squeeze(sum((diff(XC4(:,1:2,:),[],2)).^2)));
 d2 = sqrt(squeeze(sum((diff(XC4(:,2:3,:),[],2)).^2)));
 diff1 = abs(d1-dM0(1)) + abs(d2-dM0(2));    dInd1 = find(diff1==min(diff1),1);
-diff2 = abs(d1-2.62) + abs(d2-2.00);        dInd2 = find(diff2==min(diff2),1);
-diff3 = abs(d1-dMT(1)) + abs(d2-dMT(2));    dInd3 = find(diff3==min(diff3),1);
+diff2 = abs(d1-2.27) + abs(d2-1.88);        dInd2 = find(diff2==min(diff2),1);
+diff3 = abs(d1-2.72) + abs(d2-2.26);        dInd3 = find(diff3==min(diff3),1);
+diff4 = abs(d1-dMT(1)) + abs(d2-dMT(2));    dInd4 = find(diff4==min(diff4),1);
 plot(d1,d2,'k-','linewidth',.4);
 hold on;
 plot([1 4],[1 4], '--', 'color', [200 200 200]/255);
@@ -284,15 +299,18 @@ plot([d1(dInd1)-.3,d1(dInd1)+.3],[d2(dInd1),d1(dInd1)],'-','color',cArrow);
 plot(d1(dInd1),d2(dInd1),'o','markersize',ms,'linewidth',lw,'color',cArrow);
 plot(d1(dInd1),d2(dInd1),'ko','markersize',2*ms);
 plot(d1(dInd2),d2(dInd2),'ko','markersize',ms,'linewidth',lw);
-plot(d1(dInd3),d2(dInd3),'o','markersize',ms,'linewidth',lw,'color',cArrow);
-plot(d1(dInd3),d2(dInd3),'ko','markersize',2*ms);
+plot(d1(dInd3),d2(dInd3),'ko','markersize',ms,'linewidth',lw);
+plot(d1(dInd4),d2(dInd4),'o','markersize',ms,'linewidth',lw,'color',cArrow);
+plot(d1(dInd4),d2(dInd4),'ko','markersize',2*ms);
 hold off;
-visualize_network(XC4(:,1:3,dInd1)/8+[d1(dInd1)-.2 d2(dInd1)+.3]',...
-                  XC4(:,4:5,dInd1)/8+[d1(dInd1)-.2 d2(dInd1)+.3]',conn4,netSc);
-visualize_network(XC4(:,1:3,dInd2)/8+[d1(dInd2)+.1 d2(dInd2)-.3]',...
-                  XC4(:,4:5,dInd2)/8+[d1(dInd2)+.1 d2(dInd2)-.3]',conn4,netSc);
-visualize_network(XC4(:,1:3,dInd3)/8+[d1(dInd3)-.3 d2(dInd3)-.15]',...
-                  XC4(:,4:5,dInd3)/8+[d1(dInd3)-.3 d2(dInd3)-.15]',conn4,netSc);
+visualize_network(XC4(:,1:3,dInd1)/8+[d1(dInd1)-.2 d2(dInd1)+.25]',...
+                  XC4(:,4:5,dInd1)/8+[d1(dInd1)-.2 d2(dInd1)+.25]',conn4,netSc);
+visualize_network(XC4(:,1:3,dInd2)/8+[d1(dInd2)-.3 d2(dInd2)+.2]',...
+                  XC4(:,4:5,dInd2)/8+[d1(dInd2)-.3 d2(dInd2)+.2]',conn4,netSc);
+visualize_network(XC4(:,1:3,dInd3)/8+[d1(dInd3)-.3 d2(dInd3)+.1]',...
+                  XC4(:,4:5,dInd3)/8+[d1(dInd3)-.3 d2(dInd3)+.1]',conn4,netSc);
+visualize_network(XC4(:,1:3,dInd4)/8+[d1(dInd4)-.3 d2(dInd4)-.15]',...
+                  XC4(:,4:5,dInd4)/8+[d1(dInd4)-.3 d2(dInd4)-.15]',conn4,netSc);
 set(gca,'visible',1,'XTick',[1 3],'YTick',[1 3],'fontsize',10);
 xlabel('d_1', 'Position', [2,.6]);
 ylabel('d_2', 'Position', [.6 2]);

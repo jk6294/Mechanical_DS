@@ -283,7 +283,7 @@ for i = 1:length(dP)-2
     set(ah,'position',[dPa(i) dPb(i) diff(dPa(i:i+1))*caF diff(dPb(i:i+1))*caF]);
 end
 % Cobweb 2
-pInd2 = 270;
+pInd2 = 300;
 dP = [D1(:,pInd2)';D1(:,pInd2)']; dP = dP(:);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
 line(dP(1:end-1),[1;dP(3:end)],'color',cTr2);
