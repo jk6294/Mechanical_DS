@@ -66,41 +66,41 @@ D1 = D1(1:size(Xs1a,2)-1,:);
 
 
 %% Animation
-fig = figure(4); clf;
-fName = 'animation.gif';
-dT = 0.03;
-% dT = 0.1;
-nXSh = 1.7;
-nYSh = 2;
-nSV = 1;
-
-for i = 1:20:size(XC,3)
-    cla;
-    dP = [D1(:,i)';D1(:,i)']; dP = dP(:);
-    dPa = dP(1:end-1); dPb = [1;dP(3:end)];
-    plot(d1,d2,'k-');
-    hold on;
-    plot([0 3],[0 3],'LineStyle','--','color',[0 0 0 .5]);
-    line(dP(1:end-1),[1;dP(3:end)]);
-    visualize_network(XC(:,1:size(Xs1a,2),i)/15 + [nXSh;nYSh],...
-                      XC(:,[1:size(Xu1a,2)]+size(Xs1a,2),i)/15 + [nXSh;nYSh],conn1a,.5);
-    axis([1.45 3 1.45 3]);
-%     construct_motion(XC(:,1:size(Xsa,2),i), XC(:,1:size(Xsa,2),i+1)-XC(:,1:size(Xsa,2),i), XC(:,[1:size(Xua,2)]+size(Xsa,2),i), conn, 20, 20);
-%     axis([min(min(XC(1,:,:))) max(max(XC(1,:,:))) min(min(XC(2,:,:))) max(max(XC(2,:,:)))]);
-    set(gca,'visible',0);
-    drawnow;
-
-    % Capture the plot as an image
-    frame = getframe(fig);
-    im = frame2im(frame);
-    [imind,cm] = rgb2ind(im,256);
-    % Write to the GIF File
-    if nSV == 1
-      imwrite(imind,cm,fName,'gif', 'Loopcount',inf,'DelayTime',dT);
-      nSV = 0;
-    else
-      imwrite(imind,cm,fName,'gif','WriteMode','append','DelayTime',dT);
-    end
-end
+% fig = figure(4); clf;
+% fName = 'animation.gif';
+% dT = 0.03;
+% % dT = 0.1;
+% nXSh = 1.7;
+% nYSh = 2;
+% nSV = 1;
+% 
+% for i = 1:20:size(XC,3)
+%     cla;
+%     dP = [D1(:,i)';D1(:,i)']; dP = dP(:);
+%     dPa = dP(1:end-1); dPb = [1;dP(3:end)];
+%     plot(d1,d2,'k-');
+%     hold on;
+%     plot([0 3],[0 3],'LineStyle','--','color',[0 0 0 .5]);
+%     line(dP(1:end-1),[1;dP(3:end)]);
+%     visualize_network(XC(:,1:size(Xs1a,2),i)/15 + [nXSh;nYSh],...
+%                       XC(:,[1:size(Xu1a,2)]+size(Xs1a,2),i)/15 + [nXSh;nYSh],conn1a,.5);
+%     axis([1.45 3 1.45 3]);
+% %     construct_motion(XC(:,1:size(Xsa,2),i), XC(:,1:size(Xsa,2),i+1)-XC(:,1:size(Xsa,2),i), XC(:,[1:size(Xua,2)]+size(Xsa,2),i), conn, 20, 20);
+% %     axis([min(min(XC(1,:,:))) max(max(XC(1,:,:))) min(min(XC(2,:,:))) max(max(XC(2,:,:)))]);
+%     set(gca,'visible',0);
+%     drawnow;
+% 
+% %     % Capture the plot as an image
+% %     frame = getframe(fig);
+% %     im = frame2im(frame);
+% %     [imind,cm] = rgb2ind(im,256);
+% %     % Write to the GIF File
+% %     if nSV == 1
+% %       imwrite(imind,cm,fName,'gif', 'Loopcount',inf,'DelayTime',dT);
+% %       nSV = 0;
+% %     else
+% %       imwrite(imind,cm,fName,'gif','WriteMode','append','DelayTime',dT);
+% %     end
+% end
 
 

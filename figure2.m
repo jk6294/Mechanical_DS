@@ -73,13 +73,13 @@ d2 = sqrt(squeeze(sum((diff(XC(:,3:4,:),[],2)).^2)));
 % Simulate Combined Network for Propagation
 [XC1a,~] = sim_motion(Xs1a,[],conn1a,.01,140,Xs1a,0);
 D1 = sqrt(squeeze(sum(diff(XC1a,1,2).^2)));
-D1 = D1(1:2:end,:);
+D1 = D1(1:2:end,:); 
 plot(d1,d2,'k-');
 hold on;
 plot([1 4],[1 4], '--', 'color', [200 200 200]/255);
 % Cobweb 1
 pInd1 = 140;
-dP = [D1(:,pInd1)';D1(:,pInd1)']; dP = dP(:);
+dP = [D1(:,pInd1)';D1(:,pInd1)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
 line(dP(1:end-1),[1;dP(3:end)],'color',cTr1);
 for i = 1:length(dP)-2
@@ -89,7 +89,7 @@ for i = 1:length(dP)-2
 end
 % Cobweb 2
 pInd2 = 70;
-dP = [D1(:,pInd2)';D1(:,pInd2)']; dP = dP(:);
+dP = [D1(:,pInd2)';D1(:,pInd2)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
 line(dP(1:end-1),[1;dP(3:end)],'color',cTr2);
 for i = 1:length(dP)-2
@@ -99,7 +99,7 @@ for i = 1:length(dP)-2
 end
 % Cobweb 3
 pInd3 = 1;
-dP = [D1(:,pInd3)';D1(:,pInd3)']; dP = dP(:);
+dP = [D1(:,pInd3)';D1(:,pInd3)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
 line(dP(1:end-1),[1;dP(3:end)],'color',cTr3);
 for i = 1:length(dP)-2
@@ -175,7 +175,7 @@ hold on;
 plot([1 4],[1 4], '--', 'color', [200 200 200]/255);
 % Cobweb 3
 pInd3 = 1;
-dP = [D1(:,pInd3)';D1(:,pInd3)']; dP = dP(:);
+dP = [D1(:,pInd3)';D1(:,pInd3)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
 line(dP(1:end-1),[1;dP(3:end)],'color',cTr3);
 for i = 1:length(dP)-2
@@ -185,7 +185,7 @@ for i = 1:length(dP)-2
 end
 % Cobweb 2
 pInd2 = 250;
-dP = [D1(:,pInd2)';D1(:,pInd2)']; dP = dP(:);
+dP = [D1(:,pInd2)';D1(:,pInd2)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
 line(dP(1:end-1),[1;dP(3:end)],'color',cTr2);
 for i = 1:length(dP)-2
@@ -195,7 +195,7 @@ for i = 1:length(dP)-2
 end
 % Cobweb 1
 pInd1 = 570;
-dP = [D1(:,pInd1)';D1(:,pInd1)']; dP = dP(:);
+dP = [D1(:,pInd1)';D1(:,pInd1)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
 line(dP(1:end-1),[1;dP(3:end)],'color',cTr1);
 for i = 1:length(dP)-2
@@ -274,7 +274,7 @@ hold on;
 plot([1 4],[1 4], '--', 'color', [200 200 200]/255);
 % Cobweb 3
 pInd3 = 1;
-dP = [D1(:,pInd3)';D1(:,pInd3)']; dP = dP(:);
+dP = [D1(:,pInd3)';D1(:,pInd3)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
 line(dP(1:end-1),[1;dP(3:end)],'color',cTr3);
 for i = 1:length(dP)-2
@@ -284,7 +284,7 @@ for i = 1:length(dP)-2
 end
 % Cobweb 2
 pInd2 = 300;
-dP = [D1(:,pInd2)';D1(:,pInd2)']; dP = dP(:);
+dP = [D1(:,pInd2)';D1(:,pInd2)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
 line(dP(1:end-1),[1;dP(3:end)],'color',cTr2);
 for i = 1:length(dP)-2
@@ -294,7 +294,7 @@ for i = 1:length(dP)-2
 end
 % Cobweb 1
 pInd1 = 462;
-dP = [D1(:,pInd1)';D1(:,pInd1)']; dP = dP(:);
+dP = [D1(:,pInd1)';D1(:,pInd1)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
 line(dP(1:end-1),[1;dP(3:end)],'color',cTr1);
 for i = 1:length(dP)-2
@@ -372,7 +372,7 @@ hold on;
 plot([.5 4],[.5 4], '--', 'color', [200 200 200]/255);
 % Cobweb 3
 pInd3 = 1;
-dP = [D1(:,pInd3)';D1(:,pInd3)']; dP = dP(:);
+dP = [D1(:,pInd3)';D1(:,pInd3)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [.5;dP(3:end)];
 line(dP(1:end-1),[.5;dP(3:end)],'color',cTr3);
 for i = 1:length(dP)-2
@@ -382,7 +382,7 @@ for i = 1:length(dP)-2
 end
 % Cobweb 2
 pInd2 = 5000;
-dP = [D1(:,pInd2)';D1(:,pInd2)']; dP = dP(:);
+dP = [D1(:,pInd2)';D1(:,pInd2)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [.5;dP(3:end)];
 line(dP(1:end-1),[.5;dP(3:end)],'color',cTr2);
 for i = 1:length(dP)-2
@@ -392,7 +392,7 @@ for i = 1:length(dP)-2
 end
 % Cobweb 1
 pInd1 = 11260;
-dP = [D1(:,pInd1)';D1(:,pInd1)']; dP = dP(:);
+dP = [D1(:,pInd1)';D1(:,pInd1)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [.5;dP(3:end)];
 line(dP(1:end-1),[.5;dP(3:end)],'color',cTr1);
 for i = 1:length(dP)-2
