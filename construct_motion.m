@@ -1,4 +1,4 @@
-function [Uss, Uus, err] = construct_motion(Xs, Xsdot, Xu, conn, vS, vU)
+function [Uss, Uus, err] = construct_motion(Xs, Xsdot, Xu, conn, vS, vU, sC)
 % Function to generate instantaneous motions
 %
 % Inputs
@@ -8,11 +8,17 @@ function [Uss, Uus, err] = construct_motion(Xs, Xsdot, Xu, conn, vS, vU)
 % conn:     s x 2   matrix of connections between node i and node j
 % vS:       1 x 1   If positive, v scales specified vectors. 0 to omit
 % vU:       1 x 1   If positive, v scales unspecified vectors. 0 to omit
+% sC:       1 x 1   optional scalar for scaling network
 %
 % Outputs
 % Uss: d x ns x m matrix of m non-rigid degrees of freedom of sp. nodes
 % Uus: d x nu x m matrix of m non-rigid degrees of freedom of unsp. nodes
 % err: 1 x z: error between actual and reconstructed motion
+
+% Optional Arguments
+if(nargin==6)
+    sC = 1;
+end
 
 % Initial Values
 d = size(Xs,1);         % Dimension of embedding
@@ -98,10 +104,11 @@ end
 
 % Visualize
 % Plot Parameters
-ms = 3;                         % Marker Size
-lw = 1.2;                       % Line Width
+ms = 3*sC;                      % Marker Size
+lw = 1.2*sC;                    % Line Width
+lwa = 1.2;                      % Arrow Line Width
 ea = .5;                        % Edge Transparency
-bw = 0.5;                       % Boarder Width
+bw = 0.5*sC;                    % Boarder Width
 C_SN = [255 100 100]/255;       % Color of Specified Node
 C_SA = [76 187 23;...           % Color of Specified Arrow
         50 255 50]/255;         
@@ -116,7 +123,8 @@ if(vS~=0 && vU ~= 0)
         % Motions
         for i = 1:max(z,1)
             U = [Uss(:,:,i)*vS Uus(:,:,i)*vU];
-            quiver(X(1,:), X(2,:),U(1,:), U(2,:), 0, 'linewidth', lw, 'color', C_SA(i,:));
+            quiver(X(1,:), X(2,:),U(1,:), U(2,:), 0, 'linewidth', lwa, 'color', C_SA(i,:));
+            quiver(X(1,:), X(2,:),U(1,:), U(2,:), 0, 'linewidth', lwa/4, 'color', [1,1,1]);
         end
         % Specified Nodes
         plot(Xs(1,:), Xs(2,:), 'o', 'linewidth', ms, 'markersize', ms, 'color', C_SN)
