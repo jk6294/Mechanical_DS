@@ -98,9 +98,10 @@ end
 
 % Visualize
 % Plot Parameters
-ms = 4;                         % Marker Size
-lw = 1;                         % Line Width
+ms = 3;                         % Marker Size
+lw = 1.2;                       % Line Width
 ea = .5;                        % Edge Transparency
+bw = 0.5;                       % Boarder Width
 C_SN = [255 100 100]/255;       % Color of Specified Node
 C_SA = [76 187 23;...           % Color of Specified Arrow
         50 255 50]/255;         
@@ -108,19 +109,23 @@ C_UN = [100 100 255]/255;       % Color of Solution Space
 if(vS~=0 && vU ~= 0)
     hold on;
     if(d==2)
+        % Edges
+        line([X(1,conn(:,1)); X(1,conn(:,2))],...
+             [X(2,conn(:,1)); X(2,conn(:,2))],...
+             'linewidth', lw, 'color', [0 0 0 ea]);
         % Motions
         for i = 1:max(z,1)
             U = [Uss(:,:,i)*vS Uus(:,:,i)*vU];
             quiver(X(1,:), X(2,:),U(1,:), U(2,:), 0, 'linewidth', lw, 'color', C_SA(i,:));
         end
-        % Edges
-        line([X(1,conn(:,1)); X(1,conn(:,2))],...
-             [X(2,conn(:,1)); X(2,conn(:,2))],...
-             'linewidth', lw, 'color', [0 0 0 ea]);
         % Specified Nodes
         plot(Xs(1,:), Xs(2,:), 'o', 'linewidth', ms, 'markersize', ms, 'color', C_SN)
+        plot(Xs(1,:), Xs(2,:), 'ko', 'linewidth', bw, 'markersize', ms*2)
         % Unspecified Nodes
-        plot(Xu(1,:), Xu(2,:), 'o', 'linewidth', ms, 'markersize', ms, 'color', C_UN);
+        if(size(Xu,2) > 0)
+            plot(Xu(1,:), Xu(2,:), 'o', 'linewidth', ms, 'markersize', ms, 'color', C_UN(1,:));
+            plot(Xu(1,:), Xu(2,:), 'ko', 'linewidth', bw, 'markersize', 2*ms);
+        end
         set(gca,'visible',0);
         set(gcf,'color','w');
     elseif(d==3)
