@@ -19,40 +19,65 @@ s = sqrt(3);
 pSc = 0.6;
 
 
-%% Test
-figure(4); clf;
-Xu = [[- lSh; 1.2] [ lSh; 1.2]];
-Xu = [Xu(1,:); -Xu(2,:)+.5];
-Xu2 = [[- lSh; 1] [ lSh; 1]];
-
-% Combine
-lSh = .6;
-Xs = [-s/2 0 s/2 s;...
-      -0.5 1 -0.5 1];
-Xu = [Xu2 Xu+[s/2;0]];
-conn = [1 5; 2 5; 3 5;...
-        1 6; 2 6; 3 6;...
-        2 7; 3 7; 4 7;...
-        2 8; 3 8; 4 8];
-[Xsc,Xuc,connc] = tesselate_network_old(Xs,Xu,conn,[s;1.5],[4,1]);
-visualize_network(Xsc, Xuc, connc, 1);
-
-[XC,fC] = sim_motion(Xsc,Xuc,connc,.01,200,[Xsc,Xuc],1);
-
-
-%% a: Deployable Slope
+%% a: Slope 1 Module
 subplot(NRow,NCol,cellM{1}); cla;
-Xs2 = [-s/2  0    s/2;...
-        -0.5  1.0 -0.5];
-dXs2 = [ 0.0  0.0 -0.0;...
+Xs1 = [-s/2  0    s/2;...
+       -0.5  1.0 -0.5];
+dXs1 = [ 0.0  0.0 -0.0;...
          0.4 -0.4  0.4];
 lSh = .6;
-Xu2 = [[- lSh; 1] [ lSh; 1]];
+Xu1 = [[- lSh; 1] [ lSh; 1]];
+
+Xs1f = [Xs1(1,:); -Xs1(2,:)+.5];
+dXs1f = [dXs1(1,:); -dXs1(2,:)];
+Xu1f = [Xu1(1,:); -Xu1(2,:)+.5];
+
+conn1 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
+construct_motion(Xs1, dXs1, Xu1, conn1, 1, 1, pSc);
+construct_motion(Xs1f+[2;0], dXs1f, Xu1f+[2;0], conn1, 1, 1, pSc);
+construct_motion(Xs1+[4;0], dXs1, Xu1+[4;0], conn1, 1, 1, pSc);
+construct_motion(Xs1f+[6;0], dXs1f, Xu1f+[6;0], conn1, 1, 1, pSc);
+axis([-1 8 -1.5 2] - [.5 .5 0 0]);
+
+
+%% b: Slope 1 Combined Network
+subplot(NRow,NCol,cellM{2}); cla;
+% Left ==> Right
+Xs1c = [Xs1 Xs1f+[s/2;0]];
+Xu1c = [Xu1 Xu1f+[s/2;0]];
+conn1c = [1 7; 2 7; 3 7; 1 8; 2 8; 3 8; 4 9; 5 9; 6 9; 4 10; 5 10; 6 10];
+[Xs1a,Xu1a,conn1a] = tesselate_network_old(Xs1c,Xu1c,conn1c,[s;0],[2;1]);
+dXs1G = zeros(size(Xs1a)); 
+dXs1G(2,1:2:size(Xs1a,2)) = .5;
+dXs1G(2,2:2:size(Xs1a,2)) = -.5;
+construct_motion(Xs1a,dXs1G,Xu1a,conn1a,1,1, pSc);
+axis([-1 8 -1.5 2] - [2 2 0 0]);
+
+
+%% c: Slope 1 Propagate Combined Motion
+subplot(NRow,NCol,cellM{3}); cla;
+[Xs1a,Xu1a,conn1a] = tesselate_network_old(Xs1c,Xu1c,conn1c,[s;0],[8;1]);
+[XC,fC] = sim_motion(Xs1a,Xu1a,conn1a,.05,60,[Xs1a Xu1a],0);
+visualize_network(XC(:,1:size(Xs1a,2),end),...
+                  XC(:,[1:size(Xu1a,2)]+size(Xs1a,2),end),conn1a, pSc);
+axis([-1 8 -1.5 2]+[3 3 0 0]);
+
+
+%% d: Slope -2 Module
+subplot(NRow,NCol,cellM{4}); cla;
+Xs2 = [-s/2  0    s/2;...
+       -0.5  1.0 -0.5];
+dXs2 = [ 0.0  0.0 -0.0;...
+         0.4  0.0 -0.8];
+Xu2 = [ 0.2 -0.384;...
+       -0.5 -1.01];
+
+% visualize_conic(Xs2,dXs2,[-2 2;-2 2],[100;100],5,1,1);
 
 Xs2f = [Xs2(1,:); -Xs2(2,:)+.5];
 dXs2f = [dXs2(1,:); -dXs2(2,:)];
 Xu2f = [Xu2(1,:); -Xu2(2,:)+.5];
-
+% 
 conn2 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
 construct_motion(Xs2, dXs2, Xu2, conn2, 1, 1, pSc);
 construct_motion(Xs2f+[2;0], dXs2f, Xu2f+[2;0], conn2, 1, 1, pSc);
@@ -61,31 +86,30 @@ construct_motion(Xs2f+[6;0], dXs2f, Xu2f+[6;0], conn2, 1, 1, pSc);
 axis([-1 8 -1.5 2] - [.5 .5 0 0]);
 
 
-%% b: Combined Network
-subplot(NRow,NCol,cellM{2}); cla;
+%% e: Slope -2 Combined Network
+subplot(NRow,NCol,cellM{5}); cla;
 % Left ==> Right
 Xs2c = [Xs2 Xs2f+[s/2;0]];
 Xu2c = [Xu2 Xu2f+[s/2;0]];
 conn2c = [1 7; 2 7; 3 7; 1 8; 2 8; 3 8; 4 9; 5 9; 6 9; 4 10; 5 10; 6 10];
-[Xs2a,Xu2a,conn2a] = tesselate_network_old(Xs2c,Xu2c,conn2c,[s;0],[2;1]);
+[Xs2a,Xu2a,conn2a] = tesselate_network_old(Xs2c,Xu2c,conn2c,[s;0],[4;1]);
 dXs2G = zeros(size(Xs2a)); 
-dXs2G(2,1:2:size(Xs2a,2)) = .5;
-dXs2G(2,2:2:size(Xs2a,2)) = -.5;
+dXs2G(2,end) = 1;
 construct_motion(Xs2a,dXs2G,Xu2a,conn2a,1,1, pSc);
-axis([-1 8 -1.5 2] - [2 2 0 0]);
+axis([-1 8 -1.5 2] - [0 0 0 0]);
 
 
-%% c: Propagate Combined Motion
-subplot(NRow,NCol,cellM{3}); cla;
+%% f: Slope -2 Propagate Combined Motion
+subplot(NRow,NCol,cellM{6}); cla;
 [Xs2a,Xu2a,conn2a] = tesselate_network_old(Xs2c,Xu2c,conn2c,[s;0],[8;1]);
-[XC,fC] = sim_motion(Xs2a,Xu2a,conn2a,.05,60,[Xs2a Xu2a],0);
+[XC,fC] = sim_motion(Xs2a,Xu2a,conn2a,.05,750,[Xs2a Xu2a],0);
 visualize_network(XC(:,1:size(Xs2a,2),end),...
                   XC(:,[1:size(Xu2a,2)]+size(Xs2a,2),end),conn2a, pSc);
 axis([-1 8 -1.5 2]+[3 3 0 0]);
 
 
-%% d: Single Network: Amplify
-subplot(NRow,NCol,cellM{4}); cla;
+%% g: Slope 0 Module
+subplot(NRow,NCol,cellM{7}); cla;
 Xs1 = [-s/2  0    s/2;...
         -0.5  1.0 -0.5];
 dXs1 = [ 0.0  0.0 -0.0;...
@@ -105,8 +129,8 @@ construct_motion(Xs1f+[6;0], dXs1f, Xu1f+[6;0], conn1, 1, 1, pSc);
 axis([-1 8 -1.5 2] - [.5 .5 0 0]);
 
    
-%% e: Combined Network
-subplot(NRow,NCol,cellM{5}); cla;
+%% h: Slope 0 Combined Network
+subplot(NRow,NCol,cellM{8}); cla;
 % Left ==> Right
 Xs1c = [Xs1 Xs1f+[s/2;0]];
 Xu1c = [Xu1 Xu1f+[s/2;0]];
@@ -117,8 +141,8 @@ construct_motion(Xs1a,dXs1G,Xu1a,conn1a,1,1, pSc);
 axis([-1 8 -1.5 2] - [2 2 0 0]);
 
 
-%% f: Propagate Combined Motion
-subplot(NRow,NCol,cellM{6}); cla;
+%% i: Slope 0 Propagate Combined Motion
+subplot(NRow,NCol,cellM{9}); cla;
 [Xs1a,Xu1a,conn1a] = tesselate_network_old(Xs1c,Xu1c,conn1c,[s;0],[8;1]);
 [XC,fC] = sim_motion(Xs1a,Xu1a,conn1a,.05,226,-[Xs1a Xu1a],0);
 visualize_network(XC(:,1:size(Xs1a,2),end),...
@@ -126,8 +150,8 @@ visualize_network(XC(:,1:size(Xs1a,2),end),...
 axis([-1 8 -1.5 2]+[3.5 3.5 0 0]);
 
 
-%% g: Place Modules
-subplot(NRow,NCol,cellM{7}); cla;
+%% j: Place Modules
+subplot(NRow,NCol,cellM{10}); cla;
 
 % Construct Unit
 lSh = .2;
@@ -167,7 +191,7 @@ visualize_network(Xs3a4+[1;1],Xu3a4+[1;1],conn3a1, pSc/2);
 axis([0 9 0 3.5]*2);
 
 
-%% h: Combine and Simulate Modules
+%% k: Combine and Simulate Modules
 Xs3a = [Xs3a1 Xs3a2 Xs3a3 Xs3a4];
 Xu3a = [Xu3a1 Xu3a2 Xu3a3 Xu3a4];
 conn3a = conn3a1;
@@ -181,15 +205,15 @@ conn3a = [[conn3a(:,1), conn3a(:,2)+max(conn3a1(:,1))];...
 [XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.05,600,-[Xs3a Xu3a],0);
 
 %% Visualize
-subplot(NRow,NCol,cellM{8}); cla;
+subplot(NRow,NCol,cellM{11}); cla;
 pInd = 200;
 visualize_network(XC(:,1:size(Xs3a,2),pInd),...
                   XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd),conn3a, pSc/2);
 axis([0 9 0 3.5]*2 - [0 0 .5 .5]);
 
 
-%% i: More Collapsed
-subplot(NRow,NCol,cellM{9}); cla;
+%% l: More Collapsed
+subplot(NRow,NCol,cellM{12}); cla;
 pInd = 508;
 XCD = -(XC(:,:,pInd)-XC(:,:,pInd-1));
 XCD = 2*XCD / sqrt(sum(diag(XCD*XCD')));
@@ -273,25 +297,14 @@ saveas(fig, ['Figures/' fName], 'pdf');
 % nXSh = 1.6;
 % nYSh = 2;
 % nSV = 1;
-% Xs1a = Xs3a;
-% Xu1a = Xu3a;
-% conn1a = conn3a;
+% Xs1a = Xs2a;
+% Xu1a = Xu2a;
+% conn1a = conn2a;
 % XdotV = XC(:,1:size(Xs1a,2),1); XdotV = XdotV-mean(XdotV,2);
 % 
-% for i = 1:5:size(XC,3)
+% for i = 1:10:1600
 %     cla;
-% %     dP = [D1(:,i)';D1(:,i)']; dP = dP(:);
-% %     dPa = dP(1:end-1); dPb = [1;dP(3:end)];
-% %     [Us, Uu, ~] = construct_motion(XC(:,1:size(Xs1a,2),i),...
-% %                                    XdotV,...
-% %                                    XC(:,[1:size(Xu1a,2)]+size(Xs1a,2),i),...
-% %                                    conn1a, 0, 0);
-% %     Us = 0.3*Us/sqrt(sum(sum(Us.^2))); 
-% %     Uu = 0.3*Uu/sqrt(sum(sum(Uu.^2)));
-% %     XdotV = Us;
-% %     quiver(XC(1,:,i)/10 + nXSh, XC(2,:,i)/10 + nYSh,[Us(1,:) Uu(1,:)], [Us(2,:) Uu(2,:)],0);
-% 
-%     R = rigidity(XC(:,:,i),conn3a);
+%     R = rigidity(XC(:,:,i),conn1a);
 %     [u,sa,va] = svds(R,1,'smallest');
 %     visualize_network(XC(:,1:size(Xs1a,2),i),...
 %                       XC(:,[1:size(Xu1a,2)]+size(Xs1a,2),i),conn1a,1);
@@ -299,8 +312,6 @@ saveas(fig, ['Figures/' fName], 'pdf');
 %     quiver(XC(1,:,i),XC(2,:,i),-va(1:size(XC,2))',-va([1:size(XC,2)]+size(XC,2))',0);
 %     hold off;
 %     axis([min(min(XC(1,:,:))) max(max(XC(1,:,:))) min(min(XC(2,:,:))) max(max(XC(2,:,:)))]);
-% %     construct_motion(XC(:,1:size(Xsa,2),i), XC(:,1:size(Xsa,2),i+1)-XC(:,1:size(Xsa,2),i), XC(:,[1:size(Xua,2)]+size(Xsa,2),i), conn, 20, 20);
-% %     axis([min(min(XC(1,:,:))) max(max(XC(1,:,:))) min(min(XC(2,:,:))) max(max(XC(2,:,:)))]);
 %     set(gca,'visible',0);
 %     drawnow;
 % 
