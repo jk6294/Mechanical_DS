@@ -113,11 +113,17 @@ Xs3 = [-s/2  0    s/2;...
         -0.5  1.0 -0.5];
 dXs3 = [ 3  0.0 -0.0;...
          s  0.0 -0.0]/5;
-lSh = -0.2;
-lSh2 = 0.001;
-Xu3 = [Xs3(:,3)-lSh*[s;-3]+lSh2*[3;s] Xs3(:,2)+lSh*[s;-3]+lSh2*[3;s]];
-% lSh = 0.3;
-% Xu3 = [[-lSh; -.5] [.25*s; .25]+[-1;s]*lSh/2];
+% lSh = -0.2;
+% lSh2 = 0.0001;
+% Xu3 = [Xs3(:,3)-lSh*[s;-3]+lSh2*[3;s] Xs3(:,2)+lSh*[s;-3]+lSh2*[3;s]];
+
+lSh = 0.3;
+Xu3 = [[-lSh; -.5] [.25*s; .25]+[-1;s]*lSh/2];
+
+% lSh = -0.3;
+% lSh2 = -0.3;
+% Xu3 = [Xs3(:,1)-lSh*[s;-3] Xs3(:,2)+lSh2*[s;-3]];
+
 conn3 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
 
 % Single Module Flipped
@@ -141,13 +147,10 @@ axis(axM - [1 1 1.3 1.3]);
 %% f: Slope 0 Propagate Combined Motion
 subplot(NRow,NCol,cellM{8}); cla;
 [Xs3a,Xu3a,conn3a] = tesselate_network_old(Xs3c,Xu3c,conn3c,[s;0],[8;1]);
-% [XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.05,300, [Xs3a Xu3a],0);
-LVals = sqrt(squeeze(sum((Xs3a(:,conn3a(:,1))-Xu3a(:,conn3a(:,2)-size(Xs3a,2))).^2)));
-[XC,fC] = sim_motion3D_congrad(Xs3a,Xu3a,conn3a,LVals',.001,1000,...
-                               [1,size(Xs3a,2)],[Xs3a(:,1),Xs3a(:,end)+[4;0.2]],0,1);
-visualize_network(XC(:,1:size(Xs3a,2),end)/1.2,...
-                  XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),end)/1.2,conn3a, pSc);
-axis(axM+[2.5 2.5 -1.3 -1.3]);
+[XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.05,270, [Xs3a Xu3a],0);
+visualize_network(XC(:,1:size(Xs3a,2),end)/1.4,...
+                  XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),end)/1.4,conn3a, pSc);
+axis(axM+[0.5 0.5 -1.3 -1.3]);
 
 
 %% g: Place Modules
@@ -157,81 +160,90 @@ subplot(NRow,NCol,cellM{3}); cla;
 Xs3 = [-s/2  0    s/2;...
        -0.5  1.0 -0.5];
 Xs3f = [Xs3(1,:); -Xs3(2,:)+.5];
-% lSh = .3;
-% Xu3 = [[-lSh; -.5] [.25*s; .25]+[-1;s]*lSh/2];
-lSh = -0.2;
-Xu3 = [Xs3(:,3)-lSh*[s;-3]+.01*[3;s] Xs3(:,2)+lSh*[s;-3]+.01*[3;s]];
+lSh = .3;
+Xu3 = [[-lSh; -.5] [.25*s; .25]+[-1;s]*lSh/2];
+
+% lSh = -0.3;
+% lSh2 = 0.000;
+% Xu3 = [Xs3(:,1)-lSh*[s;-3]+lSh2*[3;s] Xs3(:,2)+lSh*[s;-3]+lSh2*[3;s]];
+
 Xu3 = [-Xu3(1,:); Xu3(2,:)];
 Xu3f = [Xu3(1,:); -Xu3(2,:)+.5];
 Xs3c = [Xs3 Xs3f+[s/2;0]];
 Xu3c = [Xu3 Xu3f+[s/2;0]];
 conn1c = [1 7; 2 7; 3 7; 1 8; 2 8; 3 8; 4 9; 5 9; 6 9; 4 10; 5 10; 6 10];
-[Xs3a1,Xu3a1,conn3a1] = tesselate_network_old(Xs3c,Xu3c,conn1c,[s;0],[3;1]);
+nR = 5;
+[Xs3a1,Xu3a1,conn3a1] = tesselate_network_old(Xs3c,Xu3c,conn1c,[s;0],[nR;1]);
 % Remove Offset
 Xu3a1 = Xu3a1-Xs3a1(:,1);
 Xs3a1 = Xs3a1-Xs3a1(:,1);
 
 % Modified Unit: Extend Length 1
-Xs3a2 = Xs3a1+[3*s;0];
-Xu3a2 = Xu3a1+[3*s;0];
+Xs3a2 = Xs3a1+[nR*s;0];
+Xu3a2 = Xu3a1+[nR*s;0];
 
 % Modified Unit: Branch 1
 Xs3a3 = [Xs3a1(1,:); -Xs3a1(2,:)]; 
 Xu3a3 = [Xu3a1(1,:); -Xu3a1(2,:)]; 
 Rz = rotz(60); Rz = Rz(1:2,1:2);
-Xs3a3 = Rz*Xs3a3 + [2.5*s;1.5];
-Xu3a3 = Rz*Xu3a3 + [2.5*s;1.5];
+Xs3a3 = Rz*Xs3a3 + [(nR-.5)*s;1.5];
+Xu3a3 = Rz*Xu3a3 + [(nR-.5)*s;1.5];
 
 % Modified Unit: Branch 2
-Xs3a4 = Xs3a1+[4.5*s;4.5];
-Xu3a4 = Xu3a1+[4.5*s;4.5];
+Xs3a4 = Xs3a1+[1.5*nR*s;1.5*nR];
+Xu3a4 = Xu3a1+[1.5*nR*s;1.5*nR];
 
 % Visualize
 visualize_network(Xs3a1,Xu3a1,conn3a1, pSc/2);
 visualize_network(Xs3a2+[1;0],Xu3a2+[1;0],conn3a1, pSc/2);
 visualize_network(Xs3a3+[0;1],Xu3a3+[0;1],conn3a1, pSc/2);
-visualize_network(Xs3a4+[1;1],Xu3a4+[1;1],conn3a1, pSc/2);
-axis([0 9 0 3.5]*2);
+% visualize_network(Xs3a4+[1;1],Xu3a4+[1;1],conn3a1, pSc/2);
+axis([0 9 -.3 3.2]*3.2);
 
 
-%% h: Combine and Simulate Modules
-Xs3a = [Xs3a1 Xs3a2 Xs3a3 Xs3a4];
-Xu3a = [Xu3a1 Xu3a2 Xu3a3 Xu3a4];
+%% Combine and Simulate Modules
+Xs3a = [Xs3a1 Xs3a2 Xs3a3];
+Xu3a = [Xu3a1 Xu3a2 Xu3a3];
 conn3a = conn3a1;
 conn3a = [[conn3a(:,1), conn3a(:,2)+max(conn3a1(:,1))];...
           [conn3a1(:,1)+max(conn3a(:,1)), conn3a1(:,2)+max(conn3a(:,2))]];
 conn3a = [[conn3a(:,1), conn3a(:,2)+max(conn3a1(:,1))];...
           [conn3a1(:,1)+max(conn3a(:,1)), conn3a1(:,2)+max(conn3a(:,2))]];
-conn3a = [[conn3a(:,1), conn3a(:,2)+max(conn3a1(:,1))];...
-          [conn3a1(:,1)+max(conn3a(:,1)), conn3a1(:,2)+max(conn3a(:,2))]];
+% conn3a = [[conn3a(:,1), conn3a(:,2)+max(conn3a1(:,1))];...
+%           [conn3a1(:,1)+max(conn3a(:,1)), conn3a1(:,2)+max(conn3a(:,2))]];
 [Xs3a,Xu3a,conn3a] = tesselate_network_old(Xs3a,Xu3a,conn3a,[1;1],[1;1]);
-[XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.05,600,-[Xs3a Xu3a],0);
 
-%% Visualize
+XsDot = [zeros(size(Xs3a)) zeros(size(Xu3a))];
+XsDot(2,size(Xs3a,2)) = -1;
+
+[XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.01,3000,XsDot,0);
+
+%% h: Visualize
 subplot(NRow,NCol,cellM{6}); cla;
-pInd = 200;
+pInd = 600;
 visualize_network(XC(:,1:size(Xs3a,2),pInd),...
                   XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd),conn3a, pSc/2);
-axis([0 9 0 3.5]*2 - [0 0 .5 .5]);
+axis([0 9 -.3 3.2]*3.2);
 
 
 %% l: More Collapsed
 subplot(NRow,NCol,cellM{9}); cla;
-pInd = 508;
+pInd = 1500;
 XCD = -(XC(:,:,pInd)-XC(:,:,pInd-1));
 XCD = 2*XCD / sqrt(sum(diag(XCD*XCD')));
 R = rigidity(XC(:,:,pInd),conn3a);
 [ua,sa,va] = svds(R,2,'smallest');
 va = -2*va/sqrt(va'*va);
-hold on;
-quiver(XC(1,:,pInd),XC(2,:,pInd),va(1:size(XC,2),2)',...
-       va([1:size(XC,2)]+size(XC,2),2)',0,'linewidth',1.2,'color',[0,.8,.8]);
-quiver(XC(1,:,pInd),XC(2,:,pInd),va(1:size(XC,2),2)',...
-       va([1:size(XC,2)]+size(XC,2),2)',0,'linewidth',.3,'color',[1 1 1]);
-hold off;
-construct_motion(XC(:,1:size(Xs3a,2),pInd),XCD(:,1:size(Xs3a,2)),...
-                 XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd),conn3a,1,1, pSc/2);
-axis([0 9 0 3.5]*2 - [0 0 .5 .5]);
+% hold on;
+% quiver(XC(1,:,pInd),XC(2,:,pInd),va(1:size(XC,2),2)',...
+%        va([1:size(XC,2)]+size(XC,2),2)',0,'linewidth',1.2,'color',[0,.8,.8]);
+% quiver(XC(1,:,pInd),XC(2,:,pInd),va(1:size(XC,2),2)',...
+%        va([1:size(XC,2)]+size(XC,2),2)',0,'linewidth',.3,'color',[1 1 1]);
+% hold off;
+% construct_motion(XC(:,1:size(Xs3a,2),pInd),XCD(:,1:size(Xs3a,2)),...
+%                  XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd),conn3a,1,1, pSc/2);
+visualize_network(XC(:,1:size(Xs3a,2),pInd),XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd),conn3a,pSc/2);
+axis([0 9 -.3 3.2]*2.5);
 
 
 %% Size and Save Figure
@@ -299,42 +311,42 @@ saveas(fig, ['Figures/' fName], 'pdf');
 
 
 %% Animate Network Alone
-fig = figure(5); clf;
-fName = 'animation_net.gif';
-dT = 0.03;
-% dT = 0.1;
-nXSh = 1.6;
-nYSh = 2;
-nSV = 1;
-Xs1a = Xs3a;
-Xu1a = Xu3a;
-conn1a = conn3a;
-XdotV = XC(:,1:size(Xs1a,2),1); XdotV = XdotV-mean(XdotV,2);
-
-for i = 1:20:size(XC,3)
-    cla;
-%     R = rigidity(XC(:,:,i),conn1a);
-%     [u,sa,va] = svds(R,1,'smallest');
-    visualize_network(XC(:,1:size(Xs1a,2),i),...
-                      XC(:,[1:size(Xu1a,2)]+size(Xs1a,2),i),conn1a,.5);
-    hold on;
-%     quiver(XC(1,:,i),XC(2,:,i),-va(1:size(XC,2))',-va([1:size(XC,2)]+size(XC,2))',0);
-    hold off;
-    axis([min(min(XC(1,:,:))) max(max(XC(1,:,:))) min(min(XC(2,:,:))) max(max(XC(2,:,:)))]);
-    set(gca,'visible',0);
-    drawnow;
-
-    % Capture the plot as an image
-    frame = getframe(fig);
-    im = frame2im(frame);
-    [imind,cm] = rgb2ind(im,256);
-    % Write to the GIF File
-    if nSV == 1
-      imwrite(imind,cm,fName,'gif', 'Loopcount',inf,'DelayTime',dT);
-      nSV = 0;
-    else
-      imwrite(imind,cm,fName,'gif','WriteMode','append','DelayTime',dT);
-    end
-end
+% fig = figure(5); clf;
+% fName = 'animation_net.gif';
+% dT = 0.03;
+% % dT = 0.1;
+% nXSh = 1.6;
+% nYSh = 2;
+% nSV = 1;
+% Xs1a = Xs3a;
+% Xu1a = Xu3a;
+% conn1a = conn3a;
+% XdotV = XC(:,1:size(Xs1a,2),1); XdotV = XdotV-mean(XdotV,2);
+% 
+% for i = 1:20:size(XC,3)
+%     cla;
+% %     R = rigidity(XC(:,:,i),conn1a);
+% %     [u,sa,va] = svds(R,1,'smallest');
+%     visualize_network(XC(:,1:size(Xs1a,2),i),...
+%                       XC(:,[1:size(Xu1a,2)]+size(Xs1a,2),i),conn1a,1);
+%     hold on;
+% %     quiver(XC(1,:,i),XC(2,:,i),-va(1:size(XC,2))',-va([1:size(XC,2)]+size(XC,2))',0);
+%     hold off;
+%     axis([min(min(XC(1,:,:))) max(max(XC(1,:,:))) min(min(XC(2,:,:))) max(max(XC(2,:,:)))]);
+%     set(gca,'visible',0);
+%     drawnow;
+% 
+%     % Capture the plot as an image
+%     frame = getframe(fig);
+%     im = frame2im(frame);
+%     [imind,cm] = rgb2ind(im,256);
+%     % Write to the GIF File
+%     if nSV == 1
+%       imwrite(imind,cm,fName,'gif', 'Loopcount',inf,'DelayTime',dT);
+%       nSV = 0;
+%     else
+%       imwrite(imind,cm,fName,'gif','WriteMode','append','DelayTime',dT);
+%     end
+% end
 
 
