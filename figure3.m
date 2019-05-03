@@ -3,16 +3,29 @@
 clear; clc;
 
 % Subplot Indices
-nRow = [6 6 9];     NRow = sum(nRow);   nR = [0 cumsum(nRow)];
-nCol = [5 5 5];   NCol = sum(nCol);   nC = [0 cumsum(nCol)];
-figM = reshape(1:(NRow*NCol), [NCol, NRow])';
-cellM = cell(length(nRow)*length(nCol),1);
-for i = 1:length(nRow)
-    for j = 1:length(nCol)
-        cP = figM((nR(i)+1):(nR(i+1)-1), (nC(j)+1):(nC(j+1)-1));
-        cellM(i+(j-1)*length(nRow)) = {cP(:)};
+NRow = 20;
+NCol = 14;
+nBal = {[1 1 1], [1 1 1], [1 1 1], [1 1 1 1]};
+cellL = [0 cumsum(cellfun('length',nBal))];
+cellM = cell(sum(cellL));
+for i = 1:length(nBal)
+    s = nBal{i}; 
+    su = cumsum(s/sum(s)*NCol);
+    sd = 
+    for j = 1:length(s)
+        cellM(j+cellL(i)) = 
     end
 end
+
+figM = reshape(1:(NRow*NCol), [NCol, NRow])';
+cellM = cell(length(nRow)*length(nCol),1);
+for i = 1:length(nRow)-1
+    for j = 1:length(nCol)
+        cP = figM((nR(i)+1):(nR(i+1)-1), (nC(j)+1):(nC(j+1)-1));
+        cellM(i+(j-1)*(length(nRow)-1)) = {cP(:)};
+    end
+end
+
 % Figure Axis Bounds
 axM = [0 9 0 3];
 
@@ -64,7 +77,7 @@ axis(axM+[2.5 2.5 -1.3 -1.3]);
 
 
 %% c: Slope -2 Module
-subplot(NRow,NCol,cellM{4}); cla;
+subplot(NRow,NCol,cellM{3}); cla;
 
 % Single Module
 Xs2 = [-s/2  0    s/2;...
@@ -97,7 +110,7 @@ axis(axM - [1 1 1.3 1.3]);
 
 
 %% d: Slope -2 Propagate Combined Motion
-subplot(NRow,NCol,cellM{5}); cla;
+subplot(NRow,NCol,cellM{4}); cla;
 [Xs2a,Xu2a,conn2a] = tesselate_network_old(Xs2c,Xu2c,conn2c,[s;0],[8;1]);
 [XC,fC] = sim_motion(Xs2a,Xu2a,conn2a,.05, 18, [Xs2a Xu2a],0);
 visualize_network(XC(:,1:size(Xs2a,2),end),...
@@ -106,24 +119,15 @@ axis(axM+[2.5 2.5 -1.3 -1.3]);
 
 
 %% e: Slope 0 Module
-subplot(NRow,NCol,cellM{7}); cla;
+subplot(NRow,NCol,cellM{5}); cla;
 
 % Single Module
 Xs3 = [-s/2  0    s/2;...
         -0.5  1.0 -0.5];
-dXs3 = [ 3  0.0 -0.0;...
-         s  0.0 -0.0]/5;
-% lSh = -0.2;
-% lSh2 = 0.0001;
-% Xu3 = [Xs3(:,3)-lSh*[s;-3]+lSh2*[3;s] Xs3(:,2)+lSh*[s;-3]+lSh2*[3;s]];
-
+dXs3 = [ 0.0  0.0 -0.0;...
+         0.5  0.0 -0.0];
 lSh = 0.3;
 Xu3 = [[-lSh; -.5] [.25*s; .25]+[-1;s]*lSh/2];
-
-% lSh = -0.3;
-% lSh2 = -0.3;
-% Xu3 = [Xs3(:,1)-lSh*[s;-3] Xs3(:,2)+lSh2*[s;-3]];
-
 conn3 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
 
 % Single Module Flipped
@@ -140,21 +144,21 @@ dXs3G = zeros(size(Xs3a)); dXs3G(:,1) =  dXs3(:,1);
 
 % Visualize
 construct_motion(Xs3/1.2, dXs3, Xu3/1.2, conn3, 1, 1, pSc);
-construct_motion(Xs3a/1.2+[2.5;0],dXs3G,Xu3a/1.2+[2.5;0],conn3a,1,1, pSc);
+construct_motion(Xs3a+[2.5;0],dXs3G,Xu3a+[2.5;0],conn3a,1,1, pSc);
 axis(axM - [1 1 1.3 1.3]);
 
 
 %% f: Slope 0 Propagate Combined Motion
-subplot(NRow,NCol,cellM{8}); cla;
+subplot(NRow,NCol,cellM{6}); cla;
 [Xs3a,Xu3a,conn3a] = tesselate_network_old(Xs3c,Xu3c,conn3c,[s;0],[8;1]);
-[XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.05,270, [Xs3a Xu3a],0);
-visualize_network(XC(:,1:size(Xs3a,2),end)/1.4,...
-                  XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),end)/1.4,conn3a, pSc);
-axis(axM+[0.5 0.5 -1.3 -1.3]);
+[XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.05,170,-[Xs3a Xu3a],0);
+visualize_network(XC(:,1:size(Xs3a,2),end),...
+                  XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),end),conn3a, pSc);
+axis(axM+[2 2 -1.3 -1.3]);
 
 
 %% g: Place Modules
-subplot(NRow,NCol,cellM{3}); cla;
+subplot(NRow,NCol,cellM{7}); cla;
 
 % Construct Unit
 Xs3 = [-s/2  0    s/2;...
