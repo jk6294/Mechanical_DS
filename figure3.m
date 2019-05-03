@@ -197,7 +197,6 @@ Xu3a4 = Xu3a1+[1.5*nR*s;1.5*nR];
 visualize_network(Xs3a1,Xu3a1,conn3a1, pSc/2);
 visualize_network(Xs3a2+[1;0],Xu3a2+[1;0],conn3a1, pSc/2);
 visualize_network(Xs3a3+[0;1],Xu3a3+[0;1],conn3a1, pSc/2);
-% visualize_network(Xs3a4+[1;1],Xu3a4+[1;1],conn3a1, pSc/2);
 axis([0 9 -.3 3.2]*3.2);
 
 
@@ -209,14 +208,12 @@ conn3a = [[conn3a(:,1), conn3a(:,2)+max(conn3a1(:,1))];...
           [conn3a1(:,1)+max(conn3a(:,1)), conn3a1(:,2)+max(conn3a(:,2))]];
 conn3a = [[conn3a(:,1), conn3a(:,2)+max(conn3a1(:,1))];...
           [conn3a1(:,1)+max(conn3a(:,1)), conn3a1(:,2)+max(conn3a(:,2))]];
-% conn3a = [[conn3a(:,1), conn3a(:,2)+max(conn3a1(:,1))];...
-%           [conn3a1(:,1)+max(conn3a(:,1)), conn3a1(:,2)+max(conn3a(:,2))]];
 [Xs3a,Xu3a,conn3a] = tesselate_network_old(Xs3a,Xu3a,conn3a,[1;1],[1;1]);
 
 XsDot = [zeros(size(Xs3a)) zeros(size(Xu3a))];
 XsDot(2,size(Xs3a,2)) = -1;
 
-[XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.01,3000,XsDot,0);
+[XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.01,3200,XsDot,0);
 
 %% h: Visualize
 subplot(NRow,NCol,cellM{6}); cla;
@@ -226,9 +223,9 @@ visualize_network(XC(:,1:size(Xs3a,2),pInd),...
 axis([0 9 -.3 3.2]*3.2);
 
 
-%% l: More Collapsed
+%% i: More Collapsed
 subplot(NRow,NCol,cellM{9}); cla;
-pInd = 1500;
+pInd = 3190;
 XCD = -(XC(:,:,pInd)-XC(:,:,pInd-1));
 XCD = 2*XCD / sqrt(sum(diag(XCD*XCD')));
 R = rigidity(XC(:,:,pInd),conn3a);
