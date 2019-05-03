@@ -3,28 +3,32 @@
 clear; clc;
 
 % Subplot Indices
-NRow = 20;
 NCol = 14;
-nBal = {[1 1 1], [1 1 1], [1 1 1], [1 1 1 1]};
-cellL = [0 cumsum(cellfun('length',nBal))];
-cellM = cell(sum(cellL));
-for i = 1:length(nBal)
-    s = nBal{i}; 
+colBal = {[1 1 1], [1 1 1], 1};
+rowBal = [6 6 10]; 
+NRow = sum(rowBal);
+ru = cumsum(rowBal)-1;
+rd = [0 ru(1:end-1)+1]+1;
+cellL = [0 cumsum(cellfun('length',colBal))];
+cellM = cell(1,cellL(end));
+for i = 1:length(colBal)
+    s = colBal{i}; 
     su = cumsum(s/sum(s)*NCol);
-    sd = 
+    sd = [1 su(1:end-1)+2];
     for j = 1:length(s)
-        cellM(j+cellL(i)) = 
+        cellM(j+cellL(i)) = {[[sd(j) su(j)]+rd(i)*NCol,...
+                              [sd(j) su(j)]+ru(i)*NCol]};
     end
 end
 
-figM = reshape(1:(NRow*NCol), [NCol, NRow])';
-cellM = cell(length(nRow)*length(nCol),1);
-for i = 1:length(nRow)-1
-    for j = 1:length(nCol)
-        cP = figM((nR(i)+1):(nR(i+1)-1), (nC(j)+1):(nC(j+1)-1));
-        cellM(i+(j-1)*(length(nRow)-1)) = {cP(:)};
-    end
-end
+% figM = reshape(1:(NRow*NCol), [NCol, NRow])';
+% cellM = cell(length(nRow)*length(nCol),1);
+% for i = 1:length(nRow)-1
+%     for j = 1:length(nCol)
+%         cP = figM((nR(i)+1):(nR(i+1)-1), (nC(j)+1):(nC(j+1)-1));
+%         cellM(i+(j-1)*(length(nRow)-1)) = {cP(:)};
+%     end
+% end
 
 % Figure Axis Bounds
 axM = [0 9 0 3];
@@ -63,21 +67,22 @@ dXs1G(2,2:2:size(Xs1a,2)) = -.5;
 % Show Module
 construct_motion(Xs1, dXs1, Xu1, conn1, 1, 1, pSc);
 construct_motion(Xs1a+[2.5;0],dXs1G,Xu1a+[2.5;0],conn1a,1,1, pSc);
-
 axis(axM - [1 1 1.3 1.3]);
+drawnow;
 
 
 %% b: Slope 1 Propagate Combined Motion
-subplot(NRow,NCol,cellM{2}); cla;
+subplot(NRow,NCol,cellM{4}); cla;
 [Xs1a,Xu1a,conn1a] = tesselate_network_old(Xs1c,Xu1c,conn1c,[s;0],[8;1]);
 [XC,fC] = sim_motion(Xs1a,Xu1a,conn1a,.05,60,[Xs1a Xu1a],0);
 visualize_network(XC(:,1:size(Xs1a,2),end),...
                   XC(:,[1:size(Xu1a,2)]+size(Xs1a,2),end),conn1a, pSc);
 axis(axM+[2.5 2.5 -1.3 -1.3]);
+drawnow;
 
 
 %% c: Slope -2 Module
-subplot(NRow,NCol,cellM{3}); cla;
+subplot(NRow,NCol,cellM{2}); cla;
 
 % Single Module
 Xs2 = [-s/2  0    s/2;...
@@ -107,19 +112,21 @@ dXs2G(2,end-6) = dXs2G(2,end)*(Uss(2,1)/Uss(2,3))^3;
 construct_motion(Xs2, dXs2, Xu2, conn2, 1, 1, pSc);
 construct_motion(Xs2a+[2.5;0],dXs2G,Xu2a+[2.5;0],conn2a,1,1, pSc);
 axis(axM - [1 1 1.3 1.3]);
+drawnow;
 
 
 %% d: Slope -2 Propagate Combined Motion
-subplot(NRow,NCol,cellM{4}); cla;
+subplot(NRow,NCol,cellM{5}); cla;
 [Xs2a,Xu2a,conn2a] = tesselate_network_old(Xs2c,Xu2c,conn2c,[s;0],[8;1]);
 [XC,fC] = sim_motion(Xs2a,Xu2a,conn2a,.05, 18, [Xs2a Xu2a],0);
 visualize_network(XC(:,1:size(Xs2a,2),end),...
                   XC(:,[1:size(Xu2a,2)]+size(Xs2a,2),end),conn2a, pSc);
 axis(axM+[2.5 2.5 -1.3 -1.3]);
+drawnow;
 
 
 %% e: Slope 0 Module
-subplot(NRow,NCol,cellM{5}); cla;
+subplot(NRow,NCol,cellM{3}); cla;
 
 % Single Module
 Xs3 = [-s/2  0    s/2;...
@@ -146,6 +153,7 @@ dXs3G = zeros(size(Xs3a)); dXs3G(:,1) =  dXs3(:,1);
 construct_motion(Xs3/1.2, dXs3, Xu3/1.2, conn3, 1, 1, pSc);
 construct_motion(Xs3a+[2.5;0],dXs3G,Xu3a+[2.5;0],conn3a,1,1, pSc);
 axis(axM - [1 1 1.3 1.3]);
+drawnow;
 
 
 %% f: Slope 0 Propagate Combined Motion
@@ -155,6 +163,7 @@ subplot(NRow,NCol,cellM{6}); cla;
 visualize_network(XC(:,1:size(Xs3a,2),end),...
                   XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),end),conn3a, pSc);
 axis(axM+[2 2 -1.3 -1.3]);
+drawnow;
 
 
 %% g: Place Modules
@@ -166,10 +175,6 @@ Xs3 = [-s/2  0    s/2;...
 Xs3f = [Xs3(1,:); -Xs3(2,:)+.5];
 lSh = .3;
 Xu3 = [[-lSh; -.5] [.25*s; .25]+[-1;s]*lSh/2];
-
-% lSh = -0.3;
-% lSh2 = 0.000;
-% Xu3 = [Xs3(:,1)-lSh*[s;-3]+lSh2*[3;s] Xs3(:,2)+lSh*[s;-3]+lSh2*[3;s]];
 
 Xu3 = [-Xu3(1,:); Xu3(2,:)];
 Xu3f = [Xu3(1,:); -Xu3(2,:)+.5];
@@ -201,7 +206,8 @@ Xu3a4 = Xu3a1+[1.5*nR*s;1.5*nR];
 visualize_network(Xs3a1,Xu3a1,conn3a1, pSc/2);
 visualize_network(Xs3a2+[1;0],Xu3a2+[1;0],conn3a1, pSc/2);
 visualize_network(Xs3a3+[0;1],Xu3a3+[0;1],conn3a1, pSc/2);
-axis([0 9 -.3 3.2]*3.2);
+axis([0 70 0 10.5]-[0 0 .5 .5]);
+drawnow;
 
 
 %% Combine and Simulate Modules
@@ -217,34 +223,43 @@ conn3a = [[conn3a(:,1), conn3a(:,2)+max(conn3a1(:,1))];...
 XsDot = [zeros(size(Xs3a)) zeros(size(Xu3a))];
 XsDot(2,size(Xs3a,2)) = -1;
 
-[XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.01,3200,XsDot,0);
+[XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.01,3300,XsDot,0);
 
 %% h: Visualize
-subplot(NRow,NCol,cellM{6}); cla;
 pInd = 600;
-visualize_network(XC(:,1:size(Xs3a,2),pInd),...
-                  XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd),conn3a, pSc/2);
-axis([0 9 -.3 3.2]*3.2);
+rotV = rotz(-1); rotV = rotV(1:2,1:2);
+sh = [21; .1];
+visualize_network(rotV*XC(:,1:size(Xs3a,2),pInd)+sh,...
+                  rotV*XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd)+sh,conn3a, pSc/2);
+drawnow;
 
 
 %% i: More Collapsed
-subplot(NRow,NCol,cellM{9}); cla;
-pInd = 3190;
+pInd = 1500;
 XCD = -(XC(:,:,pInd)-XC(:,:,pInd-1));
 XCD = 2*XCD / sqrt(sum(diag(XCD*XCD')));
 R = rigidity(XC(:,:,pInd),conn3a);
 [ua,sa,va] = svds(R,2,'smallest');
 va = -2*va/sqrt(va'*va);
-% hold on;
-% quiver(XC(1,:,pInd),XC(2,:,pInd),va(1:size(XC,2),2)',...
-%        va([1:size(XC,2)]+size(XC,2),2)',0,'linewidth',1.2,'color',[0,.8,.8]);
-% quiver(XC(1,:,pInd),XC(2,:,pInd),va(1:size(XC,2),2)',...
-%        va([1:size(XC,2)]+size(XC,2),2)',0,'linewidth',.3,'color',[1 1 1]);
-% hold off;
-% construct_motion(XC(:,1:size(Xs3a,2),pInd),XCD(:,1:size(Xs3a,2)),...
-%                  XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd),conn3a,1,1, pSc/2);
-visualize_network(XC(:,1:size(Xs3a,2),pInd),XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd),conn3a,pSc/2);
-axis([0 9 -.3 3.2]*2.5);
+rotV = rotz(-1.5); rotV = rotV(1:2,1:2);
+sh = [40; 0];
+visualize_network(rotV*XC(:,1:size(Xs3a,2),pInd)+sh,...
+                  rotV*XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd)+sh,conn3a, pSc/2);
+drawnow;
+
+
+%% j: More Collapsed
+pInd = 3300;
+XCD = -(XC(:,:,pInd)-XC(:,:,pInd-1));
+XCD = 2*XCD / sqrt(sum(diag(XCD*XCD')));
+R = rigidity(XC(:,:,pInd),conn3a);
+[ua,sa,va] = svds(R,2,'smallest');
+va = -2*va/sqrt(va'*va);
+rotV = rotz(-1.5); rotV = rotV(1:2,1:2);
+sh = [55; -.2];
+visualize_network(rotV*XC(:,1:size(Xs3a,2),pInd)+sh,...
+                  rotV*XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd)+sh,conn3a, pSc/2);
+drawnow;
 
 
 %% Size and Save Figure
@@ -252,7 +267,7 @@ fName = 'figure3';
 set(gcf, 'Renderer', 'painters'); 
 fig.PaperPositionMode = 'manual';
 fig.PaperUnits = 'centimeters'; 
-fig.PaperPosition = [-2.1 -0.3 18.4 5.9];
+fig.PaperPosition = [-2.0 -0.3 17.4 6.2];
 fig.PaperSize = [14 5.5];
 saveas(fig, ['Figures/' fName], 'pdf');
 
