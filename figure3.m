@@ -5,7 +5,7 @@ clear; clc;
 % Subplot Indices
 NCol = 14;
 colBal = {[1 1 1], [1 1 1], 1};
-rowBal = [6 6 10]; 
+rowBal = [9 9 14]; 
 NRow = sum(rowBal);
 ru = cumsum(rowBal)-1;
 rd = [0 ru(1:end-1)+1]+1;
@@ -13,7 +13,7 @@ cellL = [0 cumsum(cellfun('length',colBal))];
 cellM = cell(1,cellL(end));
 for i = 1:length(colBal)
     s = colBal{i}; 
-    su = cumsum(s/sum(s)*NCol);
+    su = cumsum(s/sum(s)*(NCol+1))-1;
     sd = [1 su(1:end-1)+2];
     for j = 1:length(s)
         cellM(j+cellL(i)) = {[[sd(j) su(j)]+rd(i)*NCol,...
@@ -21,21 +21,18 @@ for i = 1:length(colBal)
     end
 end
 
-% figM = reshape(1:(NRow*NCol), [NCol, NRow])';
-% cellM = cell(length(nRow)*length(nCol),1);
-% for i = 1:length(nRow)-1
-%     for j = 1:length(nCol)
-%         cP = figM((nR(i)+1):(nR(i+1)-1), (nC(j)+1):(nC(j+1)-1));
-%         cellM(i+(j-1)*(length(nRow)-1)) = {cP(:)};
-%     end
-% end
-
 % Figure Axis Bounds
 axM = [0 9 0 3];
+labX = -.1;
+labY = 0.90;
+labColY = 1.3;
 
 fig = figure(3); clf;
 s = sqrt(3);
 pSc = 0.6;
+
+annotation('line','linewidth',.2,'position',[.365 .49 0 .4],'color',[.9 .9 .9]);
+annotation('line','linewidth',.2,'position',[.645 .49 0 .4],'color',[.9 .9 .9]);
 
 
 %% a: Slope 1 Module
@@ -68,7 +65,17 @@ dXs1G(2,2:2:size(Xs1a,2)) = -.5;
 construct_motion(Xs1, dXs1, Xu1, conn1, 1, 1, pSc);
 construct_motion(Xs1a+[2.5;0],dXs1G,Xu1a+[2.5;0],conn1a,1,1, pSc);
 axis(axM - [1 1 1.3 1.3]);
+text(labX,labY,'a','Units','Normalized','fontsize',10,'fontweight','bold');
+text(.3,labColY,'Slope = 1','Units','Normalized','fontsize',10);
 drawnow;
+
+fName = 'figure3';
+set(gcf, 'Renderer', 'painters'); 
+fig.PaperPositionMode = 'manual';
+fig.PaperUnits = 'centimeters'; 
+fig.PaperPosition = [-1.9 -0.645 17.4 6.2];
+fig.PaperSize = [14 5.45];
+saveas(fig, ['Figures/' fName], 'pdf');
 
 
 %% b: Slope 1 Propagate Combined Motion
@@ -78,6 +85,7 @@ subplot(NRow,NCol,cellM{4}); cla;
 visualize_network(XC(:,1:size(Xs1a,2),end),...
                   XC(:,[1:size(Xu1a,2)]+size(Xs1a,2),end),conn1a, pSc);
 axis(axM+[2.5 2.5 -1.3 -1.3]);
+text(labX,labY,'b','Units','Normalized','fontsize',10,'fontweight','bold');
 drawnow;
 
 
@@ -107,11 +115,14 @@ conn2c = [1 7; 2 7; 3 7; 1 8; 2 8; 3 8; 4 9; 5 9; 6 9; 4 10; 5 10; 6 10];
 dXs2G = zeros(size(Xs2a)); 
 dXs2G(2,end) = 1;
 dXs2G(2,end-6) = dXs2G(2,end)*(Uss(2,1)/Uss(2,3))^3;
+dXs2G = dXs2G*.9;
 
 % Show Module
 construct_motion(Xs2, dXs2, Xu2, conn2, 1, 1, pSc);
 construct_motion(Xs2a+[2.5;0],dXs2G,Xu2a+[2.5;0],conn2a,1,1, pSc);
 axis(axM - [1 1 1.3 1.3]);
+text(labX,labY,'c','Units','Normalized','fontsize',10,'fontweight','bold');
+text(.23,labColY,'Slope = 1.5','Units','Normalized','fontsize',10);
 drawnow;
 
 
@@ -122,6 +133,7 @@ subplot(NRow,NCol,cellM{5}); cla;
 visualize_network(XC(:,1:size(Xs2a,2),end),...
                   XC(:,[1:size(Xu2a,2)]+size(Xs2a,2),end),conn2a, pSc);
 axis(axM+[2.5 2.5 -1.3 -1.3]);
+text(labX,labY,'d','Units','Normalized','fontsize',10,'fontweight','bold');
 drawnow;
 
 
@@ -153,6 +165,8 @@ dXs3G = zeros(size(Xs3a)); dXs3G(:,1) =  dXs3(:,1);
 construct_motion(Xs3/1.2, dXs3, Xu3/1.2, conn3, 1, 1, pSc);
 construct_motion(Xs3a+[2.5;0],dXs3G,Xu3a+[2.5;0],conn3a,1,1, pSc);
 axis(axM - [1 1 1.3 1.3]);
+text(labX,labY,'e','Units','Normalized','fontsize',10,'fontweight','bold');
+text(.2,labColY,'Slope = 0','Units','Normalized','fontsize',10);
 drawnow;
 
 
@@ -163,11 +177,20 @@ subplot(NRow,NCol,cellM{6}); cla;
 visualize_network(XC(:,1:size(Xs3a,2),end),...
                   XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),end),conn3a, pSc);
 axis(axM+[2 2 -1.3 -1.3]);
+text(labX,labY,'f','Units','Normalized','fontsize',10,'fontweight','bold');
 drawnow;
 
 
 %% g: Place Modules
 subplot(NRow,NCol,cellM{7}); cla;
+
+% Arrow Annotations
+annotation('arrow','HeadLength',8,'HeadWidth',12,'color',[.7 .7 .7],...
+           'linewidth',4,'position',[.335 .25 .05 0]);
+annotation('arrow','HeadLength',8,'HeadWidth',12,'color',[.7 .7 .7],...
+           'linewidth',4,'position',[.55 .25 .05 0]);
+annotation('arrow','HeadLength',8,'HeadWidth',12,'color',[.7 .7 .7],...
+           'linewidth',4,'position',[.76 .25 .05 0]);
 
 % Construct Unit
 Xs3 = [-s/2  0    s/2;...
@@ -202,11 +225,17 @@ Xu3a3 = Rz*Xu3a3 + [(nR-.5)*s;1.5];
 Xs3a4 = Xs3a1+[1.5*nR*s;1.5*nR];
 Xu3a4 = Xu3a1+[1.5*nR*s;1.5*nR];
 
+% Motions
+dXs3a1 = zeros(size(Xs3a1)); dXs3a1(2,end) = -1;
+dXs3a2 = dXs3a1;
+dXs3a3 = zeros(size(Xs3a1)); dXs3a3(1,end) = -1;
+
 % Visualize
-visualize_network(Xs3a1,Xu3a1,conn3a1, pSc/2);
-visualize_network(Xs3a2+[1;0],Xu3a2+[1;0],conn3a1, pSc/2);
-visualize_network(Xs3a3+[0;1],Xu3a3+[0;1],conn3a1, pSc/2);
-axis([0 70 0 10.5]-[0 0 .5 .5]);
+construct_motion(Xs3a1,dXs3a1,Xu3a1,conn3a1,1,1,pSc/2);
+construct_motion(Xs3a2+[1;0],dXs3a2 ,Xu3a2+[1;0],conn3a1,1,1,pSc/2);
+construct_motion(Xs3a3+[0;1],dXs3a3,Xu3a3+[0;1],conn3a1,1,1,pSc/2);
+axis([0 70 0 11.0]-[0 0 .5 .5]);
+text(-.027,labY,'g','Units','Normalized','fontsize',10,'fontweight','bold');
 drawnow;
 
 
@@ -222,8 +251,8 @@ conn3a = [[conn3a(:,1), conn3a(:,2)+max(conn3a1(:,1))];...
 
 XsDot = [zeros(size(Xs3a)) zeros(size(Xu3a))];
 XsDot(2,size(Xs3a,2)) = -1;
-
 [XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.01,3300,XsDot,0);
+
 
 %% h: Visualize
 pInd = 600;
@@ -231,6 +260,7 @@ rotV = rotz(-1); rotV = rotV(1:2,1:2);
 sh = [21; .1];
 visualize_network(rotV*XC(:,1:size(Xs3a,2),pInd)+sh,...
                   rotV*XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd)+sh,conn3a, pSc/2);
+text(.28,labY,'h','Units','Normalized','fontsize',10,'fontweight','bold');
 drawnow;
 
 
@@ -242,9 +272,10 @@ R = rigidity(XC(:,:,pInd),conn3a);
 [ua,sa,va] = svds(R,2,'smallest');
 va = -2*va/sqrt(va'*va);
 rotV = rotz(-1.5); rotV = rotV(1:2,1:2);
-sh = [40; 0];
+sh = [40; -.17];
 visualize_network(rotV*XC(:,1:size(Xs3a,2),pInd)+sh,...
                   rotV*XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd)+sh,conn3a, pSc/2);
+text(.56,labY,'i','Units','Normalized','fontsize',10,'fontweight','bold');
 drawnow;
 
 
@@ -255,10 +286,11 @@ XCD = 2*XCD / sqrt(sum(diag(XCD*XCD')));
 R = rigidity(XC(:,:,pInd),conn3a);
 [ua,sa,va] = svds(R,2,'smallest');
 va = -2*va/sqrt(va'*va);
-rotV = rotz(-1.5); rotV = rotV(1:2,1:2);
-sh = [55; -.2];
+rotV = rotz(-0.5); rotV = rotV(1:2,1:2);
+sh = [55; -.61];
 visualize_network(rotV*XC(:,1:size(Xs3a,2),pInd)+sh,...
                   rotV*XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd)+sh,conn3a, pSc/2);
+text(.83,labY,'j','Units','Normalized','fontsize',10,'fontweight','bold');
 drawnow;
 
 
@@ -267,8 +299,8 @@ fName = 'figure3';
 set(gcf, 'Renderer', 'painters'); 
 fig.PaperPositionMode = 'manual';
 fig.PaperUnits = 'centimeters'; 
-fig.PaperPosition = [-2.0 -0.3 17.4 6.2];
-fig.PaperSize = [14 5.5];
+fig.PaperPosition = [-1.9 -0.645 17.4 6.2];
+fig.PaperSize = [14 5.45];
 saveas(fig, ['Figures/' fName], 'pdf');
 
 
