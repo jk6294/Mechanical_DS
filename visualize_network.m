@@ -1,4 +1,4 @@
-function [] = visualize_network(Xs, Xu, conn, sC, C_SN)
+function [] = visualize_network(Xs, Xu, conn, sC, C_SN, C_UN)
 % This function is to visualize a constructed network.
 %
 % Inputs
@@ -13,19 +13,16 @@ function [] = visualize_network(Xs, Xu, conn, sC, C_SN)
 
 if(nargin == 3)
     sC = 1;
-    eC = [0 0 0 .5];
-    C_SN = [255 100 100]/255;
+    C_SN = [255 100 100]/255;         % Color of Specified Node
     C_UN = [100 100 255]/255;
 elseif(nargin == 4)
-    eC = [0 0 0 .5];
-    C_SN = [255 100 100]/255;
+    C_SN = [255 100 100]/255;         % Color of Specified Node
     C_UN = [100 100 255]/255;
 elseif(nargin == 5)
-    C_UN = C_SN;
+    C_UN = [100 100 255]/255;
 end
 
 % Plot Parameters
-% C_SN = [255 100 100]/255;         % Color of Specified Node
 % C_UN = [100 100 255]/255;         % Color of Unspecified Node
 d = size(Xs,1);                     % Number of Dimensions
 ms = 3*sC;                          % Marker Size

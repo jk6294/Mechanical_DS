@@ -110,9 +110,9 @@ end
 plot(d1,d2,'k-');
 hold off;
 % Networks
-visualize_network(XC1a(:,:,pInd1)/8+[1.7;3.6],[],conn1a,.33,cTr1);
-visualize_network(XC1a(:,:,pInd2)/8+[1.85;2.9],[],conn1a,.33,cTr2);
-visualize_network(XC1a(:,:,pInd3)/8+[2.6;2.0],[],conn1a,.33,cTr3);
+visualize_network(XC1a(:,:,pInd1)/8+[1.7;3.6],[],conn1a,.33,cTr1,cTr1);
+visualize_network(XC1a(:,:,pInd2)/8+[1.85;2.9],[],conn1a,.33,cTr2,cTr2);
+visualize_network(XC1a(:,:,pInd3)/8+[2.6;2.0],[],conn1a,.33,cTr3,cTr3);
 % Formatting
 set(gca,'visible',1,'XTick',[1 3],'YTick',[1 3],'fontsize',10);
 axis([1 4 1 4]);
@@ -207,11 +207,11 @@ plot(d1,d2,'k-');
 hold off;
 % Networks
 visualize_network(XC2a(:,1:10,pInd1)/10+[1.51;3.05],...
-                  XC2a(:,11:end,pInd1)/10+[1.51;3.05],conn2a,.33,cTr1);
+                  XC2a(:,11:end,pInd1)/10+[1.51;3.05],conn2a,.33,cTr1,cTr1);
 visualize_network(XC2a(:,1:10,pInd2)/10+[1.43;2.6],...
-                  XC2a(:,11:end,pInd2)/10+[1.43;2.6],conn2a,.33,cTr2);
+                  XC2a(:,11:end,pInd2)/10+[1.43;2.6],conn2a,.33,cTr2,cTr2);
 visualize_network(XC2a(:,1:10,pInd3)/10+[1.23;2.07],...
-                  XC2a(:,11:end,pInd3)/10+[1.23;2.07],conn2a,.33,cTr3);
+                  XC2a(:,11:end,pInd3)/10+[1.23;2.07],conn2a,.33,cTr3,cTr3);
 % Formatting
 set(gca,'visible',1,'XTick',[1 3],'YTick',[1 3],'fontsize',10);
 axis([1 3.3 1 3.3]);
@@ -305,12 +305,12 @@ end
 plot(d1,d2,'k-');
 hold off;
 % Networks
-visualize_network(XC3a(:,1:10,pInd1)/10+[1.6;3.03],...
-                  XC3a(:,11:end,pInd1)/10+[1.6;3.03],conn3a,.33,cTr1);
-visualize_network(XC3a(:,1:10,pInd2)/10+[1.6;2.63],...
-                  XC3a(:,11:end,pInd2)/10+[1.6;2.63],conn3a,.33,cTr2);
-visualize_network(XC3a(:,1:10,pInd3)/10+[1.6;2.23],...
-                  XC3a(:,11:end,pInd3)/10+[1.6;2.23],conn3a,.33,cTr3);
+visualize_network(XC3a(:,1:16,pInd1)/10+[1.6;3.03],...
+                  XC3a(:,17:end,pInd1)/10+[1.6;3.03],conn3a,.33,cTr1,cTr1);
+visualize_network(XC3a(:,1:16,pInd2)/10+[1.6;2.63],...
+                  XC3a(:,17:end,pInd2)/10+[1.6;2.63],conn3a,.33,cTr2,cTr2);
+visualize_network(XC3a(:,1:16,pInd3)/10+[1.6;2.23],...
+                  XC3a(:,17:end,pInd3)/10+[1.6;2.23],conn3a,.33,cTr3,cTr3);
 % Formatting
 set(gca,'visible',1,'XTick',[1 3],'YTick',[1 3],'fontsize',10);
 axis([1 3.3 1 3.3]);
@@ -404,11 +404,11 @@ plot(d1,d2,'k-');
 hold off;
 % Networks
 visualize_network(XC4a(:,1:10,pInd1)/10+[1.6;3.8],...
-                  XC4a(:,11:end,pInd1)/10+[1.6;3.8],conn4a,.33,cTr1);
+                  XC4a(:,11:end,pInd1)/10+[1.6;3.8],conn4a,.33,cTr1,cTr1);
 visualize_network(XC4a(:,1:10,pInd2)/10+[1.6;3.3],...
-                  XC4a(:,11:end,pInd2)/10+[1.6;3.3],conn4a,.33,cTr2);
+                  XC4a(:,11:end,pInd2)/10+[1.6;3.3],conn4a,.33,cTr2,cTr2);
 visualize_network(XC4a(:,1:10,pInd3)/10+[1.6;2.83],...
-                  XC4a(:,11:end,pInd3)/10+[1.6;2.83],conn4a,.33,cTr3);
+                  XC4a(:,11:end,pInd3)/10+[1.6;2.83],conn4a,.33,cTr3,cTr3);
 % Formatting
 set(gca,'visible',1,'XTick',[1 3],'YTick',[1 3],'fontsize',10);
 axis([.8 4 .8 4]);
