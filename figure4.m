@@ -40,7 +40,7 @@ cTr3 = [015 082 186]/255;
 
 % Module Parameters
 l1 = [0;-s]; l2 = [0;-1.5*s];
-a1 = 19.5; a2 = 38; a3 = 60;
+a1 = 19.4; a2 = 38; a3 = 60;
 R1 = rotz(-a1/2); R2 = rotz(-a2/2); R3 = rotz(-a3/2);
 R1 = R1(1:2,1:2); R2 = R2(1:2,1:2); R3 = R3(1:2,1:2);
 
@@ -157,59 +157,99 @@ drawnow;
 
 
 %% d: Example Line
-% Collect Unspecified Node Posiitons
-XuC = {Xu1,Xu2,Xu3,Xu1f,Xu2f,Xu3f};
+% Collect Unspecified Node Posiitons and Colors
+XuC = cat(3,Xu1,Xu2,Xu3);
 C_UNC = [cTr1; cTr2; cTr3];
-% Create Chain of Specified Nodes
-nS4 = 56;
-Xs4L1 = s/2*ones(1,nS4+2);
-Xs4L2 = repmat([-.5 1],1,(nS4+2)/2);
-Xs4 = [cumsum(Xs4L1)-s; Xs4L2];
 % Decide Placement Order of Unspecified Nodes
-Xu4L = [2 2, 2 2, 2 2, 2 2, 2 2, 2 2, 2 2,...
+XuNL = [2 2, 2 2, 2 2, 2 2, 2 2, 2 2, 2 2,...
         1 3, 1 3, 1 3, 1 3,...
         2 2, 2 2, 2 2, 2 2, 2 2, 2 2,...
         3 1 ,3 1, 3 1, 3 1,...
         2 2, 2 2, 2 2, 2 2, 2 2, 2 2, 2 2];
-Xu4 = zeros(2,2*nS4);
-C_UN4 = zeros(2*nS4,4);
-for i = 1:nS4
-    % Node Positions
-    Xu4(:,[1,2]+2*(i-1)) = XuC{Xu4L(i)+3*mod(i-1,2)}+[s/2;0]*(i-1);
-    % Colors
-    C_UN4([1,2]+2*(i-1),:) = repmat([C_UNC(Xu4L(i),:) 1],2,1);
-end
-% Connections
-conn4s = repmat([3:nS4],6,1);
-conn4s = [1;1;2;2;2;2;conn4s(:);repmat(nS4+1,4,1);repmat(nS4+2,2,1)];
-conn4u = repmat([1:6]',1,nS4+2)+[2:2:2*nS4+4]-6;
-conn4u = conn4u(:); conn4u = conn4u(conn4u>0 & conn4u<=size(Xu4,2))+nS4+2;
-conn4 = [conn4s conn4u];
+[XsN,XuN,connN,C_UNN] = network_chain_x([-s/2 0; -.5 1],XuC,XuNL,C_UNC);
 
 
 %% Simulate
-[XC,fC] = sim_motion(Xs4,Xu4,conn4,.5,300,-[Xs4,Xu4],0);
+[XCN,fC] = sim_motion(XsN,XuN,connN,.5,300,-[XsN,XuN],0);
 
 
 %% d: Folded Network
 subplot(NRow,NCol,cellM{9}); cla;
 % Visualize
-visualize_network(Xs4,Xu4,conn4,.3,[255 100 100]/255,C_UN4);
-da = mean(squeeze(sqrt(sum(diff(XC(:,1:nS4+2,:),1,2).^2))) + l2(2));
+visualize_network(XsN,XuN,connN,.3,[255 100 100]/255,C_UNN);
+da = mean(squeeze(sqrt(sum(diff(XCN(:,1:size(XsN,2),:),1,2).^2))) + l2(2));
 pInd = find(abs(da) == min(abs(da)),1);
 RV = rotz(7); RV = RV(1:2,1:2);
 XSh = 42; YSh = -3;
-visualize_network(RV*XC(:,1:nS4+2,round(pInd/2))+[XSh;YSh],...
-                  RV*XC(:,[1:2*nS4]+nS4+2,round(pInd/2))+[XSh;YSh],conn4,...
+visualize_network(RV*XCN(:,1:size(XsN,2),round(pInd/2))+[XSh;YSh],...
+                  RV*XCN(:,[1:size(XuN,2)]+size(XsN,2),round(pInd/2))+[XSh;YSh],connN,...
                   .3,[255 100 100]/255,C_UN4);
 XSh = 70; YSh = -3;
-visualize_network(RV*XC(:,1:nS4+2,pInd)+[XSh;YSh],...
-                  RV*XC(:,[1:2*nS4]+nS4+2,pInd)+[XSh;YSh],conn4,.3,...
-                  [255 100 100]/255,C_UN4);
+visualize_network(RV*XCN(:,1:size(XsN,2),pInd)+[XSh;YSh],...
+                  RV*XCN(:,[1:size(XuN,2)]+size(XsN,2),pInd)+[XSh;YSh],connN,.3,...
+                  [255 100 100]/255,C_UNN);
 axis([-1,102,-10,10]);
 
 
-%% 
+%% e: All Letters: NETWORKS
+% Collect Unspecified Node Posiitons and Colors
+XuC = cat(3,Xu1,Xu2,Xu3);
+C_UNC = [cTr1; cTr2; cTr3];
+Xsp = [-s/2 0; -.5 1];
+
+% N
+XuNL = [2 2, 2 2, 2 2, 2 2, 2 2, 2 2, 2 2,...
+        1 3, 1 3, 1 3, 1 3,...
+        2 2, 2 2, 2 2, 2 2, 2 2, 2 2,...
+        3 1 ,3 1, 3 1, 3 1,...
+        2 2, 2 2, 2 2, 2 2, 2 2, 2 2, 2 2];
+[XsN,XuN,connN,C_UNN] = network_chain_x(Xsp,XuC,XuNL,C_UNC);
+
+% E
+XuEL = [2 2, 2 2, 2 2,...
+        3 1, 3 1, 3 1, 3 2, 3 2, 3 2, 3 2 ,3 2, 3 2, 3 2,...
+        2 2,...
+        3 2, 3 2, 3 2, 3 2, 3 2,...
+        2 2];
+[XsE,XuE,connE] = network_chain_x(Xsp,XuC,XuEL,C_UNC);
+
+
+
+axis([-1,102,-10,10]);
+
+
+%% Simulate
+% N
+[XCN,fCN] = sim_motion(XsN,XuN,connN,.5,300,-[XsN,XuN],0);
+% E
+[XCE,fCE] = sim_motion(XsE,XuN,connE,1,140,-[XsE,XuN],0);
+
+
+%% T
+
+
+
+
+
+%% Visualize
+% Visualize
+subplot(NRow,NCol,cellM{8}); cla;
+visualize_network(XsE,XuN,connE,.3,[255 100 100]/255,C_UEN);
+da = mean(squeeze(sqrt(sum(diff(XC(:,1:nSE+2,:),1,2).^2))) + l2(2));
+pInd = find(abs(da) == min(abs(da)),1);
+[pInd da(pInd)]
+RV = rotz(106); RV = RV(1:2,1:2);
+XSh = 58; YSh = -16;
+visualize_network(RV*XC(:,1:nSE+2,round(pInd/2))+[XSh;YSh],...
+                  RV*XC(:,[1:2*nSE]+nSE+2,round(pInd/2))+[XSh;YSh],connE,...
+                  .3,[255 100 100]/255,C_UEN);
+RV = rotz(-134); RV = RV(1:2,1:2);
+XSh = 90; YSh = 12;
+visualize_network(RV*XC(:,1:nSE+2,pInd)+[XSh;YSh],...
+                  RV*XC(:,[1:2*nSE]+nSE+2,pInd)+[XSh;YSh],connE,.3,...
+                  [255 100 100]/255,C_UEN);
+axis([-1,102,-10,10]);
+
 
 
 
