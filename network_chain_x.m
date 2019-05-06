@@ -28,7 +28,6 @@ end
 % Calculate module shifts
 Xsh = Xsp(1,2)-Xsp(1,1);
 Ysh = Xsp(2,2)+Xsp(2,1);
-Ysh
 XuC = cat(3,XuC, [XuC(1,:,:); -XuC(2,:,:)+Ysh]);
 
 
