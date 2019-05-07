@@ -12,6 +12,13 @@ function [] = visualize_network(Xs, Xu, conn, sC, C_SN, C_UN)
 % Outputs
 % Figure. Assumes the desired figure placement is already selected
 
+if(size(C_SN,1)==0)
+    C_SN = [255 100 100]/255; 
+end
+if(size(C_UN,1)==0)
+    C_UN = [100 100 255]/255;
+end
+
 if(nargin == 3)
     sC = 1;
     C_SN = repmat([255 100 100]/255,size(Xs,2),1); 
@@ -26,6 +33,7 @@ elseif(nargin == 6)
     C_SN = repmat(C_SN,size(Xs,2)/size(C_SN,1),1);
     C_UN = repmat(C_UN,size(Xu,2)/size(C_UN,1),1);
 end
+
 
 % Plot Parameters
 % C_UN = [100 100 255]/255;         % Color of Unspecified Node
