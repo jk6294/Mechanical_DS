@@ -84,8 +84,6 @@ axis(axM);
 drawnow;
 
 
-
-
 %% b: Maintain Distance
 subplot(NRow,NCol,cellM{2}); cla;
 % Construct Network
@@ -167,7 +165,6 @@ XuNL = [2 2, 2 2, 2 2, 2 2, 2 2, 2 2, 2 2,...
 % Simulate
 [XCN,fC] = sim_motion(XsN,XuN,connN,.5,300,-[XsN,XuN],0);
 
-%% d: Visualize
 subplot(NRow,NCol,cellM{9}); cla;
 % Visualize
 visualize_network(XsN,XuN,connN,.3,[255 100 100]/255,C_UNN);

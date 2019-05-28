@@ -149,7 +149,7 @@ line(Xs2(1,2)-xSh+nW*[s -s], Xs2(2,2)+ySh+nW*[-1 1],'color','k','LineWidth',lw_d
 line(Xs2(1,2:3)+xSh,Xs2(2,2:3)+ySh,'color','k','LineWidth',lw_d);
 line(Xs2(1,2)+xSh+nW*[s -s], Xs2(2,2)+ySh+nW*[1 -1],'color','k','LineWidth',lw_d);
 line(Xs2(1,3)+xSh+nW*[s -s], Xs2(2,3)+ySh+nW*[1 -1],'color','k','LineWidth',lw_d);
-text(Xs2(1,1)-.8, mean(Xs2(2,1:2))+.0, 'd_1','fontsize',10);
+text(Xs2(1,1)-.75, mean(Xs2(2,1:2))+.0, 'd_1','fontsize',10);
 text(Xs2(1,3)+.2, mean(Xs2(2,2:3))+.0, 'd_2','fontsize',10);
 hold off;
 axis([-1 1 -1 1]*1.5 + [netSX netSX 0 0]);
@@ -205,6 +205,9 @@ text(.0,labColY,'Displacement','Units','Normalized','fontsize',10);
 
 
 %% h: Finite Network
+nW = .02;
+xSh = .3;
+ySh = xSh/sqrt(3);
 subplot(NRow,NCol,cellM{8})
 Xu0 = [-1.0  0.0;...
         1.6 -0.90];
@@ -213,6 +216,16 @@ visualize_conic_finite(Xs30,Xs3T,[-1 1; -1 1]*2,[100;100],0,0,0,.15);
 [Xu3,~] = construct_network(Xs30,Xs3T,Xu0,conn3,0,1);
 Xu3 = Xu3(1:2,:);
 visualize_network(Xs30,Xu3,conn3);
+hold on;
+line(Xs30(1,1:2)-xSh,Xs30(2,1:2)+ySh,'color','k','LineWidth',lw_d);
+line(Xs30(1,1)-xSh+nW*[s -s], Xs30(2,1)+ySh+nW*[-1 1],'color','k','LineWidth',lw_d);
+line(Xs30(1,2)-xSh+nW*[s -s], Xs30(2,2)+ySh+nW*[-1 1],'color','k','LineWidth',lw_d);
+line(Xs30(1,2:3)+xSh,Xs30(2,2:3)+ySh,'color','k','LineWidth',lw_d);
+line(Xs30(1,2)+xSh+nW*[s -s], Xs30(2,2)+ySh+nW*[1 -1],'color','k','LineWidth',lw_d);
+line(Xs30(1,3)+xSh+nW*[s -s], Xs30(2,3)+ySh+nW*[1 -1],'color','k','LineWidth',lw_d);
+text(Xs30(1,1)-.75, mean(Xs30(2,1:2))+.15, 'd_1','fontsize',10);
+text(Xs30(1,3)+.10, mean(Xs30(2,2:3))+.15, 'd_2','fontsize',10);
+hold off;
 axis([-1 1 -1 1]*1.7 + [netSX netSX .4 .4]);
 text(labX,labY,'h','Units','Normalized','fontsize',10,'fontweight','bold');
 
@@ -268,6 +281,9 @@ text(.05,labColY,'Vel. + Disp.','Units','Normalized','fontsize',10);
 
 
 %% k: Construct Infinitesimal and Finite Network
+nW = .03;
+xSh = .3;
+ySh = xSh/sqrt(3);
 subplot(NRow,NCol,cellM{11});
 % Xu4 = [ 0.950 -1.690;...
 %        -1.394 -0.080];
@@ -277,6 +293,16 @@ conn4 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
 visualize_conic_finite(Xs40,Xs4T,[-2 2;-2 2],[100;100],0,0,0,.15);
 visualize_conic(Xs40,dXs4,[-2 2;-2 2],[100;100],0,0,0,.2);
 visualize_network(Xs40,Xu4,conn4);
+hold on;
+line(Xs40(1,1:2)-xSh,Xs40(2,1:2)+ySh,'color','k','LineWidth',lw_d);
+line(Xs40(1,1)-xSh+nW*[s -s], Xs40(2,1)+ySh+nW*[-1 1],'color','k','LineWidth',lw_d);
+line(Xs40(1,2)-xSh+nW*[s -s], Xs40(2,2)+ySh+nW*[-1 1],'color','k','LineWidth',lw_d);
+line(Xs40(1,2:3)+xSh,Xs40(2,2:3)+ySh,'color','k','LineWidth',lw_d);
+line(Xs40(1,2)+xSh+nW*[s -s], Xs40(2,2)+ySh+nW*[1 -1],'color','k','LineWidth',lw_d);
+line(Xs40(1,3)+xSh+nW*[s -s], Xs40(2,3)+ySh+nW*[1 -1],'color','k','LineWidth',lw_d);
+text(Xs40(1,1)-.8, mean(Xs40(2,1:2))+.1, 'd_1','fontsize',10);
+text(Xs40(1,3)+.1, mean(Xs40(2,2:3))+.1, 'd_2','fontsize',10);
+hold off;
 axis([-1 1 -1 1]*2 + [netSX netSX .27 .27]);
 text(labX,labY,'k','Units','Normalized','fontsize',10,'fontweight','bold');
 

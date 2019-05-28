@@ -186,11 +186,11 @@ subplot(NRow,NCol,cellM{7}); cla;
 
 % Arrow Annotations
 annotation('arrow','HeadLength',8,'HeadWidth',12,'color',[.7 .7 .7],...
-           'linewidth',4,'position',[.335 .25 .05 0]);
+           'linewidth',4,'position',[.285 .25 .05 0]);
 annotation('arrow','HeadLength',8,'HeadWidth',12,'color',[.7 .7 .7],...
-           'linewidth',4,'position',[.55 .25 .05 0]);
+           'linewidth',4,'position',[.50 .25 .05 0]);
 annotation('arrow','HeadLength',8,'HeadWidth',12,'color',[.7 .7 .7],...
-           'linewidth',4,'position',[.76 .25 .05 0]);
+           'linewidth',4,'position',[.71 .25 .05 0]);
 
 % Construct Unit
 Xs3 = [-s/2  0    s/2;...
@@ -199,65 +199,54 @@ Xs3f = [Xs3(1,:); -Xs3(2,:)+.5];
 lSh = .3;
 Xu3 = [[-lSh; -.5] [.25*s; .25]+[-1;s]*lSh/2];
 
-Xu3 = [-Xu3(1,:); Xu3(2,:)];
+% Xu3 = [-Xu3(1,:); Xu3(2,:)];
 Xu3f = [Xu3(1,:); -Xu3(2,:)+.5];
-Xs3c = [Xs3 Xs3f+[s/2;0]];
-Xu3c = [Xu3 Xu3f+[s/2;0]];
+Xs3c = [Xs3 Xs3f+[s/2;0]]; Xs3c = [Xs3c(1,:); -Xs3c(2,:)];
+Xu3c = [Xu3 Xu3f+[s/2;0]]; Xu3c = [Xu3c(1,:); -Xu3c(2,:)];
 conn1c = [1 7; 2 7; 3 7; 1 8; 2 8; 3 8; 4 9; 5 9; 6 9; 4 10; 5 10; 6 10];
 nR = 5;
-[Xs3a1,Xu3a1,conn3a1] = tesselate_network_old(Xs3c,Xu3c,conn1c,[s;0],[nR;1]);
+[Xs3a1,Xu3a1,conn3a1] = tesselate_network_old(Xs3c,Xu3c,conn1c,[s;0],[2*nR;1]);
+[Xs3a2,Xu3a2,conn3a2] = tesselate_network_old(Xs3c,Xu3c,conn1c,[s;0],[nR;1]);
 % Remove Offset
-Xu3a1 = Xu3a1-Xs3a1(:,1);
-Xs3a1 = Xs3a1-Xs3a1(:,1);
-
-% Modified Unit: Extend Length 1
-Xs3a2 = Xs3a1+[nR*s;0];
-Xu3a2 = Xu3a1+[nR*s;0];
+Xu3a1 = Xu3a1-Xs3a1(:,1); Xs3a1 = Xs3a1-Xs3a1(:,1);
+Xu3a2 = Xu3a2-Xs3a2(:,1); Xs3a2 = Xs3a2-Xs3a2(:,1);
 
 % Modified Unit: Branch 1
-Xs3a3 = [Xs3a1(1,:); -Xs3a1(2,:)]; 
-Xu3a3 = [Xu3a1(1,:); -Xu3a1(2,:)]; 
-Rz = rotz(60); Rz = Rz(1:2,1:2);
-Xs3a3 = Rz*Xs3a3 + [(nR-.5)*s;1.5];
-Xu3a3 = Rz*Xu3a3 + [(nR-.5)*s;1.5];
-
-% Modified Unit: Branch 2
-Xs3a4 = Xs3a1+[1.5*nR*s;1.5*nR];
-Xu3a4 = Xu3a1+[1.5*nR*s;1.5*nR];
+Xs3a2 = [Xs3a2(1,:); -Xs3a2(2,:)]; 
+Xu3a2 = [Xu3a2(1,:); -Xu3a2(2,:)]; 
+Rz = rotz(-60); Rz = Rz(1:2,1:2);
+Xs3a2 = Rz*Xs3a2 + [nR*s/2;nR*s^2/2];
+Xu3a2 = Rz*Xu3a2 + [nR*s/2;nR*s^2/2];
 
 % Motions
-dXs3a1 = zeros(size(Xs3a1)); dXs3a1(2,end) = -1;
-dXs3a2 = dXs3a1;
-dXs3a3 = zeros(size(Xs3a1)); dXs3a3(1,end) = -1;
+dXs3a1 = zeros(size(Xs3a1)); dXs3a1(2,1) = -1;
+dXs3a2 = zeros(size(Xs3a2)); dXs3a2(1,1) =  1;
 
 % Visualize
 construct_motion(Xs3a1,dXs3a1,Xu3a1,conn3a1,1,1,pSc/2);
-construct_motion(Xs3a2+[1;0],dXs3a2 ,Xu3a2+[1;0],conn3a1,1,1,pSc/2);
-construct_motion(Xs3a3+[0;1],dXs3a3,Xu3a3+[0;1],conn3a1,1,1,pSc/2);
-axis([0 70 0 11.0]-[0 0 .5 .5]);
+construct_motion(Xs3a2+[0;1],dXs3a2,Xu3a2+[0;1],conn3a2,1,1,pSc/2);
+axis([-.1 70 0 11.0]-[0 0 2 2]);
 text(-.027,labY,'g','Units','Normalized','fontsize',10,'fontweight','bold');
 drawnow;
 
 
 %% Combine and Simulate Modules
-Xs3a = [Xs3a1 Xs3a2 Xs3a3];
-Xu3a = [Xu3a1 Xu3a2 Xu3a3];
+Xs3a = [Xs3a1 Xs3a2];
+Xu3a = [Xu3a1 Xu3a2];
 conn3a = conn3a1;
-conn3a = [[conn3a(:,1), conn3a(:,2)+max(conn3a1(:,1))];...
-          [conn3a1(:,1)+max(conn3a(:,1)), conn3a1(:,2)+max(conn3a(:,2))]];
-conn3a = [[conn3a(:,1), conn3a(:,2)+max(conn3a1(:,1))];...
-          [conn3a1(:,1)+max(conn3a(:,1)), conn3a1(:,2)+max(conn3a(:,2))]];
+conn3a = [[conn3a(:,1), conn3a(:,2)+max(conn3a2(:,1))];...
+          [conn3a2(:,1)+max(conn3a(:,1)), conn3a2(:,2)+max(conn3a(:,2))]];
 [Xs3a,Xu3a,conn3a] = tesselate_network_old(Xs3a,Xu3a,conn3a,[1;1],[1;1]);
 
 XsDot = [zeros(size(Xs3a)) zeros(size(Xu3a))];
-XsDot(2,size(Xs3a,2)) = -1;
+XsDot(2,1) = -1;
 [XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.01,3300,XsDot,0);
 
 
 %% h: Visualize
 pInd = 600;
-rotV = rotz(-1); rotV = rotV(1:2,1:2);
-sh = [21; .1];
+rotV = rotz(0.8); rotV = rotV(1:2,1:2);
+sh = [20; -.123];
 visualize_network(rotV*XC(:,1:size(Xs3a,2),pInd)+sh,...
                   rotV*XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd)+sh,conn3a, pSc/2);
 text(.28,labY,'h','Units','Normalized','fontsize',10,'fontweight','bold');
@@ -271,8 +260,8 @@ XCD = 2*XCD / sqrt(sum(diag(XCD*XCD')));
 R = rigidity(XC(:,:,pInd),conn3a);
 [ua,sa,va] = svds(R,2,'smallest');
 va = -2*va/sqrt(va'*va);
-rotV = rotz(-1.5); rotV = rotV(1:2,1:2);
-sh = [40; -.17];
+rotV = rotz(1.9); rotV = rotV(1:2,1:2);
+sh = [38; -.609];
 visualize_network(rotV*XC(:,1:size(Xs3a,2),pInd)+sh,...
                   rotV*XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd)+sh,conn3a, pSc/2);
 text(.56,labY,'i','Units','Normalized','fontsize',10,'fontweight','bold');
@@ -286,8 +275,8 @@ XCD = 2*XCD / sqrt(sum(diag(XCD*XCD')));
 R = rigidity(XC(:,:,pInd),conn3a);
 [ua,sa,va] = svds(R,2,'smallest');
 va = -2*va/sqrt(va'*va);
-rotV = rotz(-0.5); rotV = rotV(1:2,1:2);
-sh = [55; -.61];
+rotV = rotz(0.52); rotV = rotV(1:2,1:2);
+sh = [55; -0.712];
 visualize_network(rotV*XC(:,1:size(Xs3a,2),pInd)+sh,...
                   rotV*XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd)+sh,conn3a, pSc/2);
 text(.83,labY,'j','Units','Normalized','fontsize',10,'fontweight','bold');
@@ -308,19 +297,20 @@ saveas(fig, ['Figures/' fName], 'pdf');
 % fig = figure(4); clf;
 % fName = 'animation.gif';
 % dT = 0.03;
-% % dT = 0.1;
-% nXSh = 1.4;
-% nYSh = 2;
+% dT = 0.1;
+% nXSh = -2.5;
+% nYSh = 2.3;
 % nSV = 1;
 % Xs1a = Xs2a;
 % Xu1a = Xu2a;
+% XC = XC2a;
 % conn1a = conn2a;
-% XdotV = XC(:,1:size(Xs1a,2),1); XdotV = XdotV-mean(XdotV,2);
+% % XdotV = XC(:,1:size(Xs1a,2),1); XdotV = XdotV-mean(XdotV,2);
 % 
 % D1 = sqrt(squeeze(sum(diff(XC(:,1:size(Xs1a,2),:),1,2).^2)));
-% D1 = D1(1:2:end,:); 
+% D1 = D1(1:end,:); 
 % 
-% for i = 1:20:size(XC,3)
+% for i = 11:40:1941
 %     cla;
 %     dP = [D1(:,i)';D1(:,i)']; dP = dP(:);
 %     dPa = dP(1:end-1); dPb = [1;dP(3:end)];
@@ -336,12 +326,12 @@ saveas(fig, ['Figures/' fName], 'pdf');
 % %     quiver(XC(1,:,i)/10 + nXSh, XC(2,:,i)/10 + nYSh,[Us(1,:) Uu(1,:)], [Us(2,:) Uu(2,:)],0);
 %     plot([0 4],[0 4],'LineStyle','--','color',[0 0 0 .5]);
 %     line(dP(1:end-1),[1;dP(3:end)]);
-%     visualize_network(XC(:,1:size(Xs1a,2),i)/10 + [nXSh;nYSh],...
-%                       XC(:,[1:size(Xu1a,2)]+size(Xs1a,2),i)/10 + [nXSh;nYSh],conn1a,.5);
-%     axis([0.6 2.7 0.6 2.7]);
+%     visualize_network(XC(:,1:size(Xs1a,2),i)/5 + [nXSh;nYSh],...
+%                       XC(:,[1:size(Xu1a,2)]+size(Xs1a,2),i)/5 + [nXSh;nYSh],conn1a,.7);
+%     axis([-4.0 3 1.6 3]);
 % %     construct_motion(XC(:,1:size(Xsa,2),i), XC(:,1:size(Xsa,2),i+1)-XC(:,1:size(Xsa,2),i), XC(:,[1:size(Xua,2)]+size(Xsa,2),i), conn, 20, 20);
 % %     axis([min(min(XC(1,:,:))) max(max(XC(1,:,:))) min(min(XC(2,:,:))) max(max(XC(2,:,:)))]);
-%     set(gca,'visible',0);
+%     set(gca,'visible',0);    
 %     drawnow;
 % 
 %     % Capture the plot as an image

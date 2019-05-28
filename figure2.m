@@ -40,10 +40,10 @@ Xs1 = [-2 -2  2  2;...
 conn1 = [1 3; 1 4; 2 3; 2 4];
 visualize_network(Xs1-[3;0],[],conn1,pSc);
 visualize_network(Xs1+[3;0],[],conn1,pSc);
-text(-5-tSx, tSy, 'd_1','fontsize',10);
-text(-1-tSx, tSy, 'd_2','fontsize',10);
-text(1-tSx, tSy, 'd_1','fontsize',10);
-text(5-tSx, tSy, 'd_2','fontsize',10);
+text(-5-tSx, tSy, 'd_1^a','fontsize',10);
+text(-1-tSx, tSy, 'd_2^a','fontsize',10);
+text(1-tSx, tSy, 'd_1^b','fontsize',10);
+text(5-tSx, tSy, 'd_2^b','fontsize',10);
 axis([-5 5 -2 2]);
 text(labX,labY,'a','Units','Normalized','fontsize',10,'fontweight','bold');
 text(.15,labColY,'4-bar linkage','Units','Normalized','fontsize',10);
@@ -116,8 +116,9 @@ visualize_network(XC1a(:,:,pInd3)/8+[2.6;2.0],[],conn1a,.33,cTr3,cTr3);
 % Formatting
 set(gca,'visible',1,'XTick',[1 3],'YTick',[1 3],'fontsize',10);
 axis([1 4 1 4]);
-text(.47,-.18,'d_k','Units','normalized');
-text(-.18,.4,'d_{k+1}','Units','normalized','rotation',90);
+text(.47,-.18,'d_k','Units','normalized','fontsize',10);
+text(-.18,.4,'d_{k+1}','Units','normalized','rotation',90,'fontsize',10);
+text(.3,-.1,'d^*','Units','normalized','fontsize',10,'color',cTr3);
 text(labX,labY,'c','Units','Normalized','fontsize',10,'fontweight','bold');
 
 
@@ -142,7 +143,7 @@ text(5.8-tSx, .4+tSy, 'd_1','fontsize',10);
 text(8.0-tSx, .4+tSy, 'd_2','fontsize',10);
 axis([-1 8 -1.5 2]);
 text(labX,labY,'d','Units','Normalized','fontsize',10,'fontweight','bold');
-text(-.15,labColY,'Super-Stable Fixed Point','Units','Normalized','fontsize',10);
+text(.1,labColY,'2 Fixed Points','Units','Normalized','fontsize',10);
 
 
 %% e: Tesselate
@@ -213,10 +214,12 @@ visualize_network(XC2a(:,1:10,pInd2)/10+[1.43;2.6],...
 visualize_network(XC2a(:,1:10,pInd3)/10+[1.23;2.07],...
                   XC2a(:,11:end,pInd3)/10+[1.23;2.07],conn2a,.33,cTr3,cTr3);
 % Formatting
-set(gca,'visible',1,'XTick',[1 3],'YTick',[1 3],'fontsize',10);
+set(gca,'visible',1,'XTick',[],'YTick',[1 3],'fontsize',10);
 axis([1 3.3 1 3.3]);
 text(.47,-.18,'d_k','Units','normalized');
 text(-.18,.4,'d_{k+1}','Units','normalized','rotation',90);
+text(.3,-.1,'d_1^*','Units','normalized','fontsize',10,'color',cTr3);
+text(.82,-.1,'d_2^*','Units','normalized','fontsize',10,'color',cTr1);
 text(labX,labY,'f','Units','Normalized','fontsize',10,'fontweight','bold');
 
 
@@ -277,6 +280,7 @@ pInd3 = 1;
 dP = [D1(:,pInd3)';D1(:,pInd3)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
 line(dP(1:end-1),[1;dP(3:end)],'color',cTr3);
+dFP1 = dP(1);                   % First Fixed Point
 for i = 1:length(dP)-2
     ah = annotation('arrow','HeadLength',3,'HeadWidth',3,'color',cTr3);
     set(ah,'parent',gca);
@@ -297,6 +301,7 @@ pInd1 = 462;
 dP = [D1(:,pInd1)';D1(:,pInd1)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
 line(dP(1:end-1),[1;dP(3:end)],'color',cTr1);
+dLC1 = dP(1);                   % First Limit Cycle
 for i = 1:length(dP)-2
     ah = annotation('arrow','HeadLength',3,'HeadWidth',3,'color',cTr1);
     set(ah,'parent',gca);
@@ -312,10 +317,12 @@ visualize_network(XC3a(:,1:16,pInd2)/10+[1.6;2.63],...
 visualize_network(XC3a(:,1:16,pInd3)/10+[1.6;2.23],...
                   XC3a(:,17:end,pInd3)/10+[1.6;2.23],conn3a,.33,cTr3,cTr3);
 % Formatting
-set(gca,'visible',1,'XTick',[1 3],'YTick',[1 3],'fontsize',10);
+set(gca,'visible',1,'XTick',[],'YTick',[1 3],'fontsize',10);
 axis([1 3.3 1 3.3]);
 text(.47,-.18,'d_k','Units','normalized');
 text(-.18,.4,'d_{k+1}','Units','normalized','rotation',90);
+text(.3,-.1,'d^*','Units','normalized','fontsize',10,'color',cTr3);
+text(.1,-.1,'d^o','Units','normalized','fontsize',10,'color',cTr1);
 text(labX,labY,'i','Units','Normalized','fontsize',10,'fontweight','bold');
 
 
@@ -410,10 +417,12 @@ visualize_network(XC4a(:,1:10,pInd2)/10+[1.6;3.3],...
 visualize_network(XC4a(:,1:10,pInd3)/10+[1.6;2.83],...
                   XC4a(:,11:end,pInd3)/10+[1.6;2.83],conn4a,.33,cTr3,cTr3);
 % Formatting
-set(gca,'visible',1,'XTick',[1 3],'YTick',[1 3],'fontsize',10);
+set(gca,'visible',1,'XTick',[],'YTick',[1 3],'fontsize',10);
 axis([.8 4 .8 4]);
 text(.47,-.18,'d_k','Units','normalized');
 text(-.18,.4,'d_{k+1}','Units','normalized','rotation',90);
+text(.35,-.1,'d^*','Units','normalized','fontsize',10,'color',cTr3);
+text(.1,-.1,'d^o','Units','normalized','fontsize',10,'color',cTr1);
 text(labX,labY,'l','Units','Normalized','fontsize',10,'fontweight','bold');
 
 
