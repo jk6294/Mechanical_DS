@@ -6,19 +6,21 @@ clear; clc;
 cTr1 = [126 240 240]/255;
 cTr2 = [115 164 211]/255;
 cTr3 = [015 082 186]/255;
+lw_d = .3;
 pSc = 0.6;
 labX = -.2;
 labY = 0.94;
+labRowX = -0.35;
 labColY = 1.3;
 
 % Subplot Indices
-nRow = [7 7 16];     NRow = sum(nRow);   nR = [0 cumsum(nRow)];
+nRow = [8 8 17];     NRow = sum(nRow);   nR = [0 cumsum(nRow)];
 nCol = [5 5 5 5];   NCol = sum(nCol);   nC = [0 cumsum(nCol)];
 figM = reshape(1:(NRow*NCol), [NCol, NRow])';
 cellM = cell(length(nRow)*length(nCol),1);
 for i = 1:length(nRow)
     for j = 1:length(nCol)
-        cP = figM((nR(i)+1):(nR(i+1)-1), (nC(j)+1):(nC(j+1)-1));
+        cP = figM((nR(i)+1):(nR(i+1)-2), (nC(j)+1):(nC(j+1)-1));
         cellM(i+(j-1)*length(nRow)) = {cP(:)};
     end
 end
@@ -26,9 +28,13 @@ end
 fig = figure(2); clf;
 
 % Global Annotation
-annotation('line','linewidth',.2,'position',[.285 .1 0 .83],'color',[.9 .9 .9]);
-annotation('line','linewidth',.2,'position',[.482 .1 0 .83],'color',[.9 .9 .9]);
-annotation('line','linewidth',.2,'position',[.679 .1 0 .83],'color',[.9 .9 .9]);
+annotation('arrow','HeadLength',8,'HeadWidth',12,'color',[.7 .7 .7],...
+           'linewidth',3,'position',[.08 .79 0 -.06]);
+annotation('arrow','HeadLength',8,'HeadWidth',12,'color',[.7 .7 .7],...
+           'linewidth',3,'position',[.08 .54 0 -.06]);
+annotation('line','linewidth',.5,'position',[.285 .1 0 .83],'color',[.9 .9 .9]);
+annotation('line','linewidth',.5,'position',[.482 .1 0 .83],'color',[.9 .9 .9]);
+annotation('line','linewidth',.5,'position',[.679 .1 0 .83],'color',[.9 .9 .9]);
 
 
 %% a: Two Modules
@@ -40,13 +46,14 @@ Xs1 = [-2 -2  2  2;...
 conn1 = [1 3; 1 4; 2 3; 2 4];
 visualize_network(Xs1-[3;0],[],conn1,pSc);
 visualize_network(Xs1+[3;0],[],conn1,pSc);
-text(-5-tSx, tSy, 'd_1^a','fontsize',10);
-text(-1-tSx, tSy, 'd_2^a','fontsize',10);
-text(1-tSx, tSy, 'd_1^b','fontsize',10);
-text(5-tSx, tSy, 'd_2^b','fontsize',10);
+text(-5-tSx, tSy, 'd_1','fontsize',10);
+text(-1-tSx, tSy, 'd_2','fontsize',10);
+text(0.8-tSx, tSy, 'd_1''','fontsize',10);
+text(4.8-tSx, tSy, 'd_2''','fontsize',10);
 axis([-5 5 -2 2]);
 text(labX,labY,'a','Units','Normalized','fontsize',10,'fontweight','bold');
-text(.15,labColY,'4-bar linkage','Units','Normalized','fontsize',10);
+text(.2,labColY,'4-Bar Linkage','Units','Normalized','fontsize',10);
+text(labRowX,.22,'Module','rotation',90,'Units','Normalized','fontsize',10);
 
 
 %% b: Coupled Modules
@@ -58,6 +65,7 @@ text(2-tSx, tSy, 'd_2','fontsize',10);
 text(6-tSx, tSy, 'd_3','fontsize',10);
 axis([-5 5 -2 2]+[2 2 0 0]);
 text(labX,labY,'b','Units','Normalized','fontsize',10,'fontweight','bold');
+text(labRowX,-.15,'Combine','rotation',90,'Units','Normalized','fontsize',10);
 
 
 %% c: Cobweb Plot
@@ -120,10 +128,15 @@ text(.47,-.18,'d_k','Units','normalized','fontsize',10);
 text(-.18,.4,'d_{k+1}','Units','normalized','rotation',90,'fontsize',10);
 text(.3,-.1,'d^*','Units','normalized','fontsize',10,'color',cTr3);
 text(labX,labY,'c','Units','Normalized','fontsize',10,'fontweight','bold');
+text(labRowX,.25,'Iterated Map','rotation',90,'Units','Normalized','fontsize',10);
 
 
 %% d: 2 FP + Super Stability
 subplot(NRow,NCol,cellM{4});
+nW = .02;
+xSh = .22;
+ySh = xSh/sqrt(3);
+
 s = sqrt(3);
 Xs2 = [-s/2 0 s/2;...
        -1/2 1 -1/2];
@@ -135,15 +148,23 @@ conn2 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
 visualize_network(Xs2,Xu2,conn2,pSc);
 visualize_network(Xs2p+[3.5;.5],Xu2p+[3.5;.5],conn2,pSc);
 visualize_network(Xs2+[7;0],Xu2+[7;0],conn2,pSc);
-text(-1.2-tSx, .4+tSy, 'd_1','fontsize',10);
-text(1-tSx, .4+tSy, 'd_2','fontsize',10);
 text(2.3-tSx,-.1+tSy, 'd_1','fontsize',10);
-text(4.5-tSx,-.1+tSy, 'd_2','fontsize',10);
+text(4.6-tSx,-.1+tSy, 'd_2','fontsize',10);
 text(5.8-tSx, .4+tSy, 'd_1','fontsize',10);
-text(8.0-tSx, .4+tSy, 'd_2','fontsize',10);
-axis([-1 8 -1.5 2]);
+text(8.1-tSx, .4+tSy, 'd_2','fontsize',10);
+hold on;
+line(Xs2(1,1:2)-xSh,Xs2(2,1:2)+ySh,'color','k','LineWidth',lw_d);
+line(Xs2(1,1)-xSh+nW*[s -s], Xs2(2,1)+ySh+nW*[-1 1],'color','k','LineWidth',lw_d);
+line(Xs2(1,2)-xSh+nW*[s -s], Xs2(2,2)+ySh+nW*[-1 1],'color','k','LineWidth',lw_d);
+line(Xs2(1,2:3)+xSh,Xs2(2,2:3)+ySh,'color','k','LineWidth',lw_d);
+line(Xs2(1,2)+xSh+nW*[s -s], Xs2(2,2)+ySh+nW*[1 -1],'color','k','LineWidth',lw_d);
+line(Xs2(1,3)+xSh+nW*[s -s], Xs2(2,3)+ySh+nW*[1 -1],'color','k','LineWidth',lw_d);
+text(-1.2-tSx, .7+tSy, 'd_1','fontsize',10);
+text(1.2-tSx, .7+tSy, 'd_2','fontsize',10);
+hold off;
+axis([-1 8 -1.5 2]*1.1-[.10 .10 0 0]);
 text(labX,labY,'d','Units','Normalized','fontsize',10,'fontweight','bold');
-text(.1,labColY,'2 Fixed Points','Units','Normalized','fontsize',10);
+text(.12,labColY,'2 Fixed Points','Units','Normalized','fontsize',10);
 
 
 %% e: Tesselate
@@ -242,7 +263,7 @@ text(4.7-tSx,-.1+tSy, 'd_2','fontsize',10);
 text(6.3-tSx, .4+tSy, 'd_1','fontsize',10);
 text(8.2-tSx, .4+tSy, 'd_2','fontsize',10);
 text(labX,labY,'g','Units','Normalized','fontsize',10,'fontweight','bold');
-text(-.02,labColY,'Isolated Limit Cycle','Units','Normalized','fontsize',10);
+text(.05,labColY,'Isolated Limit Cycle','Units','Normalized','fontsize',10);
 axis([-1 8 -1.5 2]);
 
 
@@ -346,7 +367,7 @@ text(6.2-tSx, .0+tSy, 'd_1','fontsize',10);
 text(8.1-tSx, .0+tSy, 'd_2','fontsize',10);
 axis([-1 8 -1.5 2]*1.2 - .7*[1 1 0 0]);
 text(labX,labY,'j','Units','Normalized','fontsize',10,'fontweight','bold');
-text(.25,labColY,'Chaos','Units','Normalized','fontsize',10);
+text(.35,labColY,'Chaos','Units','Normalized','fontsize',10);
 
 
 %% k: Tesselate Chaos
@@ -431,6 +452,6 @@ fName = 'figure2';
 set(gcf, 'Renderer', 'painters'); 
 fig.PaperPositionMode = 'manual';
 fig.PaperUnits = 'centimeters'; 
-fig.PaperPosition = [-2.28 -0.3 24.4 8.9];
-fig.PaperSize = [19 8.5];
+fig.PaperPosition = [-1.7 -0.65 23.8 9.5];
+fig.PaperSize = [19 8.7];
 saveas(fig, ['Figures/' fName], 'pdf');

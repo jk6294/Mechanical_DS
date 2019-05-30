@@ -8,7 +8,7 @@ cDist = [200 200 200]/255;
 ms = 1.5;
 lw = 1.5;
 lw_d = .3;
-labX = -.3;
+labX = -.35;
 labY = 0.94;
 netSX = .2;
 netSc = .3;
@@ -34,10 +34,10 @@ annotation('arrow','HeadLength',8,'HeadWidth',12,'color',[.7 .7 .7],...
            'linewidth',4,'position',[.063 .73 0 -.07]);
 annotation('arrow','HeadLength',8,'HeadWidth',12,'color',[.7 .7 .7],...
            'linewidth',4,'position',[.063 .435 0 -.07]);
-annotation('line','linewidth',.2,'position',[.27 .1 0 .83],'color',[.9 .9 .9]);
-annotation('line','linewidth',.2,'position',[.47 .1 0 .83],'color',[.9 .9 .9]);
-annotation('line','linewidth',.2,'position',[.67 .1 0 .83],'color',[.9 .9 .9]);
-annotation('line','linewidth',.2,'position',[.85 .1 0 .83],'color',[.9 .9 .9]);
+annotation('line','linewidth',.5,'position',[.27 .1 0 .83],'color',[.9 .9 .9]);
+annotation('line','linewidth',.5,'position',[.465 .1 0 .83],'color',[.9 .9 .9]);
+annotation('line','linewidth',.5,'position',[.66 .1 0 .83],'color',[.9 .9 .9]);
+annotation('line','linewidth',.5,'position',[.86 .1 0 .83],'color',[.9 .9 .9]);
 
 
 %% a: Rigid Body Motion
@@ -201,7 +201,7 @@ conn2 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
 visualize_conic_finite(Xs30,Xs3T,[-1 1; -1 1]*2.0,[140;140],5,.7,.85);
 axis([-1 1 -1 1]*1.7 + [netSX netSX .4 .4]);
 text(labX,labY,'g','Units','Normalized','fontsize',10,'fontweight','bold');
-text(.0,labColY,'Displacement','Units','Normalized','fontsize',10);
+text(-0.15,labColY,'Displacement','Units','Normalized','fontsize',10);
 
 
 %% h: Finite Network
@@ -277,7 +277,7 @@ visualize_conic_finite(Xs40,Xs4T,[-2 2;-2 2],[100;100],0,.7,0);
 visualize_conic(Xs40,dXs4,[-2 2;-2 2],[100;100],0,1,0);
 axis([-1 1 -1 1]*2 + [netSX netSX .27 .27]);
 text(labX,labY,'j','Units','Normalized','fontsize',10,'fontweight','bold');
-text(.05,labColY,'Vel. + Disp.','Units','Normalized','fontsize',10);
+text(-0.53,labColY,'Velocity + Displacement','Units','Normalized','fontsize',10);
 
 
 %% k: Construct Infinitesimal and Finite Network

@@ -33,12 +33,12 @@ XuC = cat(3,XuC, [XuC(1,:,:); -XuC(2,:,:)+Ysh]);
 
 %% Place Unspecified Nodes
 Xua = zeros(2,2*L);
-C_UNa = zeros(2*L,4);
+C_UNa = zeros(2*L,3);
 for i = 1:L
     % Node Positions
     Xua(:,[1,2]+2*(i-1)) = XuC(:,:,XuL(i)+k*mod(i-1,2))+[Xsh;0]*(i-1);
     % Node Colors
-    C_UNa([1,2]+2*(i-1),:) = repmat([C_UN(XuL(i),:) 1],2,1);
+    C_UNa([1,2]+2*(i-1),:) = repmat(C_UN(XuL(i),:),2,1);
 end
 
 

@@ -1,9 +1,9 @@
 % Figure 4: Large-Scale Conformational Changes
 %% Prepare Space
-clear; clc;
+% clear; clc;
 
 % Subplot Indices
-NCol = 14;
+NCol = 21;
 colBal = {[1 1 1 4], [1 1 1 4], [3 4]};
 rowBal = [9 9 9]; 
 NRow = sum(rowBal);
@@ -22,9 +22,9 @@ for i = 1:length(colBal)
 end
 
 % Figure Axis Bounds
-axM = [-1.5 1.5 -1.0 2.8];
+axM = [-2.5 1.5 -0.8 3.0];
 labX = -.1;
-labY = 0.90;
+labY = 0.92;
 labColY = 1.3;
 
 fig = figure(4); clf;
@@ -57,15 +57,17 @@ conn1 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
 [Xu1,fV] = construct_network(Xs10,Xs1T,Xu1,conn1,0,1);
 Xu1 = Xu1(1:2,:);
 visualize_network(Xs10,Xu1,conn1,1,[255 100 100]/255, cTr1);
-axis(axM);
+axis(axM+[0 0 .3 .3]);
 text(labX,labY,'a','Units','Normalized','fontsize',10,'fontweight','bold');
+text(labX+.33,labY,'Contract','Units','Normalized','fontsize',10);
+text(labX,0.3,'d_1^*','Units','Normalized','fontsize',10);
 
 annotation('arrow','HeadLength',6,'HeadWidth',8,'color',[.7 .7 .7],...
-           'linewidth',2,'position',[.155 .68 0 -.08]);
+           'linewidth',2,'position',[.1745 .67 0 -.08]);
 annotation('arrow','HeadLength',6,'HeadWidth',8,'color',[.7 .7 .7],...
-           'linewidth',2,'position',[.276 .68 0 -.08]);
+           'linewidth',2,'position',[.292 .67 0 -.08]);
 annotation('arrow','HeadLength',6,'HeadWidth',8,'color',[.7 .7 .7],...
-           'linewidth',2,'position',[.397 .68 0 -.08]);
+           'linewidth',2,'position',[.4095 .67 0 -.08]);
 
 subplot(NRow,NCol,cellM{5}); cla;
 % Simulate Network
@@ -79,6 +81,7 @@ distL = sum(abs(distv - [d1 d2 d3]),2);
 pInd = find(distL==min(distL),1);
 visualize_network(XC1(:,1:3,pInd),XC1(:,4:5,pInd),conn1,...
                   1,[255 100 100]/255, cTr1);
+text(labX,0.42,'d_2^*','Units','Normalized','fontsize',10);
 % plot(d1); hold on; plot(d2); plot(d3); hold off;
 axis(axM);
 drawnow;
@@ -97,8 +100,9 @@ conn2 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
 Xu2 = Xu2(1:2,:);
 % Show Network
 visualize_network(Xs20,Xu2,conn2,1,[255 100 100]/255, cTr2);
-axis(axM);
+axis(axM+[0 0 .3 .3]);
 text(labX,labY,'b','Units','Normalized','fontsize',10,'fontweight','bold');
+text(labX+.34,labY,'Maintain','Units','Normalized','fontsize',10);
 
 subplot(NRow,NCol,cellM{6}); cla;
 % Simulate Network
@@ -130,8 +134,9 @@ conn3 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
 Xu3 = Xu3(1:2,:);
 % Show Network
 visualize_network(Xs30,Xu3,conn1,1,[255 100 100]/255, cTr3);
-axis(axM);
+axis(axM+[0 0 .3 .3]);
 text(labX,labY,'c','Units','Normalized','fontsize',10,'fontweight','bold');
+text(labX+.37,labY,'Expand','Units','Normalized','fontsize',10);
 
 subplot(NRow,NCol,cellM{7}); cla;
 % Simulate Network
@@ -181,9 +186,9 @@ visualize_network(RV*XCN(:,1:size(XsN,2),pInd)+[XSh;YSh],...
                   [255 100 100]/255,C_UNN);
 axis([-1,124,-10,13]);
 annotation('arrow','HeadLength',6,'HeadWidth',8,'color',[.7 .7 .7],...
-           'linewidth',2,'position',[.255 .21 .02 0]);
+           'linewidth',2,'position',[.260 .21 .02 0]);
 annotation('arrow','HeadLength',6,'HeadWidth',8,'color',[.7 .7 .7],...
-           'linewidth',2,'position',[.355 .21 .02 0]);
+           'linewidth',2,'position',[.365 .21 .02 0]);
 text(-.02,labY,'d','Units','Normalized','fontsize',10,'fontweight','bold');
 
 
@@ -278,146 +283,160 @@ pIndK = find(abs(da) == min(abs(da)),1);
 
 
 %% e: Visualize Original and Transition
-subplot(NRow,NCol,[cellM{4} cellM{8}]); cla;
+subplot(NRow,NCol,[cellM{4} cellM{8} cellM{10}]); cla;
 nM = 60;
 nI = 2;
 nSh = 25;
-axis([-1,174,0 nM-nI+3]);
+axis([-1,174,-20, nM-nI+3]);
 R90 = rotz(-90); R90 = R90(1:2,1:2);
+
 
 % N
 visualize_network(R90*XsN+[0;nM-nI],R90*XuN+[0;nM-nI],connN,.3,[],C_UNN);
-RV = rotz(-90); RV = RV(1:2,1:2);
-XSh = 10; YSh = 45;
-visualize_network(RV*XCN(:,1:size(XsN,2),round(pIndN/2))+[XSh;YSh],...
-                  RV*XCN(:,[1:size(XuN,2)]+size(XsN,2),round(pIndN/2))+[XSh;YSh],connN,.3,...
-                  [255 100 100]/255,C_UNN);
-drawnow;
-
-% E
-visualize_network(R90*XsE+[1*nSh;nM-nI],R90*XuE+[1*nSh;nM-nI],connE,.3,[],C_UNE);
-RV = rotz(-100); RV = RV(1:2,1:2);
-XSh = 36; YSh = 34;
-visualize_network(RV*XCE(:,1:size(XsE,2),round(pIndE/2))+[XSh;YSh],...
-                  RV*XCE(:,[1:size(XuE,2)]+size(XsE,2),round(pIndE/2))+[XSh;YSh],connE,.3,...
-                  [255 100 100]/255,C_UNE);
-drawnow;
-
-% T
-visualize_network(R90*XsT+[2*nSh;nM-nI],R90*XuT+[2*nSh;nM-nI],connT,.3,[],C_UNT);
-RV = rotz(-37); RV = RV(1:2,1:2);
-XSh = 44; YSh = 28;
-visualize_network(RV*XCT(:,1:size(XsT,2),round(0.7*pIndT))+[XSh;YSh],...
-                  RV*XCT(:,[1:size(XuT,2)]+size(XsT,2),round(0.7*pIndT))+[XSh;YSh],connT,.3,...
-                  [255 100 100]/255,C_UNT);
-drawnow;
-
-% W
-visualize_network(R90*XsW+[3*nSh;nM-nI],R90*XuW+[3*nSh;nM-nI],connW,.3,[],C_UNW);
-RV = rotz(270); RV = RV(1:2,1:2);
-XSh = 85; YSh = 48;
-visualize_network(RV*XCW(:,1:size(XsW,2),round(pIndW/2))+[XSh;YSh],...
-                  RV*XCW(:,[1:size(XuW,2)]+size(XsW,2),round(pIndW/2))+[XSh;YSh],connW,.3,...
-                  [255 100 100]/255,C_UNW);
-drawnow;
-              
-% O
-visualize_network(R90*XsO+[4*nSh;nM-nI],R90*XuO+[4*nSh;nM-nI],connO,.3,[],C_UNO);
-RV = rotz(-90); RV = RV(1:2,1:2);
-XSh = 103; YSh = 30;
-visualize_network(RV*XCO(:,1:size(XsO,2),round(pIndO/2))+[XSh;YSh],...
-                  RV*XCO(:,[1:size(XuO,2)]+size(XsO,2),round(pIndO/2))+[XSh;YSh],connO,.3,...
-                  [255 100 100]/255,C_UNO);
-drawnow;
-
-% R
-visualize_network(R90*XsR+[5*nSh;nM-nI],R90*XuR+[5*nSh;nM-nI],connR,.3,[],C_UNR);
-RV = rotz(-21); RV = RV(1:2,1:2);
-XSh = 108; YSh = 16;
-visualize_network(RV*XCR(:,1:size(XsR,2),round(pIndR/2))+[XSh;YSh],...
-                  RV*XCR(:,[1:size(XuR,2)]+size(XsR,2),round(pIndR/2))+[XSh;YSh],connR,.3,...
-                  [255 100 100]/255,C_UNR);
-drawnow;
-
-% K
-visualize_network(R90*XsK+[6*nSh-5;nM-nI],R90*XuK+[6*nSh-5;nM-nI],connK,.3,[],C_UNK);
-RV = rotz(-10); RV = RV(1:2,1:2);
-XSh = 133; YSh = 15;
-visualize_network(RV*XCK(:,1:size(XsK,2),round(pIndK/2))+[XSh;YSh],...
-                  RV*XCK(:,[1:size(XuK,2)]+size(XsK,2),round(pIndK/2))+[XSh;YSh],connK,.3,...
-                  [255 100 100]/255,C_UNK);
-drawnow;
-
-text(nSh/175-.1,0.955,'N','Units','Normalized','fontsize',10);
-text(2*nSh/175-.1,0.955,'E','Units','Normalized','fontsize',10);
-text(3*nSh/175-.1,0.955,'T','Units','Normalized','fontsize',10);
-text(4*nSh/175-.1,0.955,'W','Units','Normalized','fontsize',10);
-text(5*nSh/175-.1,0.955,'O','Units','Normalized','fontsize',10);
-text(6*nSh/175-.1,0.955,'R','Units','Normalized','fontsize',10);
-text(7*nSh/175-.1,0.955,'K','Units','Normalized','fontsize',10);
-text(-.05,0.955,'e','Units','Normalized','fontsize',10,'fontweight','bold');
-
-
-%% f: Full Word: NETWORK
-subplot(NRow,NCol,cellM{10}); cla;
-axis([15,180,-10,13] - [20 20 0 0]);
-
-% N
+RV = rotz(-110); RV = RV(1:2,1:2);
+XSh = 20; YSh = 57;
+visualize_network(RV*XCN(:,1:size(XsN,2),round(pIndN/3))+[XSh;YSh],...
+                  RV*XCN(:,[1:size(XuN,2)]+size(XsN,2),round(pIndN/3))+[XSh;YSh],connN,.3,...
+                  [255 100 100]/255,C_UNN,.4);
+RV = rotz(-140); RV = RV(1:2,1:2);
+XSh = 32; YSh = 23;
+visualize_network(RV*XCN(:,1:size(XsN,2),round(2*pIndN/3))+[XSh;YSh],...
+                  RV*XCN(:,[1:size(XuN,2)]+size(XsN,2),round(2*pIndN/3))+[XSh;YSh],connN,.3,...
+                  [255 100 100]/255,C_UNN,.4);
 RV = rotz(6.5); RV = RV(1:2,1:2);
-XSh = 0; YSh = -3;
+XSh = 0; YSh = -12;
 visualize_network(RV*XCN(:,1:size(XsN,2),pIndN)+[XSh;YSh],...
                   RV*XCN(:,[1:size(XuN,2)]+size(XsN,2),pIndN)+[XSh;YSh],connN,.3,...
                   [255 100 100]/255,C_UNN);
 drawnow;
 
+
 % E
+visualize_network(R90*XsE+[1*nSh;nM-nI],R90*XuE+[1*nSh;nM-nI],connE,.3,[],C_UNE);
+RV = rotz(-100); RV = RV(1:2,1:2);
+XSh = 36; YSh = 59;
+visualize_network(RV*XCE(:,1:size(XsE,2),round(pIndE/3))+[XSh;YSh],...
+                  RV*XCE(:,[1:size(XuE,2)]+size(XsE,2),round(pIndE/3))+[XSh;YSh],connE,.3,...
+                  [255 100 100]/255,C_UNE,.4);
+XSh = 40; YSh = 30;
+visualize_network(RV*XCE(:,1:size(XsE,2),round(2*pIndE/3))+[XSh;YSh],...
+                  RV*XCE(:,[1:size(XuE,2)]+size(XsE,2),round(2*pIndE/3))+[XSh;YSh],connE,.3,...
+                  [255 100 100]/255,C_UNE,.4);
 RV = rotz(-133); RV = RV(1:2,1:2);
-XSh = 52; YSh = 12;
+XSh = 52; YSh = 3;
 visualize_network(RV*XCE(:,1:size(XsE,2),pIndE)+[XSh;YSh],...
                   RV*XCE(:,[1:size(XuE,2)]+size(XsE,2),pIndE)+[XSh;YSh],connE,.3,...
                   [255 100 100]/255,C_UNE);
 drawnow;
-
+              
+              
 % T
+visualize_network(R90*XsT+[2*nSh;nM-nI],R90*XuT+[2*nSh;nM-nI],connT,.3,[],C_UNT);
+RV = rotz(-70); RV = RV(1:2,1:2);
+XSh = 58; YSh = 58;
+visualize_network(RV*XCT(:,1:size(XsT,2),round(0.2*pIndT))+[XSh;YSh],...
+                  RV*XCT(:,[1:size(XuT,2)]+size(XsT,2),round(0.2*pIndT))+[XSh;YSh],connT,.3,...
+                  [255 100 100]/255,C_UNT,.4);
+RV = rotz(-37); RV = RV(1:2,1:2);
+XSh = 44; YSh = 28;
+visualize_network(RV*XCT(:,1:size(XsT,2),round(0.7*pIndT))+[XSh;YSh],...
+                  RV*XCT(:,[1:size(XuT,2)]+size(XsT,2),round(0.7*pIndT))+[XSh;YSh],connT,.3,...
+                  [255 100 100]/255,C_UNT,.4);
 RV = rotz(-21); RV = RV(1:2,1:2);
-XSh = 36; YSh = 10;
+XSh = 36; YSh = 1;
 visualize_network(RV*XCT(:,1:size(XsT,2),pIndT+5)+[XSh;YSh],...
                   RV*XCT(:,[1:size(XuT,2)]+size(XsT,2),pIndT+5)+[XSh;YSh],connT,.3,...
                   [255 100 100]/255,C_UNT);
 drawnow;
-              
+
+
 % W
+visualize_network(R90*XsW+[3*nSh;nM-nI],R90*XuW+[3*nSh;nM-nI],connW,.3,[],C_UNW);
+RV = rotz(255); RV = RV(1:2,1:2);
+XSh = 95; YSh = 60;
+visualize_network(RV*XCW(:,1:size(XsW,2),round(pIndW/3))+[XSh;YSh],...
+                  RV*XCW(:,[1:size(XuW,2)]+size(XsW,2),round(pIndW/3))+[XSh;YSh],connW,.3,...
+                  [255 100 100]/255,C_UNW,.4);
+RV = rotz(225); RV = RV(1:2,1:2);
+XSh = 104; YSh = 28;
+visualize_network(RV*XCW(:,1:size(XsW,2),round(2*pIndW/3))+[XSh;YSh],...
+                  RV*XCW(:,[1:size(XuW,2)]+size(XsW,2),round(2*pIndW/3))+[XSh;YSh],connW,.3,...
+                  [255 100 100]/255,C_UNW,.4);
 RV = rotz(180); RV = RV(1:2,1:2);
-XSh = 102; YSh = -1.5;
+XSh = 102; YSh = -10.5;
 visualize_network(RV*XCW(:,1:size(XsW,2),pIndW)+[XSh;YSh],...
                   RV*XCW(:,[1:size(XuW,2)]+size(XsW,2),pIndW)+[XSh;YSh],connW,.3,...
                   [255 100 100]/255,C_UNW);
 drawnow;
+  
 
 % O
+visualize_network(R90*XsO+[4*nSh;nM-nI],R90*XuO+[4*nSh;nM-nI],connO,.3,[],C_UNO);
+RV = rotz(-90); RV = RV(1:2,1:2);
+XSh = 108; YSh = 54;
+visualize_network(RV*XCO(:,1:size(XsO,2),round(pIndO/3))+[XSh;YSh],...
+                  RV*XCO(:,[1:size(XuO,2)]+size(XsO,2),round(pIndO/3))+[XSh;YSh],connO,.3,...
+                  [255 100 100]/255,C_UNO,.4);
+XSh = 105; YSh = 25;
+visualize_network(RV*XCO(:,1:size(XsO,2),round(2*pIndO/3))+[XSh;YSh],...
+                  RV*XCO(:,[1:size(XuO,2)]+size(XsO,2),round(2*pIndO/3))+[XSh;YSh],connO,.3,...
+                  [255 100 100]/255,C_UNO,.4);
 RV = rotz(0); RV = RV(1:2,1:2);
-XSh = 82; YSh = -1.5;
+XSh = 82; YSh = -10.5;
 visualize_network(RV*XCO(:,1:size(XsO,2),pIndO)+[XSh;YSh],...
                   RV*XCO(:,[1:size(XuO,2)]+size(XsO,2),pIndO)+[XSh;YSh],connO,.3,...
                   [255 100 100]/255,C_UNO);
 drawnow;
-              
+
+
 % R
+visualize_network(R90^3*XsR+[5*nSh;24-nI],R90^3*XuR+[5*nSh;24-nI],connR,.3,[],C_UNR);
+RV = rotz(92); RV = RV(1:2,1:2);
+XSh = 135; YSh = 20;
+visualize_network(RV*XCR(:,1:size(XsR,2),round(pIndR/4))+[XSh;YSh],...
+                  RV*XCR(:,[1:size(XuR,2)]+size(XsR,2),round(pIndR/4))+[XSh;YSh],connR,.3,...
+                  [255 100 100]/255,C_UNR,.4);
+RV = rotz(180); RV = RV(1:2,1:2);
+XSh = 140; YSh = 12;
+visualize_network(RV*XCR(:,1:size(XsR,2),round(2*pIndR/3))+[XSh;YSh],...
+                  RV*XCR(:,[1:size(XuR,2)]+size(XsR,2),round(2*pIndR/3))+[XSh;YSh],connR,.3,...
+                  [255 100 100]/255,C_UNR,.4);
 RV = rotz(222); RV = RV(1:2,1:2);
-XSh = 123; YSh = 14;
+XSh = 123; YSh = 5;
 visualize_network(RV*XCR(:,1:size(XsR,2),pIndR)+[XSh;YSh],...
                   RV*XCR(:,[1:size(XuR,2)]+size(XsR,2),pIndR)+[XSh;YSh],connR,.3,...
                   [255 100 100]/255,C_UNR);
 drawnow;
-              
+
+
 % K
+visualize_network(R90*XsK+[6*nSh-5;nM-nI],R90*XuK+[6*nSh-5;nM-nI],connK,.3,[],C_UNK);
+RV = rotz(-90); RV = RV(1:2,1:2);
+XSh = 157; YSh = 66;
+visualize_network(RV*XCK(:,1:size(XsK,2),round(pIndK/3))+[XSh;YSh],...
+                  RV*XCK(:,[1:size(XuK,2)]+size(XsK,2),round(pIndK/3))+[XSh;YSh],connK,.3,...
+                  [255 100 100]/255,C_UNK,.4);
+RV = rotz(-10); RV = RV(1:2,1:2);
+XSh = 131; YSh = 8;
+visualize_network(RV*XCK(:,1:size(XsK,2),round(2*pIndK/3))+[XSh;YSh],...
+                  RV*XCK(:,[1:size(XuK,2)]+size(XsK,2),round(2*pIndK/3))+[XSh;YSh],connK,.3,...
+                  [255 100 100]/255,C_UNK,.4);
 RV = rotz(67); RV = RV(1:2,1:2);
-XSh = 116; YSh = -26;
+XSh = 116; YSh = -35;
 visualize_network(RV*XCK(:,1:size(XsK,2),pIndK)+[XSh;YSh],...
                   RV*XCK(:,[1:size(XuK,2)]+size(XsK,2),pIndK)+[XSh;YSh],connK,.3,...
                   [255 100 100]/255,C_UNK);
 drawnow;
-text(-.05,labY,'f','Units','Normalized','fontsize',10,'fontweight','bold');
+
+text(nSh/175-.1,0.978,'N','Units','Normalized','fontsize',10);
+text(2*nSh/175-.1,0.978,'E','Units','Normalized','fontsize',10);
+text(3*nSh/175-.1,0.978,'T','Units','Normalized','fontsize',10);
+text(4*nSh/175-.1,0.978,'W','Units','Normalized','fontsize',10);
+text(5*nSh/175-.1,0.978,'O','Units','Normalized','fontsize',10);
+text(6*nSh/175-.1,0.978,'R','Units','Normalized','fontsize',10);
+text(7*nSh/175-.1,0.978,'K','Units','Normalized','fontsize',10);
+text(-.05,0.978,'e','Units','Normalized','fontsize',10,'fontweight','bold');
+text(-.05,0.22,'f','Units','Normalized','fontsize',10,'fontweight','bold');
 
 
 %% Animate Network Alone
@@ -463,7 +482,7 @@ fName = 'figure4';
 set(gcf, 'Renderer', 'painters'); 
 fig.PaperPositionMode = 'manual';
 fig.PaperUnits = 'centimeters'; 
-fig.PaperPosition = [-3.0 -0.75 24.3 6.4];
+fig.PaperPosition = [-2.95 -0.75 24.5 6.4];
 fig.PaperSize = [19 5.0];
 saveas(fig, ['Figures/' fName], 'pdf');
 
