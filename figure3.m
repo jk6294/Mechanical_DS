@@ -1,11 +1,12 @@
 % Figure 3: Designing Folding Sequence
 %% Prepare Space
 clear; clc;
+set(groot,'defaulttextinterpreter','latex');
 
 % Subplot Indices
 NCol = 20;
-colBal = {[1 1 1], [1 1 1], 1};
-rowBal = [9 9 14]; 
+colBal = {[1 1 1], [1 1 1], [1 1 1], 1};
+rowBal = [9 9 9 14]; 
 NRow = sum(rowBal);
 ru = cumsum(rowBal)-1;
 rd = [0 ru(1:end-1)+1]+1;
@@ -28,11 +29,16 @@ labY = 0.95;
 labColY = 1.3;
 
 fig = figure(3); clf;
+set(gcf, 'Renderer', 'painters', 'Position', [10 10 24.0 9.5], 'Units', 'centimeters'); 
 s = sqrt(3);
 pSc = 0.5;
+lw_d = .5;
+lSh = .5;
+nW = .1;
 
-annotation('line','linewidth',.5,'position',[.380 .49 0 .4],'color',[.9 .9 .9]);
-annotation('line','linewidth',.5,'position',[.658 .49 0 .4],'color',[.9 .9 .9]);
+annotation('line','linewidth',.5,'position',[.380 .44 0 .4],'color',[.9 .9 .9]);
+annotation('line','linewidth',.5,'position',[.658 .44 0 .4],'color',[.9 .9 .9]);
+annotation('line','linewidth',.5,'position',[.135 .42 .765 0],'color',[.9 .9 .9]);
 
 
 %% a: Slope 1 Module
@@ -42,7 +48,7 @@ subplot(NRow,NCol,cellM{1}); cla;
 Xs1 = [-s/2  0    s/2;...
        -0.5  1.0 -0.5];
 dXs1 = [ 0.0  0.0 -0.0;...
-         0.5 -0.5  0.5];
+         0.7 -0.7  0.7];
 lSh = .6;
 Xu1 = [[- lSh; 1] [ lSh; 1]];
 conn1 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
@@ -58,37 +64,42 @@ Xu1c = [Xu1 Xu1f+[s/2;0]];
 conn1c = [1 7; 2 7; 3 7; 1 8; 2 8; 3 8; 4 9; 5 9; 6 9; 4 10; 5 10; 6 10];
 [Xs1a,Xu1a,conn1a] = tesselate_network_old(Xs1c,Xu1c,conn1c,[s;0],[3;1]);
 dXs1G = zeros(size(Xs1a)); 
-dXs1G(2,1:2:size(Xs1a,2)) = .5;
-dXs1G(2,2:2:size(Xs1a,2)) = -.5;
+dXs1G(2,1:2:size(Xs1a,2)) = .7;
+dXs1G(2,2:2:size(Xs1a,2)) = -.7;
 
 % Show Module
 construct_motion(Xs1+[1.1;0], dXs1, Xu1+[1.1;0], conn1, 1, 1, pSc);
-construct_motion(Xs1a+[6.6;0],dXs1G,Xu1a+[6.6;0],conn1a,1,1, pSc);
+construct_motion(Xs1a+[6.6;0],dXs1G,Xu1a+[6.6;0],conn1a,1, 1, pSc);
+line_coordinates(Xs1(:,1:2)+[1.1;0],1.1,nW,lw_d);
+line_coordinates(Xs1(:,2:3)+[1.1;0],1.1,nW,lw_d);
 axis(axM - [1 1 1.3 1.3]);
-text(labX,labY,'a','Units','Normalized','fontsize',10,'fontweight','bold');
+
+% Text
+text(.04, .6, '$\mathrm{d_1}$', 'Units', 'Normalized', 'fontsize',10);
+text(.31, .6, '$\mathrm{d_2}$', 'Units', 'Normalized', 'fontsize',10);
+text(labX,labY,'\textbf{a}','Units','Normalized','fontsize',10);
 text(labX+.12,labY,'Module','Units','Normalized','fontsize',10);
 text(labX+.6,labY,'Combined','Units','Normalized','fontsize',10);
-text(.3,labColY,'\delta d_2/\delta d_1 = 1','Units','Normalized','fontsize',10);
+text(.17,labColY,'\textbf{Uniform:} $\mathrm{\delta d_2/\delta d_1 = 1}$','Units','Normalized',...
+     'fontsize',10);
 drawnow;
-
-fName = 'figure3';
-set(gcf, 'Renderer', 'painters'); 
-fig.PaperPositionMode = 'manual';
-fig.PaperUnits = 'centimeters'; 
-fig.PaperPosition = [-1.9 -0.645 17.4 6.2];
-fig.PaperSize = [14 5.45];
-saveas(fig, ['Figures/' fName], 'pdf');
 
 
 %% b: Slope 1 Propagate Combined Motion
 subplot(NRow,NCol,cellM{4}); cla;
 [Xs1a,Xu1a,conn1a] = tesselate_network_old(Xs1c,Xu1c,conn1c,[s;0],[10;1]);
 [XC,fC] = sim_motion(Xs1a,Xu1a,conn1a,.05,75,[Xs1a Xu1a],0);
+visualize_network(XC(:,1:size(Xs1a,2),1),...
+                  XC(:,[1:size(Xu1a,2)]+size(Xs1a,2),1),conn1a, pSc);
+axis(axM+[2.5 2.5 -1.1 -1.1]);
+text(labX,labY-.1,'\textbf{b}','Units','Normalized','fontsize',10);
+text(labX+.4,labY-.1,'Motion','Units','Normalized','fontsize',10);
+drawnow;
+
+subplot(NRow,NCol,cellM{7}); cla;
 visualize_network(XC(:,1:size(Xs1a,2),end),...
                   XC(:,[1:size(Xu1a,2)]+size(Xs1a,2),end),conn1a, pSc);
-axis(axM+[2.5 2.5 -1.3 -1.3]);
-text(labX,labY,'b','Units','Normalized','fontsize',10,'fontweight','bold');
-text(labX+.4,labY,'Uniform','Units','Normalized','fontsize',10);
+axis(axM+[2.5 2.5 -2.3 -2.3]);
 drawnow;
 
 
@@ -99,7 +110,7 @@ subplot(NRow,NCol,cellM{2}); cla;
 Xs2 = [-s/2  0    s/2;...
        -0.5  1.0 -0.5];
 dXs2 = [ 0.0  0.0  0.0;...
-         -0.2  0.0  -0.3]*2;
+         -0.2  0.0  -0.3]*2.5;
 Xu2 = [ 0.30  0.8;...
        -0.50  1.3];
 xV = s/2;
@@ -118,30 +129,49 @@ Xu2c = [Xu2 Xu2f+[s/2;0]];
 conn2c = [1 7; 2 7; 3 7; 1 8; 2 8; 3 8; 4 9; 5 9; 6 9; 4 10; 5 10; 6 10];
 [Xs2a,Xu2a,conn2a] = tesselate_network_old(Xs2c,Xu2c,conn2c,[s;0],[3;1]);
 dXs2G = zeros(size(Xs2a)); 
-dXs2G(2,end) = 1;
-dXs2G(2,end-6) = dXs2G(2,end)*(Uss(2,1)/Uss(2,3))^3;
-dXs2G = dXs2G*.9;
+r = Uss(2,1)/Uss(2,3);
+dXs2G(2,end) = 2.3;
+dXs2G(2,end-1) = 0;
+dXs2G(2,end-2) = dXs2G(2,end)*r^1;
+dXs2G(2,end-3) = -dXs2G(2,end)*(r^2-r);
+dXs2G(2,end-4) = dXs2G(2,end)*(r^3-r^2+r);
+dXs2G(2,end-5) = -dXs2G(2,end)*(r^4-r^3+r^2-r);
+dXs2G(2,end-6) = dXs2G(2,end)*(r^5-r^4+r^3-r^2+r);
+dXs2G(2,end-7) = -dXs2G(2,end)*(r^6-r^5+r^6-r^5+r^2-r);
+dXs2G(2,:) = (dXs2G(2,:)-dXs2G(2,end-5))*1.0;
 
 % Show Module
 construct_motion(Xs2+[1.1;0], dXs2, Xu2+[1.1;0], conn2, 1, 1, pSc);
 construct_motion(Xs2a+[6.6;0],dXs2G,Xu2a+[6.6;0],conn2a,1,1, pSc);
+line_coordinates(Xs2(:,1:2)+[1.1;0],.5,nW,lw_d);
+line_coordinates(Xs2(:,2:3)+[1.1;0],.5,nW,lw_d);
 axis(axM - [1 1 1.3 1.3]);
-text(labX,labY,'c','Units','Normalized','fontsize',10,'fontweight','bold');
+
+% Text
+text(.04, .4, '$\mathrm{d_1}$', 'Units', 'Normalized', 'fontsize',10);
+text(.31, .4, '$\mathrm{d_2}$', 'Units', 'Normalized', 'fontsize',10);
+text(labX,labY,'\textbf{c}','Units','Normalized','fontsize',10);
 text(labX+.12,labY,'Module','Units','Normalized','fontsize',10);
 text(labX+.6,labY,'Combined','Units','Normalized','fontsize',10);
-text(.3,labColY,'\delta d_2/\delta d_1 = 1.5','Units','Normalized','fontsize',10);
+text(-.12,labColY,'\textbf{Partially Localized Right:} $\mathrm{\delta d_2/\delta d_1 = 1.5}$',...
+     'Units','Normalized','fontsize',10);
 drawnow;
 
 
-% d: Slope -2 Propagate Combined Motion
+%% d: Slope -2 Propagate Combined Motion
 subplot(NRow,NCol,cellM{5}); cla;
 [Xs2a,Xu2a,conn2a] = tesselate_network_old(Xs2c,Xu2c,conn2c,[s;0],[10;1]);
 [XC,fC] = sim_motion(Xs2a,Xu2a,conn2a,.05, 50, [Xs2a Xu2a],0);
+visualize_network(XC(:,1:size(Xs2a,2),1),...
+                  XC(:,[1:size(Xu2a,2)]+size(Xs2a,2),1),conn2a, pSc);
+axis(axM+[2.5 2.5 -1.1 -1.1]);
+text(labX,labY-.1,'\textbf{d}','Units','Normalized','fontsize',10);
+text(labX+.4,labY-.1,'Motion','Units','Normalized','fontsize',10);
+
+subplot(NRow,NCol,cellM{8}); cla;
 visualize_network(XC(:,1:size(Xs2a,2),end),...
                   XC(:,[1:size(Xu2a,2)]+size(Xs2a,2),end),conn2a, pSc);
-axis(axM+[2.5 2.5 -1.3 -1.3]);
-text(labX,labY,'d','Units','Normalized','fontsize',10,'fontweight','bold');
-text(labX+.15,labY,'Partially Localized Right','Units','Normalized','fontsize',10);
+axis(axM+[2.5 2.5 -2.3 -2.3]);
 drawnow;
 
 
@@ -152,7 +182,7 @@ subplot(NRow,NCol,cellM{3}); cla;
 Xs3 = [-s/2  0    s/2;...
         -0.5  1.0 -0.5];
 dXs3 = [ 0.0  0.0 -0.0;...
-         0.5  0.0 -0.0];
+         0.8  0.0 -0.0];
 lSh = 0.3;
 Xu3 = [[-lSh; -.5] [.25*s; .25]+[-1;s]*lSh/2];
 conn3 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
@@ -172,11 +202,18 @@ dXs3G = zeros(size(Xs3a)); dXs3G(:,1) =  dXs3(:,1);
 % Visualize
 construct_motion(Xs3+[1.1;0], dXs3, Xu3+[1.1;0], conn3, 1, 1, pSc);
 construct_motion(Xs3a+[6.6;0],dXs3G,Xu3a+[6.6;0],conn3a,1,1, pSc);
+line_coordinates(Xs2(:,1:2)+[1.1;0],.8,nW,lw_d);
+line_coordinates(Xs2(:,2:3)+[1.1;0],.8,nW,lw_d);
+
+% Text
 axis(axM - [1 1 1.3 1.3]);
+text(.04, .55, '$\mathrm{d_1}$', 'Units', 'Normalized', 'fontsize',10);
+text(.31, .55, '$\mathrm{d_2}$', 'Units', 'Normalized', 'fontsize',10);
 text(labX,labY,'e','Units','Normalized','fontsize',10,'fontweight','bold');
 text(labX+.12,labY,'Module','Units','Normalized','fontsize',10);
 text(labX+.6,labY,'Combined','Units','Normalized','fontsize',10);
-text(.3,labColY,'\delta d_2/\delta d_1 = 0','Units','Normalized','fontsize',10);
+text(-.02,labColY,'\textbf{Fully Localized Left:} $\mathrm{\delta d_2/\delta d_1 = 0}$',...
+     'Units','Normalized','fontsize',10);
 drawnow;
 
 
@@ -184,16 +221,22 @@ drawnow;
 subplot(NRow,NCol,cellM{6}); cla;
 [Xs3a,Xu3a,conn3a] = tesselate_network_old(Xs3c,Xu3c,conn3c,[s;0],[14;1]);
 [XC,fC] = sim_motion(Xs3a,Xu3a,conn3a,.05,345,-[Xs3a Xu3a],0);
+visualize_network(XC(:,1:size(Xs3a,2),1),...
+                  XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),1),conn3a, pSc);
+axis(axM+[4.5 4.5 -1.1 -1.1]);
+text(labX,labY-.1,'\textbf{f}','Units','Normalized','fontsize',10,'fontweight','bold');
+text(labX+.4,labY-.1,'Motion','Units','Normalized','fontsize',10);
+drawnow;
+
+subplot(NRow,NCol,cellM{9}); cla;
 visualize_network(XC(:,1:size(Xs3a,2),end),...
                   XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),end),conn3a, pSc);
-axis(axM+[4.5 4.5 -1.7 -1.7]);
-text(labX,labY,'f','Units','Normalized','fontsize',10,'fontweight','bold');
-text(labX+.25,labY,'Fully Localized Left','Units','Normalized','fontsize',10);
+axis(axM+[4.5 4.5 -2.3 -2.3]);
 drawnow;
 
 
 %% g: Place Modules
-subplot(NRow,NCol,cellM{7}); cla;
+subplot(NRow,NCol,cellM{10}); cla;
 
 % Arrow Annotations
 annotation('arrow','HeadLength',8,'HeadWidth',12,'color',[.7 .7 .7],...
@@ -237,8 +280,8 @@ dXs3a2 = zeros(size(Xs3a2)); dXs3a2(1,1) =  1;
 construct_motion(Xs3a1,dXs3a1,Xu3a1,conn3a1,1,1,pSc/2);
 construct_motion(Xs3a2+[0;1],dXs3a2,Xu3a2+[0;1],conn3a2,1,1,pSc/2);
 axis([-.1 80 0 11.0]-[0 0 2 2]);
-text(-.006,labY-.15,'g','Units','Normalized','fontsize',10,'fontweight','bold');
-text(.4,labY,'Mechanical AND Gate','Units','Normalized','fontsize',10);
+text(-.006,labY-.1,'\textbf{g}','Units','Normalized','fontsize',10);
+text(.39,labY+.05,'\textbf{Mechanical AND Gate}','Units','Normalized','fontsize',10);
 drawnow;
 
 
@@ -261,7 +304,7 @@ rotV = rotz(0.8); rotV = rotV(1:2,1:2);
 sh = [24; -.123];
 visualize_network(rotV*XC(:,1:size(Xs3a,2),pInd)+sh,...
                   rotV*XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd)+sh,conn3a, pSc/2);
-text(.28,labY-.15,'h','Units','Normalized','fontsize',10,'fontweight','bold');
+text(.28,labY-.15,'\textbf{h}','Units','Normalized','fontsize',10);
 drawnow;
 
 
@@ -276,7 +319,7 @@ rotV = rotz(1.9); rotV = rotV(1:2,1:2);
 sh = [45; -.609];
 visualize_network(rotV*XC(:,1:size(Xs3a,2),pInd)+sh,...
                   rotV*XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd)+sh,conn3a, pSc/2);
-text(.56,labY-.15,'i','Units','Normalized','fontsize',10,'fontweight','bold');
+text(.56,labY-.15,'\textbf{i}','Units','Normalized','fontsize',10);
 drawnow;
 
 
@@ -291,7 +334,7 @@ rotV = rotz(0.52); rotV = rotV(1:2,1:2);
 sh = [65; -0.712];
 visualize_network(rotV*XC(:,1:size(Xs3a,2),pInd)+sh,...
                   rotV*XC(:,[1:size(Xu3a,2)]+size(Xs3a,2),pInd)+sh,conn3a, pSc/2);
-text(.83,labY-.15,'j','Units','Normalized','fontsize',10,'fontweight','bold');
+text(.83,labY-.15,'\textbf{j}','Units','Normalized','fontsize',10);
 drawnow;
 
 
@@ -300,8 +343,8 @@ fName = 'figure3';
 set(gcf, 'Renderer', 'painters'); 
 fig.PaperPositionMode = 'manual';
 fig.PaperUnits = 'centimeters'; 
-fig.PaperPosition = [-2.9 -0.75 24.0 7.2];
-fig.PaperSize = [19 6.35];
+fig.PaperPosition = [-2.9 -1.02 24.0 9.5];
+fig.PaperSize = [19 8.2];
 saveas(fig, ['Figures/' fName], 'pdf');
 
 
