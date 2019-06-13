@@ -32,8 +32,8 @@ figure(1);
 dV = 0.742:.0005:1.872;
 D = [L;L]; D = D(1:end-1)';
 hold on;
-plot(dV,f(dV),'k-','linewidth',2);
 line(D(1:end-1),[.5;D(3:end)],'color',c);
+plot(dV,f(dV),'k-','linewidth',2);
 hold off;
 
 figure(2); clf;
