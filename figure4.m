@@ -96,7 +96,7 @@ text(.28, -.05, '$\mathrm{d^a}$','Units','Normalized','fontsize',10);
 text(labX,labY,'\textbf{a}','Units','Normalized','fontsize',10);
 text(labX+.08,labY+.3,'Initial: $\mathrm{D_1^*}$','Units','Normalized','fontsize',10);
 text(labX+.65,labY+.3,'Final: $\mathrm{D_2^*}$','Units','Normalized','fontsize',10);
-text(labX-.1,labY-.82,'Contract','Units','Normalized','Rotation',90,'fontsize',10);
+text(labX-.07,labY-.82,'Contract','Units','Normalized','Rotation',90,'fontsize',10);
 annotation('arrow','HeadLength',6,'HeadWidth',8,'color',[.7 .7 .7],...
            'linewidth',2,'position',[.205 .77 .02 0]);
 
