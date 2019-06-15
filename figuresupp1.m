@@ -4,11 +4,11 @@ set(groot,'defaulttextinterpreter','latex');
 
 fig = figure(1); clf;
 flw = [19.8 7.8];
-set(gcf, 'Renderer', 'painters', 'Position', [-25 25 flw], 'Units', 'centimeters'); 
+set(gcf, 'Renderer', 'painters', 'Position', [0 15 flw], 'Units', 'centimeters'); 
 
 
 %% a: Module: Full Motion
-subplot(1,2,1);
+subplot(1,2,1); cla;
 s = sqrt(3);
 pLim = [1.2 4.2];
 netSC = .7;
@@ -87,7 +87,7 @@ text(1.3,2.8,'$\mathrm{d_2 = f_3(d_1)}$','fontsize',10,'color',[015 082 186]/255
 text(1.3,2.5,'$\mathrm{d_2 = f_4(d_1)}$','fontsize',10,'color',[000 000 000]/255);
 xlabel('$\mathrm{d_1}$','fontsize',10);
 ylabel('$\mathrm{d_2}$','fontsize',10);
-text(-0.05,0.98,'\textbf{a}','units','normalized','fontsize',10);
+text(-0.05,0.98,'\textbf{b}','units','normalized','fontsize',10);
 
 
 
@@ -97,6 +97,6 @@ fName = 'figure1supp';
 set(gcf, 'Renderer', 'painters'); 
 fig.PaperPositionMode = 'manual';
 fig.PaperUnits = 'centimeters';
-fig.PaperPosition = [-1.5 .2 flw];
-fig.PaperSize = [16.5 7.8];
+fig.PaperPosition = [-1.5 -.2 flw];
+fig.PaperSize = [16.5 7.2];
 saveas(fig, ['Figures/' fName], 'pdf');

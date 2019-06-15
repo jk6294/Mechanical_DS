@@ -79,6 +79,7 @@ text(.65, 1, 'Combine', 'Units', 'Normalized', 'fontsize', 10);
 axis([0 14.0 0 5.2] + [-5.6 -5.6 -2.7 -2.7]);
 text(labX,labY,'\textbf{a}','Units','Normalized','fontsize',10,'fontweight','bold');
 text(.2,labColY,'\textbf{4-Bar Linkage}','Units','Normalized','fontsize',10,'fontweight','bold');
+drawnow;
 
 
 %% b: Coupled Modules
@@ -115,6 +116,7 @@ text(tSx, -4.5, '$\mathrm{d_1=3}$', 'fontsize', 10);
 text(-tSx-3, -4.5, '$\mathrm{d_3=3}$', 'fontsize', 10);
 text(labX,labY,'\textbf{b}','Units','Normalized','fontsize',10,'fontweight','bold');
 text(.32, 1, 'Motion', 'Units', 'Normalized', 'fontsize', 10);
+drawnow;
 
 
 %% c: Cobweb Plot
@@ -141,6 +143,9 @@ for i = 1:length(dP)-2
     set(ah,'parent',gca);
     set(ah,'position',[dPa(i) dPb(i) diff(dPa(i:i+1))*caF diff(dPb(i:i+1))*caF]);
 end
+plot(dP(1),1,'ks','markersize',5,'linewidth',1);
+plot(dP(2),dP(3),'ks','markersize',5,'linewidth',1);
+plot(dP(4),dP(5),'ks','markersize',5,'linewidth',1);
 % Cobweb 2
 dP = [D1(:,pInd2)';D1(:,pInd2)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
@@ -168,14 +173,18 @@ axis([1 3.4 1 3.4]);
 
 % Text
 text(.6,.5,'$\mathrm{d_{k+1}=d_k}$','Units','normalized','fontsize',10,'color',[200 200 200]/255);
-text(.2,.9,'$\mathrm{d_{k+1}=f(d_k)}$','Units','normalized','fontsize',10);
+text(.3,.7,'$\mathrm{d_{k+1}=f(d_k)}$','Units','normalized','fontsize',10);
 text(.47,-.1,'$\mathrm{d_k}$','Units','normalized','fontsize',10);
 text(-.1,.4,'$\mathrm{d_{k+1}}$','Units','normalized','rotation',90,'fontsize',10);
+text(.85,.05,'$\mathrm{d_1}$','Units','normalized','fontsize',10);
+text(.85,.19,'$\mathrm{d_2}$','Units','normalized','fontsize',10);
+text(.16,.88,'$\mathrm{d_3}$','Units','normalized','fontsize',10);
 text(.38,-.06,'2','Units','normalized','fontsize',10);
 text(.58,-.06,'2.5','Units','normalized','fontsize',10);
-text(.8,-.06,'3','Units','normalized','fontsize',10);
+text(.86,-.06,'3','Units','normalized','fontsize',10);
 text(labX,labY*1.1,'\textbf{c}','Units','Normalized','fontsize',10,'fontweight','bold');
 text(.31,labY*1.1,'Cobweb','Units','Normalized','fontsize',10);
+drawnow;
 
 
 %% d: 2 FP + Super Stability
@@ -221,6 +230,7 @@ text(.66, 1, 'Combine', 'Units', 'Normalized', 'fontsize', 10);
 axis([0 11.5 0 4.5]+[-1.4 -1.4 -1.5 -1.5]);
 text(labX,labY,'\textbf{d}','Units','Normalized','fontsize',10,'fontweight','bold');
 text(.101,labColY,'\textbf{2 Fixed Points}','Units','Normalized','fontsize',10,'fontweight','bold');
+drawnow;
 
 
 %% e: Tesselate
@@ -264,6 +274,7 @@ text(tSx,-4.1,'$\mathrm{D_2^*}$','fontsize',10);
 text(-tSx+10.5,-4.9,'$\mathrm{D_2^*}$','fontsize',10);
 text(labX,labY,'\textbf{e}','Units','Normalized','fontsize',10,'fontweight','bold');
 text(.32, 1, 'Motion', 'Units', 'Normalized', 'fontsize', 10);
+drawnow;
 
 
 %% f: Simulate
@@ -323,6 +334,7 @@ text(.05,.25,'$\mathrm{D_1^*}$','Units','normalized','fontsize',10);
 text(.70,.92,'$\mathrm{D_2^*}$','Units','normalized','fontsize',10);
 text(labX,labY*1.1,'\textbf{f}','Units','Normalized','fontsize',10,'fontweight','bold');
 text(.32,labY*1.1,'Cobweb','Units','Normalized','fontsize',10);
+drawnow;
 
 
 %% g: Limit Cycle
@@ -370,6 +382,7 @@ text(.66, 1, 'Combine', 'Units', 'Normalized', 'fontsize', 10);
 text(labX,labY,'\textbf{g}','Units','Normalized','fontsize',10);
 text(-.02,labColY,'\textbf{Isolated Limit Cycle}','Units','Normalized','fontsize',10,'fontweight','bold');
 axis([0 11.5 0 4.5]+[-1.4 -1.4 -1.5 -1.5]);
+drawnow;
 
 
 %% h: Tesselate Limit Cycle
@@ -417,6 +430,7 @@ text(labX,labY,'\textbf{h}','Units','Normalized','fontsize',10,'fontweight','bol
 text(.32, 1, 'Motion', 'Units', 'Normalized', 'fontsize', 10);
 
 axis([0 17.5 0 14] + [-2 -2 -6.2 -6.2])
+drawnow;
 
 
 %% i: Simulate
@@ -479,6 +493,7 @@ text(.025,.93,'$\mathrm{D_1^o}$','Units','normalized','fontsize',10);
 text(.89,.24,'$\mathrm{D_2^o}$','Units','normalized','fontsize',10);
 text(labX,labY*1.1,'\textbf{i}','Units','Normalized','fontsize',10);
 text(.32,labY*1.1,'Cobweb','Units','Normalized','fontsize',10);
+drawnow;
 
 
 %% j: Chaos
@@ -528,6 +543,7 @@ text(.66, 1, 'Combine', 'Units', 'Normalized', 'fontsize', 10);
 text(labX,labY,'\textbf{j}','Units','Normalized','fontsize',10);
 text(.32,labColY,'\textbf{Chaos}','Units','Normalized','fontsize',10,'fontweight','bold');
 axis([0 11.5 0 4.5]+[-1.8 -1.8 -1.4 -1.4]);
+drawnow;
 
 
 %% k: Tesselate Chaos
@@ -572,6 +588,7 @@ text(labX,labY,'\textbf{k}','Units','Normalized','fontsize',10,'fontweight','bol
 text(.32, 1, 'Motion', 'Units', 'Normalized', 'fontsize', 10);
               
 axis([0 17.5 0 14] + [-3 -3 -5.6 -5.6])
+drawnow;
 
 
 %% l: Simulate
@@ -634,6 +651,7 @@ text(.05,.90,'$\mathrm{D_1^o}$','Units','normalized','fontsize',10);
 text(.87,.185,'$\mathrm{D_2^o}$','Units','normalized','fontsize',10);
 text(labX,labY*1.1,'\textbf{l}','Units','Normalized','fontsize',10);
 text(.32,labY*1.1,'Cobweb','Units','Normalized','fontsize',10);
+drawnow;
 
 
 %% Size and Save Figure
