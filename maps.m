@@ -25,12 +25,13 @@ thet = atan2d(Xs(2,1),Xs(1,1));
 R = rotz(-thet); R = R(1:2,1:2);
 Xs = R*Xs; Xu = R*Xu;
 
-% Calculate Specified Node Positions
+% Calculate Variable Node Positions
 x4 = (d1^2 + L(2)^2 - L(1)^2)/(2*d1);
 x5 = (d1^2 + L(5)^2 - L(4)^2)/(2*d1);
 y4v = 0; y5v = 0; y4 = []; y5 = [];
 y4p = sqrt(L(2)^2 - x4^2);
 y5p = sqrt(L(5)^2 - x5^2);
+% Choose positive or negative y coordinates based on initial position
 if(abs(y4p - Xu(2,1)) < tol)
     y4 = y4p;
     y4v = 1;
