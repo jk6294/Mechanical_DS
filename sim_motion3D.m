@@ -80,6 +80,9 @@ for i = 2:n
     K = full(Jf(XAC{:}));
     V = null(K);
     k1 = double(V*null(R'*V));
+    if(size(k1,2)>1)
+        k1 = k1*(k1'*delX(:,i-1));
+    end
     k1 = sign(k1'*delX(:,i-1)) * k1 / sqrt(k1'*k1);
     
     % Step 2
@@ -91,6 +94,9 @@ for i = 2:n
     K = full(Jf(XAC{:}));
     V = null(K);
     k2 = double(V*null(R'*V));
+    if(size(k2,2)>1)
+        k2 = k2*(k2'*delX(:,i-1));
+    end
     k2 = sign(k2'*delX(:,i-1)) * k2 / sqrt(k2'*k2);
     
     % Step 3
@@ -102,6 +108,9 @@ for i = 2:n
     K = full(Jf(XAC{:}));
     V = null(K);
     k3 = double(V*null(R'*V));
+    if(size(k3,2)>1)
+        k3 = k3*(k3'*delX(:,i-1));
+    end
     k3 = sign(k3'*delX(:,i-1)) * k3 / sqrt(k3'*k3);
     
     % Step 4
@@ -113,6 +122,9 @@ for i = 2:n
     K = full(Jf(XAC{:}));
     V = null(K);
     k4 = double(V*null(R'*V));
+    if(size(k4,2)>1)
+        k4 = k4*(k4'*delX(:,i-1));
+    end
     k4 = sign(k4'*delX(:,i-1)) * k4 / sqrt(k4'*k4);
     
     % Update

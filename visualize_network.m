@@ -82,9 +82,9 @@ if(d==2)
 elseif(d==3)
     % Spherical point
     [xSp, ySp, zSp] = sphere(20);
-    xSp = xSp/10; 
-    ySp = ySp/10; 
-    zSp = zSp/10; 
+    xSp = xSp/10*sC; 
+    ySp = ySp/10*sC; 
+    zSp = zSp/10*sC; 
     % Edges
     line([X(1,conn(:,1)); X(1,conn(:,2))],...
          [X(2,conn(:,1)); X(2,conn(:,2))],...
@@ -93,13 +93,13 @@ elseif(d==3)
     % Unspecified Nodes
     for i = 1:size(Xu,2)
         s = surf(xSp+Xu(1,i), ySp+Xu(2,i), zSp+Xu(3,i));
-        s.FaceColor = C_UN(1,:);
+        s.FaceColor = C_UN(i,:);
         s.EdgeColor = 'none';
     end
     % Specified Nodes
     for i = 1:size(Xs,2)
         s = surf(xSp+Xs(1,i), ySp+Xs(2,i), zSp+Xs(3,i));
-        s.FaceColor = C_SN;
+        s.FaceColor = C_SN(i,:);
         s.EdgeColor = 'none';
     end
     hold off;
