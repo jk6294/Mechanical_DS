@@ -85,10 +85,16 @@ plot(pLim,pLim, '--', 'color', [200 200 200]/255);
 pIndL = [1 29 59 81];
 vI = [ 0.05 -0.30  0.10  0.30;...
       -0.65 -0.70 -0.40  0.00];
+pIndsTr = [1 2 4; 1 3 5; 4 6 7; 5 6 8];
 for i = 1:length(pIndL)
-    hold on;
     pInd = pIndL(i);
     vSh = [d1(pInd);d2(pInd)] + vI(:,i);
+    hold on;
+    for j = 1:size(pIndsTr,1)
+        patch(XC(1,pIndsTr(j,:),pInd)/6+vSh(1),...
+              XC(2,pIndsTr(j,:),pInd)/6+vSh(2),...
+              [160 160 255]/255);
+    end
     visualize_network(XC(:,:,pInd)/6+vSh,[],conn2,netSC,...
                       [255 100 100]/255, [255 100 100]/255);
 end
