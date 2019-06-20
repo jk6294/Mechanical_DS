@@ -143,9 +143,9 @@ for i = 1:length(dP)-2
     set(ah,'parent',gca);
     set(ah,'position',[dPa(i) dPb(i) diff(dPa(i:i+1))*caF diff(dPb(i:i+1))*caF]);
 end
-plot(dP(1),1,'ks','markersize',5,'linewidth',1);
-plot(dP(2),dP(3),'ks','markersize',5,'linewidth',1);
-plot(dP(4),dP(5),'ks','markersize',5,'linewidth',1);
+plot(dP(1),1,'ko','markersize',2.5,'linewidth',2.5);
+plot(dP(2),dP(3),'ko','markersize',2.5,'linewidth',2.5);
+plot(dP(4),dP(5),'ko','markersize',2.5,'linewidth',2.5);
 % Cobweb 2
 dP = [D1(:,pInd2)';D1(:,pInd2)']; dP = dP(:); dP = dP(1:end-1);
 dPa = dP(1:end-1); dPb = [1;dP(3:end)];
@@ -177,8 +177,8 @@ text(.3,.7,'$\mathrm{d_{k+1}=f(d_k)}$','Units','normalized','fontsize',10);
 text(.47,-.1,'$\mathrm{d_k}$','Units','normalized','fontsize',10);
 text(-.1,.4,'$\mathrm{d_{k+1}}$','Units','normalized','rotation',90,'fontsize',10);
 text(.85,.05,'$\mathrm{d_1}$','Units','normalized','fontsize',10);
-text(.85,.19,'$\mathrm{d_2}$','Units','normalized','fontsize',10);
-text(.16,.88,'$\mathrm{d_3}$','Units','normalized','fontsize',10);
+text(.71,.27,'$\mathrm{(d_1,d_2)}$','Units','normalized','fontsize',10);
+text(.17,.88,'$\mathrm{(d_2,d_3)}$','Units','normalized','fontsize',10);
 text(.38,-.06,'2','Units','normalized','fontsize',10);
 text(.58,-.06,'2.5','Units','normalized','fontsize',10);
 text(.86,-.06,'3','Units','normalized','fontsize',10);
