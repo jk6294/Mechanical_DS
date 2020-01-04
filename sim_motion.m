@@ -60,10 +60,14 @@ fC = zeros([1, n]); fC(1) = 0; X0 = X0';
 delX = zeros([2*N, n]); delX(:,1) = X0(:);
 
 % Print Total Progress
-fprintf([repmat('.',1,n-1) '\n\n']);
+fprintf([repmat('.',1,100) '\n\n']);
+nTh = .01;
 for i = 2:n
     % Indicate Progress
-    fprintf('\b=\n');
+    if(i/n >= nTh)
+        fprintf('\b=\n');
+        nTh = nTh+.01;
+    end
     
     % Step 1
     XP1 = xC(:,i-1); YP1 = yC(:,i-1);

@@ -1,4 +1,4 @@
--1% Figure 1: Designing a Single Module
+% Figure 1: Designing a Single Module
 %% Prepare Space
 clear; clc;
 set(groot,'defaulttextinterpreter','latex');

@@ -1,4 +1,4 @@
-function [] = visualize_conic_finite(X0, XF, R, nC, nP, vS, vU, oV)
+function [] = visualize_conic_finite(X0, XF, R, nC, nP, vS, vU, oV, nS)
 % Function for visualizing solution spaces in 2D and 3D spatial coordinates
 % Solution space dimension must be between 1 and d
 %
@@ -11,19 +11,23 @@ function [] = visualize_conic_finite(X0, XF, R, nC, nP, vS, vU, oV)
 % vS: Scalar: scales the specified arrows by this amount
 % vU: Scalar: scales the unspecified arrows by this amount
 % oV:    1 x 1 scalar: Optional if plotting for overlay
+% nS:    1 x 1 scalar: Optional for scaling network
 
 % Optional Arguments
 if(nargin==7)
     oV = 1;
+    nS = 1;
 end
 
 % Visualization Parameters
-LW_SA = 2;                      % Line Width of Specified Arrow
-LW_UA = .7;                     % Line Width of Unspecified Arrows
-LW_SS = 1;                      % Line Width of Solution Space
-BW = 0.5;                       % Width of marker border
-MS_SN = 3;                      % Marker Size of Specified Node
-MS_UN = 1.5;                    % Marker Size of Unspecified Node
+LW_SA = 2*nS;                      % Line Width of Specified Arrow
+LW_UA = .7*nS;                     % Line Width of Unspecified Arrows
+LW_SS = 1*nS;                      % Line Width of Solution Space
+BW = 0.5*nS;                       % Width of marker border
+MS_SN = 3*nS;                      % Marker Size of Specified Node
+MS_UN = 1.5*nS;                    % Marker Size of Unspecified Node
+MB_SN = 2*nS;
+MB_UN = 1*nS;
 C_SN = [255 100 100]/255;       % Color of Specified Node
 C_SA = [76 187 23;...           % Color of Specified Arrow
         50 255 50]/255;         
@@ -116,13 +120,13 @@ for j = 1:z
             plot(Cu(1,pInds), Cu(2,pInds), 'ko', 'markersize', 2*MS_UN, 'linewidth', BW);
             % Unspecified Node Final Position
             plot(Cup(1,pInds), Cup(2,pInds), 'o', 'markersize', MS_UN, 'linewidth', MS_UN, 'color', [1 1 1]);
-            plot(Cup(1,pInds), Cup(2,pInds), 'o', 'markersize', MS_UN+1, 'linewidth', MS_UN-1, 'color', C_SS(2,:));
+            plot(Cup(1,pInds), Cup(2,pInds), 'o', 'markersize', MS_UN+MB_UN, 'linewidth', MS_UN-MB_UN, 'color', C_SS(2,:));
             % Specified Node Initial Position
             plot(X0(1,:), X0(2,:), 'o', 'linewidth', MS_SN, 'markersize', MS_SN, 'color', C_SN);
             plot(X0(1,:), X0(2,:), 'ko', 'linewidth', BW, 'markersize', 2*MS_SN);
             % Specified Node Final Position
             plot(XF(1,:), XF(2,:), 'o', 'linewidth', MS_SN, 'markersize', MS_SN, 'color', [1 1 1]);
-            plot(XF(1,:), XF(2,:), 'o', 'linewidth', MS_SN-2, 'markersize', MS_SN+2, 'color', C_SN);
+            plot(XF(1,:), XF(2,:), 'o', 'linewidth', MS_SN-MB_SN, 'markersize', MS_SN+MB_SN, 'color', C_SN);
         end
         hold off;
         set(gca,'visible',0);

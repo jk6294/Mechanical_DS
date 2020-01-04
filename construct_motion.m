@@ -97,7 +97,7 @@ end
 
 % Error warning for states of self-stress
 if(nSS == 0)
-    disp('No states of self-stress; motions should be finitely deformable');
+%     disp('No states of self-stress; motions should be finitely deformable');
 else
     disp('States of self-stress; motions may not be finitely deformable');
 end
