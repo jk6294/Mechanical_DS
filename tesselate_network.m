@@ -1,4 +1,5 @@
 function [XsO, connO] = tesselate_network(Xs, conn, XTr, NTr)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Code for efficiently tesselating networks in cardinal directions.
 %
 % Inputs
@@ -10,6 +11,8 @@ function [XsO, connO] = tesselate_network(Xs, conn, XTr, NTr)
 % Outputs
 % XsO:      d x NsO matrix of NsO tesselated specified node positions
 % connO:    sO x 2 matrix of connections from tesslated nodes i to j
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 % Parameters
 d = size(Xs,1);             % Dimension of embedding
@@ -42,8 +45,10 @@ elseif(d==3)
 end
 % Filter Redundant Connections
 [C,IA,IC] = uniquetol(XsOProx',1e-5,'ByRows',1);
-XsO = C';
-connO = [IC(connOProx(:,1)), IC(connOProx(:,2))];
+[B,I] = sort(IA);
+[~,J] = sort(I);
+XsO = XsOProx(:,B);
+connO = [J((IC(connOProx(:,1)))), J((IC(connOProx(:,2))))];
 % connO(:,2) = connO(:,2) + max(connO(:,1));
 
 

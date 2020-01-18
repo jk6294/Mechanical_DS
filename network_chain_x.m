@@ -1,4 +1,5 @@
 function [Xsa,Xua,conna,C_UNa] = network_chain_x(Xsp,XuC,XuL,C_UN)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Function to create a network chain along the x-direction, left to right.
 % Specifically for 2D networks with 3 specified node modules.
 % Requires at least 4 modules
@@ -14,6 +15,7 @@ function [Xsa,Xua,conna,C_UNa] = network_chain_x(Xsp,XuC,XuL,C_UN)
 % Xua:      2  x 2L         matrix of chain unspecified node coordinates
 % conna:    6L x 2          matrix of connections
 % C_UNa:    2L x 4          matrix of unspecified node colors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %% Preliminary
