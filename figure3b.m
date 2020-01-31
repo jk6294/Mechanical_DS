@@ -143,41 +143,102 @@ disp('done');
 
 
 %% b-c: Draw Phase Diagrams
+figure(3);
 subplot('position',spb); cla;
 dRat1c = dRat1.*dRat2;
-aW1 = round(Cm1/10);
-aW2 = round(Cm2/10);
-aW = [aW1 aW2];
-dRat1M = [-1*ones(aW1,aW2+Cm2); -1*ones(Cm1,aW2) abs(dRat1c)];
+
+% Phase diagram buffer
+aW1 = round(Cm1/10); aW2 = round(Cm2/10); aW = [aW1 aW2];
+
+% Phase diagram parameters
+dRat1M = [abs(dRat1c) -1*ones(Cm1,aW2); -1*ones(aW1,aW2+Cm2)];
 dRat1M(isnan(dRat1M)) = -1;
+
+% Set up colormap and axis
 colormap([1 1 1; parula(2^11)]);
-uInd1 = [387 450+sInd] - aW;
-uInd2 = [368 446] - aW;
-uInd3 = [400 400] - aW;
+col = winter(200);
+col1 = flipud(col(1:floor(Cm1/(Cm1+Cm2)*size(col,1)),:));
+col2 = flipud(col(ceil(Cm1/(Cm1+Cm2)*size(col,1)):size(col,1),:));
+
+
+% %% Sim
+% ind1 = floor(linspace(1,Cm2,20)) + sInd;
+% ind2 = floor(linspace(1,Cm1,20));
+% nFor = 300;
+% nBac = 300;
+% nTot = nFor + nBac;
+% Zd1 = zeros(length(ind1), length(ind2), nTot);
+% Zd2 = zeros(length(ind1), length(ind2), nTot);
+% 
+% for i = 1:length(ind1)
+%     disp(i/length(ind1));
+%     for j = 1:length(ind2)
+%         Xu1 = CB1(:,[ind1(i) ind2(j)]);
+%         
+%         % Map simulations
+%         [Xc1a,~] = sim_motion(Xs,Xu1,conn,.01,300,[Xs Xu1],0);    % Simulate
+%         [Xc1b,~] = sim_motion(Xs,Xu1,conn,.01,300,-[Xs Xu1],0);   % Simulate
+%         Xc1 = cat(3,flip(Xc1b,3), Xc1a);
+%         
+%         % Distances
+%         Zd1(i,j,:) = sqrt(squeeze(sum((diff(Xc1(:,1:2,:),[],2)).^2)));
+%         Zd2(i,j,:) = sqrt(squeeze(sum((diff(Xc1(:,2:3,:),[],2)).^2)));
+%     end
+% end
+% 
+% 
+% %% Plot
+% figb = figure(4); clf;
+% for i = 1:length(ind1)
+%     for j = 1:length(ind2)
+%         subplot('Position',[1-(i)/length(ind1),1-(j)/length(ind2),...
+%                             1/length(ind1), 1/length(ind2)]);
+%         da = squeeze(Zd1(i,j,:));
+%         db = squeeze(Zd2(i,j,:));
+%         if(dRat1M(ind2(j),ind1(i)-sInd) < 1)
+%             plot(da, db, 'linewidth', 1,'color',[0 0 1]);
+%         else
+%             plot(da, db, 'linewidth', 1,'color',[0 1 0]);
+%         end
+%         d = [da; db];
+%         hold on;
+%         plot([min(d) max(d)], [min(d) max(d)], '--', 'color', [1 1 1]*.7);
+%         plot(d1s,d2s,'ko','markersize',2,'linewidth',2);
+%         plot(d2s,d1s,'ko','markersize',2,'linewidth',2);
+%         set(gca,'xtick',[],'ytick',[]);
+%         axis([min(d) max(d) min(d) max(d)]);
+%     end
+%     drawnow;
+% end
+% 
+% print('FillPageFigure','-dpdf','-bestfit')
+
+
+%
+% Select module
+n1P = 480;
+n2P = 237;
+uInd1 = [n1P+sInd n2P];
 % Unspecified node positions
 Xu1 = CB1(:,uInd1);
 Xu1f = CB2(:,uInd1);
-Xu2 = CB1(:,uInd2);
-Xu3 = CB1(:,uInd3);
+
+[Uss1,~,~] = construct_motion(Xs,Xs,Xu1,conn,0,0);
+[Uss2,~,~] = construct_motion(Xf,Xf,Xu1f,conn,0,0);
 
 imagesc(tanh(dRat1M));
 hold on;
-plot(uInd1(2)+aW2-sInd,uInd1(1)+aW1,'s','linewidth',1.8,'markersize',7,'color',cTr1);
-plot(uInd2(2)+aW2-sInd,uInd2(1)+aW1,'s','linewidth',1.8,'markersize',7,'color',cTr2);
-plot(uInd3(2)+aW2-sInd,uInd3(1)+aW1,'s','linewidth',1.8,'markersize',7,'color',cTr3);
-scatter(linspace(0,Cm1-.4*aW2,100)+1.25*aW2, ones(1,100)*12,1,winter(100),'s',...
-        'linewidth',4);
-scatter(ones(1,100)*12,linspace(0,Cm1-.4*aW1,100)+1.25*aW1,1,winter(100),'s',...
-        'linewidth',4);
+plot(uInd1(1)-sInd,uInd1(2),'s','linewidth',1.8,'markersize',7,'color',cTr1);
+scatter(linspace(0,Cm2,size(col2,1)), ones(1,size(col2,1))*Cm1+aW1*.8,1,col2,'s','linewidth',4);
+scatter(ones(1,size(col1,1))*Cm2+aW2*.8,linspace(0,Cm1,size(col1,1)),1,col1,'s','linewidth',4);
 hold off;
-visualize_network(Xs*40+[150;230],Xu1*40+[150;230],conn,...
+rot180 = rotz(180); rot180 = rot180(1:2,1:2);
+visualize_network(rot180*Xs*40+[n1P;n2P],rot180*Xu1*40+[n1P;n2P],conn,...
                   'scale',pSc*.8,'scolor',C_SN,'ucolor',cTr1);
-visualize_network(Xs*40+[370;350],Xu2*40+[370;350],conn,...
-                  'scale',pSc*.8,'scolor',C_SN,'ucolor',cTr2);
-visualize_network(Xs*40+[330;700],Xu3*40+[330;700],conn,...
-                  'scale',pSc*.8,'scolor',C_SN,'ucolor',cTr3);
+visualize_network(rot180*Xf*40+[n1P-100;n2P],rot180*Xu1f*40+[n1P-100;n2P],conn,...
+                  'scale',pSc*.8,'scolor',C_SN,'ucolor',cTr1);
 caxis([-.001 1]);
-set(gca,'xtick',[],'ytick',[],'ydir','normal','visible',0);
+set(gca,'xtick',[],'ytick',[],'ydir','reverse','xdir','reverse','visible',0);
 h = colorbar('location', 'east');
 h.Position = [0.452 .57 .015 .35];
 h.Ticks = [];
@@ -195,21 +256,17 @@ text(labX-.01,labY-.09,'each variable node placement','Units','Normalized','font
 %
 subplot('position',spc); cla;
 dRat1T = (abs(dRat1.*dRat2) > 1)*1;
-dRat2M = [-1*ones(aW1,aW2+Cm2); -1*ones(Cm1,aW2) abs(dRat1T)];
+dRat2M = [abs(dRat1T) -1*ones(Cm1,aW2); -1*ones(aW1,aW2+Cm2)];
 dRat2M(isnan(dRat2M)) = -1;
 imagesc(dRat2M);
 hold on;
-plot(uInd1(2)+aW2-sInd,uInd1(1)+aW1,'s','linewidth',1.8,'markersize',7,'color',cTr1);
-plot(uInd2(2)+aW2-sInd,uInd2(1)+aW1,'s','linewidth',1.8,'markersize',7,'color',cTr2);
-plot(uInd3(2)+aW2-sInd,uInd3(1)+aW1,'s','linewidth',1.8,'markersize',7,'color',cTr3);
-scatter(linspace(0,Cm1-.4*aW2,100)+1.25*aW2, ones(1,100)*12,1,winter(100),'s',...
-        'linewidth',4);
-scatter(ones(1,100)*12,linspace(0,Cm1-.4*aW1,100)+1.25*aW1,1,winter(100),'s',...
-        'linewidth',4);
+plot(uInd1(1)-sInd,uInd1(2),'s','linewidth',1.8,'markersize',7,'color',cTr1);
+scatter(linspace(0,Cm2,size(col2,1)), ones(1,size(col2,1))*Cm1+aW1*.8,1,col2,'s','linewidth',4);
+scatter(ones(1,size(col1,1))*Cm2+aW2*.8,linspace(0,Cm1,size(col1,1)),1,col1,'s','linewidth',4);
 hold off;
 caxis([-.001 1]);
-text(.36,.89,'unstable','Units','Normalized','fontsize',FS);
-text(.44,.2,'stable','Units','Normalized','fontsize',FS,'color',[1 1 1]);
+text(.44,.89,'stable','Units','Normalized','fontsize',FS,'color',[1 1 1]);
+text(.36,.2,'unstable','Units','Normalized','fontsize',FS);
 text(0,0,'0','Units','Normalized','fontsize',FS);
 text(-0.13,.96,'$2\pi$','Units','Normalized','fontsize',FS);
 text(1.03,0,'$2\pi$','Units','Normalized','fontsize',FS);
@@ -217,7 +274,7 @@ text(.5,-.09,'$\theta_1$','Units','Normalized','fontsize',FS);
 text(-.12,.5,'$\theta_2$','Units','Normalized','fontsize',FS);
 text(labX-.1,labY,'\textbf{c} ~~~Unstable modules have','Units','Normalized','fontsize',FS,'fontweight','bold');
 text(labX-.1,labY-.09,'~~~~~~~~~slope $|\delta d_2/\delta d_2| > 1$','Units','Normalized','fontsize',FS,'fontweight','bold');
-set(gca,'xtick',[],'ytick',[],'ydir','normal','visible',0);
+set(gca,'xtick',[],'ytick',[],'ydir','reverse','xdir','reverse','visible',0);
 
 
 % d: Maps
@@ -227,63 +284,46 @@ nSc = 2.4; nSh = 1.1;
 netSc = .15; 
 
 % Map simulations
-[Xc1a,~] = sim_motion(Xs,Xu1,conn,.01,200,[Xs Xu1],0);   % Simulate
-[Xc1b,~] = sim_motion(Xs,Xu1,conn,.01,100,-[Xs Xu1],0);   % Simulate
-% [Xc2,~] = sim_motion(Xs,Xu2,conn,.01,153,[Xs Xu2],0);   % Simulate
-% [Xc3,~] = sim_motion(Xs,Xu3,conn,.01,170,[Xs Xu3],0);   % Simulate
+[Xc1a,~] = sim_motion(Xs,Xu1,conn,.01,170,[Xs Xu1],0);    % Simulate
+[Xc1b,~] = sim_motion(Xs,Xu1,conn,.01,80,-[Xs Xu1],0);   % Simulate
 Xc1 = cat(3,flip(Xc1b,3), Xc1a);
 
 % Map distances
 d11 = sqrt(squeeze(sum((diff(Xc1(:,1:2,:),[],2)).^2)));
 d21 = sqrt(squeeze(sum((diff(Xc1(:,2:3,:),[],2)).^2)));
-% d12 = sqrt(squeeze(sum((diff(Xc2(:,1:2,:),[],2)).^2)));
-% d22 = sqrt(squeeze(sum((diff(Xc2(:,2:3,:),[],2)).^2)));
-% d13 = sqrt(squeeze(sum((diff(Xc3(:,1:2,:),[],2)).^2)));
-% d23 = sqrt(squeeze(sum((diff(Xc3(:,2:3,:),[],2)).^2)));
+d1all = [d11 d21]';
+d1all = sum(abs(d1all - flipud(d1all)));
+fpInd = find(d1all == min(d1all));
 
+aSh = [1; 1];
 subplot('position',spd); cla;
 plot([1 3],[1 3], '--', 'color', [200 200 200]/255);
+visualize_network(Xc1(:,1:3,fpInd)/4+aSh,Xc1(:,4:5,fpInd)/4+aSh,conn);
 hold on;
-% axis([1 2.1 1 2.1]);
 plot(d11,d21,'-','linewidth',2,'color',cTr1);
-% plot(d12,d22,'-','linewidth',2,'color',cTr2);
-% plot(d13,d23,'-','linewidth',2,'color',cTr3);
 plot(d1s,d2s,'k*','linewidth',1.5,'markersize',9);
 plot(d1f,d2f,'k*','linewidth',1.5,'markersize',9);
 hold off;
-% visualize_network(Xs*netSc+[2.1;1.4],Xu1*netSc+[2.1;1.4],conn,pSc,C_SN,cTr1);
-% % visualize_network(Xs*netSc+[1.4;1.4],Xu2*netSc+[1.4;1.4],conn,pSc,C_SN,cTr2);
-% % visualize_network(Xs*netSc+[1.4;2.0],Xu3*netSc+[1.4;2.0],conn,pSc,C_SN,cTr3);
-% visualize_network(Xc1(:,1:3,end)*netSc+[3.3;2.5],...
-%                   Xc1(:,4:5,end)*netSc+[3.3;2.5],conn,pSc,C_SN,cTr1);
-% % visualize_network(Xc2(:,1:3,end)*netSc+[3.34;3.2],...
-% %                   Xc2(:,4:5,end)*netSc+[3.34;3.2],conn,pSc,C_SN,cTr2);
-% % visualize_network(Xc3(:,1:3,end)*netSc+[2.5;3.17],...
-% %                   Xc3(:,4:5,end)*netSc+[2.5;3.17],conn,pSc,C_SN,cTr3);
-% axis([[0 1]*sRatd [0 1]]*nSc);
-% set(gca,'visible',1,'xtick',[],'ytick',[]);
-% text(.18,.16,'$D_1^*$','Units','Normalized','fontsize',FS);
-% text(.65,.88,'$D_2^*$','Units','Normalized','fontsize',FS);
-% text(.5,-.09,'$d_1$','Units','Normalized','fontsize',FS);
-% text(-.12,.5,'$d_2$','Units','Normalized','fontsize',FS);
-% text(labX-.13,labY,'\textbf{d} ~~~Modules pass through','Units','Normalized','fontsize',FS,'fontweight','bold');
-% text(labX-.13,labY-.09,'~~~~~~~~~both fixed points','Units','Normalized','fontsize',FS,'fontweight','bold');
-% 
-% 
-% %% Simulations
-% % Chain
-% [Xsa1,Xua1,conna1] = network_chain_x(Xs(:,[1 3]),Xu1,ones(1,2));
+drawnow;
+axis([min([d11;d21]) max([d11;d21]) min([d11;d21]) max([d11;d21])]);
+
+% Build chain
 Xsc = [Xs [s/2; 0.3]];
 Xuc = [Xu1 [Xu1f(1,:);-Xu1f(2,:)-.2]];
 connc = [1 5; 2 5; 3 5; 1 6; 2 6; 3 6; 2 7; 3 7; 4 7; 2 8; 3 8; 4 8];
 [Xsa1,Xua1,conna1] = tesselate_network_old(Xsc,Xuc,connc,[s;0],[5;1]);
-% [Xsa2,Xua2,conna2] = network_chain_x(Xs(:,1:2),Xu2,ones(1,4));
-% [Xsa3,Xua3,conna3] = network_chain_x(Xs(:,1:2),Xu3,ones(1,4));
-% 
+subplot('position',spe); cla;
+visualize_network(Xsa1,Xua1,conna1);
+
+
+%%
+
+
 % % Simulate
 [XC1,fC1] = sim_motion(Xsa1,Xua1,conna1,.01,1000,[Xsa1 Xua1],0);
 % [XC2,fC2] = sim_motion(Xsa2,Xua2,conna2,.02,700,[Xsa2 Xua2],0);
 % [XC3,fC3] = sim_motion(Xsa3,Xua3,conna3,.01,1000,[Xsa3 Xua3],0);
+disp(max(fC1));
 % 
 % %
 nS1 = size(Xsa1,2);
@@ -298,11 +338,6 @@ subplot('position',spe); cla;
 dc = squeeze(sqrt(sum(diff(XC1,1,2).^2)));
 dc = dc([1:10],:);
 
-% delXC1 = XC1(:,:,2) - XC1(:,:,1);
-% [Us1,Uu1,err] = construct_motion(XC1(:,1:nS1,1),delXC1(:,1:nS1),...
-%                                  XC1(:,nS1+1:end,1),conna1,0,0);
-% quiver(XC1(1,:,1)*netSc+.86,XC1(2,:,1)*netSc+1.2,...
-%        [Us1(1,:) Uu1(1,:)], [Us1(2,:) Uu1(2,:)],'linewidth',1,'color','g');
 visualize_network(XC1(:,1:nS1,1)*netSc+[.86;1.2],...
                   XC1(:,nS1+1:end,1)*netSc+[.86;1.2],conna1,...
                   'scale',pSc,'scolor',C_SN,'ucolor',cTr1);
@@ -346,9 +381,10 @@ visualize_network(XC1(:,1:nS1,1)*netSc+[.86;1.2],...
 % text(labX,labY-.11,'~~~~~~~~~~~~~~~~from the $d_2$ end','Units','Normalized','fontsize',FS,'fontweight','bold');
 
 
-%% Animation
 figure(9); clf;
-animate_network(XC1,conna1,'fname','a1','save',1);
+animate_network(XC1,conna1,'distance',[d11 d21]','nu',size(Xua1,2),...
+                'nframe',100,'figwidth',10);
+% Animation
 
                         
 %% Save

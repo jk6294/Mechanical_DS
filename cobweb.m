@@ -15,7 +15,7 @@ addParameter(p,'msize',3);
 addParameter(p,'mdecay',.5);
 addParameter(p,'nalpha',1);
 addParameter(p,'lalpha',1);
-addParameter(p,'linewidth',.8);
+addParameter(p,'linewidth',.7);
 addParameter(p,'headlength',3);
 addParameter(p,'headwidth',4);
 addParameter(p,'headscale',.8);
@@ -54,7 +54,7 @@ for i = (2*aI(1)):(2*aI(2)-1)
 end
 
 for i = 1:length(d)-1
-    plot(d(i),d(i+1),'o','markersize',ms-(i-1)*md,...
+    plot(d(i),d(i+1),'s','markersize',ms-(i-1)*md,...
          'linewidth',ms-(i-1)*md,'color',C_N(i,:));
 end
 

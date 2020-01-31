@@ -22,7 +22,6 @@ function [] = animate_network(XC,conn,varargin)
 % nframe    1 x 1       number: frames in animation     [100]
 % save      1 x 1       1 to save, 0 to not save        [0]
 % fname     string      file name without ending        ['animation']
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -43,6 +42,7 @@ addParameter(p,'nu',0);
 addParameter(p,'nframe',100);
 addParameter(p,'save',0);
 addParameter(p,'fname','animation');
+addParameter(p,'distance',[]);
 parse(p,varargin{:});
 
 sC = p.Results.scale;
@@ -60,6 +60,7 @@ nF = p.Results.nframe;
 fw = p.Results.figwidth;
 s = p.Results.save;
 fname = p.Results.fname;
+d = p.Results.distance;
 
 
 fig = gcf; clf;
@@ -70,15 +71,41 @@ dT = 0.03;
 pInds = floor(linspace(1,size(XC,3),nF));
 ns = size(XC,2)-nu;
 a = [min(min(XC(1,:,:))) max(max(XC(1,:,:))) min(min(XC(2,:,:))) max(max(XC(2,:,:)))];
-fig.Position(3:4) = [diff(a(1:2)) diff(a(3:4))] / diff(a(1:2)) * fw;
+
+if(size(d,2) > 0)
+    fig.Position(3:4) = [diff(a(1:2))+diff(a(3:4)) diff(a(3:4))] /...
+                        (diff(a(1:2))+diff(a(3:4))) * fw;
+    sPos1 = [0 0 fig.Position(4)/ fig.Position(3) 1];
+    sPos2 = [fig.Position(4)/ fig.Position(3) 0,...
+             -diff(fig.Position(3:4))/fig.Position(3) 1];
+    dc = squeeze(sqrt(sum(diff(XC,1,2).^2)));
+    dc = dc([1:ns-1],:);
+else
+    fig.Position(3:4) = [diff(a(1:2)) diff(a(3:4))] / diff(a(1:2)) * fw;
+    sPos2 = [0 0 1 1];
+end
 
 for i = pInds
+    if(size(d,2) > 0)
+        subplot('Position', sPos1);
+        cla;
+        plot(d(1,:), d(2,:));
+        mind = min(d(:)); 
+        maxd = max(d(:));
+        diffd = maxd - mind;
+        axis([mind-diffd/10 maxd+diffd/10 mind-diffd/10 maxd+diffd/10]);
+        hold on;
+        plot([min(d(:)) max(d(:))], [min(d(:)) max(d(:))], '--', 'color', [1 1 1]*.7);
+        cobweb(dc(:,i),'mdecay',0);
+        hold off;
+    end
+    subplot('Position', sPos2, 'Units', 'normalized');
     cla;
     visualize_network(XC(:,1:ns,i),XC(:,[1:nu]+ns,i),conn,...
                       'scale',sC,'nalpha',nTr,'lalpha',lTr,...
                       'scolor',C_SN,'ucolor',C_UN,'bcolor',C_B,...
                       'lcolor',C_L,'lwidth',lw,'bwidth',bw,'msize',ms);
-    axis(a);
+    axis(a + [[-1 1]*diff(a(1:2)) [-1 1]*diff(a(3:4))]/10);
     set(gca,'visible',0);
     drawnow;
 

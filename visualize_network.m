@@ -29,12 +29,12 @@ p = inputParser;
 addParameter(p,'scale',1);
 addParameter(p,'nalpha',1);
 addParameter(p,'lalpha',1);
-addParameter(p,'scolor',repmat([255 100 100]/255,max(size(Xs,2),1),1));
-addParameter(p,'ucolor',repmat([100 100 255]/255,max(size(Xu,2),1),1));
-addParameter(p,'bcolor',[0 0 0]);
+addParameter(p,'scolor',repmat([230 225 225]/255,max(size(Xs,2),1),1));
+addParameter(p,'ucolor',repmat([225 225 230]/255,max(size(Xu,2),1),1));
+addParameter(p,'bcolor',[1 1 1]*.0);
 addParameter(p,'lcolor',repmat([0 0 0],size(conn,1),1));
-addParameter(p,'lwidth',1.5);
-addParameter(p,'bwidth',.6);
+addParameter(p,'lwidth',1.0);
+addParameter(p,'bwidth',1.0);
 addParameter(p,'msize',4);
 parse(p,varargin{:});
 
