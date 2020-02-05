@@ -49,7 +49,7 @@ elseif(d==3)
 end
 % Filter Redundant Connections
 % [C,IA,IC] = unique(XsOProx','rows','stable');
-[C,IA,IC] = uniquetol(XsOProx',1e-3,'ByRows',1);
+[C,~,IC] = uniquetol(XsOProx',1e-3,'ByRows',1);
 XsO = C';
 XuO = XuOProx;
 connO = [IC(connOProx(:,1)), connOProx(:,2)];

@@ -136,7 +136,6 @@ ah = annotation('arrow','HeadLength',7,'HeadWidth',7,'color',[1 1 1]*gr,'linewid
 set(ah,'parent',gca,'position',[.70 0.06 .07 0]);
 
 
-
 %% b: Module + RBM
 % Node Positions
 L = 1;
@@ -215,8 +214,8 @@ nInt3 = find(ddiff == min(ddiff));
 
 % pInd = 4;
 pI = [1 nInt nInt2 380];
-pISh = [ 0.130  .11  0.075  0.075  0.075;...
-        -0.025 -.06 -0.067 -0.067 -0.067];
+pISh = [ 0.130  .11  0.075  0.075;...
+        -0.025 -.06 -0.077 -0.067];
 CP = winter(floor(nM));
 
 
@@ -341,44 +340,6 @@ text(xT+2*delX,.24,'$1.5$','Units','normalized','fontsize',FS,'HorizontalAlignme
 text(xT+2.2*delX,.24,'...','Units','normalized','fontsize',FS,'HorizontalAlignment','center');
 text(xT+2.38*delX,.24,'$\sqrt{2}$','Units','normalized','fontsize',FS,'HorizontalAlignment','center');
 text(xT+3.38*delX,.12,'$\sqrt{2}$','Units','normalized','fontsize',FS,'HorizontalAlignment','center');
-
-
-
-% %% e: Combine
-% rot45 = rotz(-45); rot45 = rot45(1:2,1:2);
-% Xsc = [0    0   0   L   L/2  L/2;...
-%        L/2 -L/2 0   0   0    L];
-% Xsc = rot45*Xsc;
-% connc = [1 3; 1 4; 2 3; 2 4; 3 5; 3 6; 4 5; 4 6];
-% [Xscc, conncc] = tesselate_network(Xsc,connc,[L/sqrt(2);0],[6;1]);
-% 
-% [XCc,fC] = sim_motion(Xscc,[],conncc,.005,920,Xscc,0);
-% 
-% %%
-% pInd = 5;
-% subplot('position',subpN(pInd,:)); cla;
-% pSh = [6 4 2 0]; pI = [1 200 500 745];
-% for pV = 1:length(pI)
-%     % Closest color pairings for each module
-%     disV = sqrt(sum(diff(XCc(:,:,pI(pV)),1,2).^2)); 
-%     disV = disV(1:2:end);
-%     disV = [disV(1:end-1); disV(2:end)];
-%     C_LM = zeros(size(disV,2),3);
-%     for i = 1:size(disV,2)
-%         fdiff = sum(abs( d-disV(:,i)));
-%         fdInd = find(fdiff == min(fdiff));
-%         C_LM(i,:) = CP(fdInd,:);
-%     end
-%     visualize_network(XCc(:,:,pI(pV))+[-XCc(1,2,pI(pV));pSh(pV)],[],...
-%                       conncc,'scale',.7,'lcolor',C_LM);
-% end
-% axis([0 sRat(pInd) 0 1]*7.5 + [[1 1]*-1,[1 1]*-0.8]);
-% 
-% % Text
-% texte = '\textbf{e}~~motion of combined network';
-% text(labX,subp(pInd,4)+labY,texte,'Units','centimeters','fontsize',FS);
-% set(annotation('arrow','HeadLength',7,'HeadWidth',7,'color',[1 1 1]*gr,...
-%                'linewidth', 1, 'position',[-.5 6.3 0 -7]), 'parent', gca);
 
 
 %% Size and Save Figure
