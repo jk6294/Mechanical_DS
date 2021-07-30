@@ -1,4 +1,4 @@
-function [] = visualize_conic_finite(X0, XF, R, nC, nP, vS, vU, oV, nS)
+function [] = visualize_conic_finite(X0, XF, R, varargin)
 % Function for visualizing solution spaces in 2D and 3D spatial coordinates
 % Solution space dimension must be between 1 and d
 %
@@ -13,22 +13,40 @@ function [] = visualize_conic_finite(X0, XF, R, nC, nP, vS, vU, oV, nS)
 % oV:    1 x 1 scalar: Optional if plotting for overlay
 % nS:    1 x 1 scalar: Optional for scaling network
 
-% Optional Arguments
-if(nargin==7)
-    oV = 1;
-    nS = 1;
-end
+p = inputParser;
+addParameter(p,'numsamp',repmat(200,size(X0,1),1));
+addParameter(p,'numpoints',0);
+addParameter(p,'lw',1);
+addParameter(p,'scalesp',0);
+addParameter(p,'scaleun',0);
+addParameter(p,'overlay',1);
+addParameter(p,'scale',1);
+addParameter(p,'scolori',repmat([230 225 225]/255,max(size(X0,2),1),1));
+addParameter(p,'scolorf',repmat([225 225 230]/255,max(size(X0,2),1),1));
+addParameter(p,'ucolori',[100 100 225]/255);
+addParameter(p,'ucolorf',[100 200 230]/255);
+parse(p,varargin{:});
+
+nC = p.Results.numsamp;
+nP = p.Results.numpoints;
+vS = p.Results.scalesp;
+vU = p.Results.scaleun;
+oV = p.Results.overlay;
+nS = p.Results.scale;
+LW_SS = p.Results.lw;
+C_SNs = p.Results.scolori;
+C_SNf = p.Results.scolorf;
+C_UNs = p.Results.ucolori;
+C_UNf = p.Results.ucolorf;
 
 % Visualization Parameters
-LW_SA = 2*nS;                      % Line Width of Specified Arrow
-LW_UA = .7*nS;                     % Line Width of Unspecified Arrows
-LW_SS = 1*nS;                      % Line Width of Solution Space
-BW = 0.5*nS;                       % Width of marker border
-MS_SN = 3*nS;                      % Marker Size of Specified Node
-MS_UN = 1.5*nS;                    % Marker Size of Unspecified Node
-MB_SN = 2*nS;
-MB_UN = 1*nS;
-C_SN = [255 100 100]/255;       % Color of Specified Node
+LW_SA = 2*nS;                   % Line Width of Specified Arrow
+LW_UA = .7*nS;                  % Line Width of Unspecified Arrows
+LW_SS = LW_SS*nS;               % Line Width of Solution Space
+BW = 1*nS;                      % Width of marker border
+MS_SN = 4*nS;                   % Marker Size of Specified Node
+MS_UN = 4*nS;                   % Marker Size of Unspecified Node
+C_SN = [230 225 225]/255;       % Color of Specified Node
 C_SA = [76 187 23;...           % Color of Specified Arrow
         50 255 50]/255;         
 C_SS = [100 100 255;...         % Color of Solution Space
@@ -99,8 +117,8 @@ for j = 1:z
                  2*Q2(3,1)*xx + 2*Q2(3,2)*yy;
             % Generate contour along conic solution at 0
             hold on;
-            C = contour(xx,yy,F1,[0 0], 'linewidth', LW_SS, 'color', C_SS(1,:).^oV);
-            contour(xx,yy,F2,[0 0], 'linewidth', LW_SS, 'color', C_SS(2,:).^oV);
+            C = contour(xx,yy,F1,[0 0], 'linewidth', LW_SS, 'color', C_UNs*oV + [1 1 1]*(1-oV));
+%             contour(xx,yy,F2,[0 0], 'linewidth', LW_SS, 'color', C_UNf*oV + [1 1 1]*(1-oV));
             Cu = C(:,floor(linspace(ceil(size(C,2)/nP),size(C,2)-1,nP)));
             % Generate displacements along curve
             S = [W v0] * P1 * [Cu; ones(1, size(Cu,2))];
@@ -116,19 +134,14 @@ for j = 1:z
         quiver(X0(1,:), X0(2,:), Us(1,:,j)*vS, Us(2,:,j)*vS, 0, 'linewidth', LW_SA/3, 'color', C_SN(j,:));
         if(oV==1)
             % Unspecified Node Initial Position
-            plot(Cu(1,pInds), Cu(2,pInds), 'o', 'markersize', MS_UN, 'linewidth', MS_UN, 'color', C_SS(1,:));
-            plot(Cu(1,pInds), Cu(2,pInds), 'ko', 'markersize', 2*MS_UN, 'linewidth', BW);
+            scatter(Cu(1,pInds), Cu(2,pInds), MS_UN^2, C_UNs,'filled','markeredgecolor','k', 'linewidth', BW);
             % Unspecified Node Final Position
-            plot(Cup(1,pInds), Cup(2,pInds), 'o', 'markersize', MS_UN, 'linewidth', MS_UN, 'color', [1 1 1]);
-            plot(Cup(1,pInds), Cup(2,pInds), 'o', 'markersize', MS_UN+MB_UN, 'linewidth', MS_UN-MB_UN, 'color', C_SS(2,:));
+            scatter(Cup(1,pInds), Cup(2,pInds), MS_UN^2, C_UNf,'filled','markeredgecolor','k', 'linewidth', BW);
             % Specified Node Initial Position
-            plot(X0(1,:), X0(2,:), 'o', 'linewidth', MS_SN, 'markersize', MS_SN, 'color', C_SN);
-            plot(X0(1,:), X0(2,:), 'ko', 'linewidth', BW, 'markersize', 2*MS_SN);
+            scatter(X0(1,:), X0(2,:), MS_SN^2, C_SNs,'filled','markeredgecolor','k', 'linewidth', BW);
             % Specified Node Final Position
-            plot(XF(1,:), XF(2,:), 'o', 'linewidth', MS_SN, 'markersize', MS_SN, 'color', [1 1 1]);
-            plot(XF(1,:), XF(2,:), 'o', 'linewidth', MS_SN-MB_SN, 'markersize', MS_SN+MB_SN, 'color', C_SN);
+            scatter(XF(1,:), XF(2,:), MS_SN^2, C_SNf,'filled','markeredgecolor','k', 'linewidth', BW);
         end
-        hold off;
         set(gca,'visible',0);
         set(gcf,'color','w');
     
@@ -255,7 +268,6 @@ for j = 1:z
             s.FaceColor = C_SN;
             s.EdgeColor = 'none';
         end
-        hold off;
         set(gca,'XTickLabel',[],'YTickLabel',[],'ZTickLabel',[],...
                 'XTick',[],'YTick',[],'ZTick',[],'box','on','boxstyle','back');
     end

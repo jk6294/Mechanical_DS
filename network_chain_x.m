@@ -58,9 +58,14 @@ Xsa = [cumsum(XsL1)-Xsh+Xsp(1,1);XsL2];
 
 %% Place Connections
 connEs = repmat(3:L,6,1);
-connEs = [1;1;2;2;2;2;connEs(:);repmat(L+1,4,1);repmat(L+2,2,1)];
-connEu = repmat((1:6)',1,L+2)+[2:2:2*L+4]-6;
-connEu = connEu(:); connEu = connEu(connEu>0 & connEu<=2*L)+L+2;
+if(L>1)
+    connEs = [1;1;2;2;2;2;connEs(:);repmat(L+1,4,1);repmat(L+2,2,1)];
+    connEu = repmat((1:6)',1,L+2)+[2:2:2*L+4]-6;
+    connEu = connEu(:); connEu = connEu(connEu>0 & connEu<=2*L)+L+2;
+else
+    connEs = [1;1;2;2;3;3];
+    connEu = [4;5;4;5;4;5];
+end
 conna = [connEs connEu];
 
 end

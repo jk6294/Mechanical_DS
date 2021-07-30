@@ -5,6 +5,7 @@ set(groot,'defaulttextinterpreter','latex');
 fig = figure(1); clf;
 flw = [19.8 7.8];
 set(gcf, 'Renderer', 'painters', 'Position', [0 15 flw], 'Units', 'centimeters'); 
+set(gcf, 'Renderer', 'painters', 'Position', [0 15 flw], 'Units', 'centimeters');
 
 
 %% a: Module: Full Motion
@@ -19,7 +20,7 @@ Xu1 = [-0.86 -0.86;...
        -1.45  1.47];
 conn1 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
 
-[XC,fC] = sim_motion(Xs1,Xu1,conn1,.02,430,[Xs1 Xu1],0);   % Simulate
+[XC,fC] = sim_motion10(Xs1,Xu1,conn1,.02,430,[Xs1 Xu1],0);   % Simulate
 d1 = sqrt(squeeze(sum((diff(XC(:,1:2,:),[],2)).^2)));
 d2 = sqrt(squeeze(sum((diff(XC(:,2:3,:),[],2)).^2)));
 plot(d1,d2,'k-','linewidth',1);
@@ -32,27 +33,27 @@ for i = 1:length(pIndL)
     hold on;
     pInd = pIndL(i);
     vSh = [d1(pInd);d2(pInd)] + vI(:,i);
-    plot(d1(pInd),d2(pInd),'ko','linewidth',3,'markersize',3);
-    visualize_network(XC(:,1:3,pInd)/8+vSh,XC(:,4:5,pInd)/8+vSh,conn1,netSC);
+    plot(d1(pInd),d2(pInd),'ko','linewidth',2,'markersize',2);
+    visualize_network(XC(:,1:3,pInd)/8+vSh,XC(:,4:5,pInd)/8+vSh,conn1,'scale',netSC,'scolor',[1 1 1]*.6);
 end
 hold on;
 pInd = pIndL(5);
 vSh = [d1(pInd);d2(pInd)] + vI(:,5);
-line_coordinates(XC(:,1:2,pInd)/8+vSh,.1,.03,1);
-line_coordinates(XC(:,2:3,pInd)/8+vSh,.1,.03,1);
+line_coordinates(XC(:,1:2,pInd)/8+vSh,'lSh',.1,'nW',.03);
+line_coordinates(XC(:,2:3,pInd)/8+vSh,'lSh',.1,'nW',.03);
 hold off;
 axis([pLim pLim]);
 set(gca,'visible',1,'XTick',[],'YTick',[],'fontsize',10,...
                     'XTickLabel',[],'YTickLabel',[]);
 
 % Labels
-text(vSh(1)-.4,vSh(2)+.15,'$\mathrm{d_1}$','fontsize',10);
-text(vSh(1)+.2,vSh(2)+.15,'$\mathrm{d_2}$','fontsize',10);
-text(vSh(1)+0,vSh(2)+1,'$\mathrm{d_2 = d_1}$','fontsize',10,'color',[200 200 200]/255);
-text(vSh(1)-.5,vSh(2)+.7,'$\mathrm{g(d_1,d_2)=0}$','fontsize',10);
+text(vSh(1)-.4,vSh(2)+.15,'$\mathrm{l_1}$','fontsize',10);
+text(vSh(1)+.2,vSh(2)+.15,'$\mathrm{l_2}$','fontsize',10);
+text(vSh(1)+0,vSh(2)+1,'$\mathrm{l_2 = l_1}$','fontsize',10,'color',[200 200 200]/255);
+text(vSh(1)-.5,vSh(2)+.7,'$\mathrm{g(l_1,l_2)=0}$','fontsize',10);
 text(-0.05,0.98,'\textbf{a}','units','normalized','fontsize',10);
-xlabel('$\mathrm{d_1}$','fontsize',10);
-ylabel('$\mathrm{d_2}$','fontsize',10);
+xlabel('$\mathrm{l_1}$','fontsize',10);
+ylabel('$\mathrm{l_2}$','fontsize',10);
 
 
 %% b: Module: Partial Motion
@@ -81,12 +82,12 @@ set(gca,'visible',1,'XTick',[],'YTick',[],'fontsize',10,...
                     'XTickLabel',[],'YTickLabel',[]);
                 
 % Labels
-text(2,3.8,'$\mathrm{d_2 = f_2(d_1)}$','fontsize',10,'color',[115 140 200]/255);
-text(3,2.3,'$\mathrm{d_2 = f_1(d_1)}$','fontsize',10,'color',[126 200 255]/255);
-text(1.3,2.8,'$\mathrm{d_2 = f_3(d_1)}$','fontsize',10,'color',[015 082 186]/255);
-text(1.3,2.5,'$\mathrm{d_2 = f_4(d_1)}$','fontsize',10,'color',[000 000 000]/255);
-xlabel('$\mathrm{d_1}$','fontsize',10);
-ylabel('$\mathrm{d_2}$','fontsize',10);
+text(2,3.8,'$\mathrm{l_2 = f_2(l_1)}$','fontsize',10,'color',[115 140 200]/255);
+text(3,2.3,'$\mathrm{l_2 = f_1(l_1)}$','fontsize',10,'color',[126 200 255]/255);
+text(1.3,2.8,'$\mathrm{l_2 = f_3(l_1)}$','fontsize',10,'color',[015 082 186]/255);
+text(1.3,2.5,'$\mathrm{l_2 = f_4(l_1)}$','fontsize',10,'color',[000 000 000]/255);
+xlabel('$\mathrm{l_1}$','fontsize',10);
+ylabel('$\mathrm{l_2}$','fontsize',10);
 text(-0.05,0.98,'\textbf{b}','units','normalized','fontsize',10);
 
 
@@ -100,3 +101,4 @@ fig.PaperUnits = 'centimeters';
 fig.PaperPosition = [-1.5 -.2 flw];
 fig.PaperSize = [16.5 7.2];
 saveas(fig, ['Figures/' fName], 'pdf');
+set(gcf, 'Renderer', 'opengl'); 

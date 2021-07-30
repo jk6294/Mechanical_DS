@@ -19,43 +19,39 @@ cR   = [255 100 100]/255;
 %% a: Cobweb
 subplot(1,2,1); cla;
 s = sqrt(3);
-pLim = [.6 2];
+pLim = [.3 1.9];
 pSh = 0;
 netSC = .7;
 
 % Modules
-Xs1 = [-s/2  0.0  s/2;...
-        -0.5  0.0 -0.5]*1.5;
-Xu1 = [ 0.15 -0.22;...
-       -0.50 -0.90]*1.5;
+load chaos_network.mat;
+Xs1 = Xsc5(:,1:3,1);
+Xu1 = Xuc5(:,1:2,1);
 Xs1p = [Xs1(1,:); -Xs1(2,:)];
 Xu1p = [Xu1(1,:); -Xu1(2,:)];
 conn1 = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
 
-% Combined
-Xs1c = [-s/2  0  s/2  s;...
-        -1/2  0 -1/2  0]*1.5;
-Xu1c = [Xu1 Xu1p+[s;-1]*1.5/2];
-conn1c = [1 5; 1 6; 2 5; 2 6; 2 7; 2 8; 3 5; 3 6; 3 7; 3 8; 4 7; 4 8];
-[Xs1aa,Xu1aa,conn1aa] = tesselate_network_old(Xs1c,Xu1c,conn1c,[1.5*s;0],[4;1]);
-
-% Map
-nV = 50;
-cRShT = linspace(.5,1,nV)';
-cRShT = [cRShT ones(nV,1)*.5 flipud(cRShT)];
+% Map and map limits
 d2 = maps(Xs1,Xu1);
-tV = linspace(1,1.005,nV)-.241;
-lyap_exp(d2,tV,[0 11],11,cRShT);
-% Find Map Range
+d2f = matlabFunction(d2);
 dkMax = double(fzero(matlabFunction(diff(d2)),1));
 dMax = double(subs(d2,dkMax));
 dMin = double(subs(d2,dMax));
-r = [dMin, dMax];
+r = [dMin + (dMax-dMin)*.001, dMax - (dMax-dMin)*.001];
+
+% Lyapunov
+nV = 50;
+cRShT = linspace(.5,1,nV)';
+cRShT = [cRShT ones(nV,1)*.5 flipud(cRShT)];
+tV = linspace(0,.01,nV)+dMin+.008;
+lyap_exp(d2,tV,[0 10],10,cRShT);
+
 % Plot
 hold on;
 plot([0 3], [0 3], '--', 'color', [200 200 200]/255);
+plot(linspace(dMin,dMax+.01,2000),d2f(linspace(dMin,dMax+.01,2000)),'k-','linewidth',1);
 plot(mean(tV),pLim(1),'ks','markersize',8,'linewidth',1);
-text(mean(tV)+.05,pLim(1)+.05,'$\mathrm{d_1}$','fontsize',10);
+text(mean(tV)+.05,pLim(1)+.05,'$\mathrm{l_1}$','fontsize',10);
 plot(r,pLim(2)-.1*[1 1],'k-','linewidth',1);
 plot(r(1)*[1 1],(pLim(2)-.1)+[-.03 .03],'k-','linewidth',1);
 plot(r(2)*[1 1],(pLim(2)-.1)+[-.03 .03],'k-','linewidth',1);
@@ -68,11 +64,11 @@ drawnow;
 
 % Labels
 text(-0.05,0.98,'\textbf{a}','units','normalized','fontsize',10);
-text(mean(pLim),pLim(2)-.05,'r','fontsize',10);
-text(1.46,.67,'$\mathrm{d_{k+1} = f(d_k)}$','fontsize',10);
-text(.9,.86,'$\mathrm{d_{k+1} = d_k}$','fontsize',10,'color',[200 200 200]/255);
-xlabel('$\mathrm{d_k}$','fontsize',10);
-ylabel('$\mathrm{d_{k+1}}$','fontsize',10);
+text(1,pLim(2)-.05,'r','fontsize',10);
+text(1.5,.45,'$\mathrm{l_{k+1} = f(l_k)}$','fontsize',10);
+text(1.52,1.6,'$\mathrm{l_{k+1} = l_k}$','fontsize',10,'color',[200 200 200]/255,'rotation',45);
+xlabel('$\mathrm{l_k}$','fontsize',10);
+ylabel('$\mathrm{l_{k+1}}$','fontsize',10);
 
 
 %% b: Lyapunov Exponents
@@ -81,12 +77,8 @@ subplot(1,2,2); cla;
 % Exponent Calculation
 nV = 1000;
 tV = linspace(r(1),r(2),nV);
-Xs1 = [-s/2  0.0  s/2;...
-        -0.5  0.0 -0.5]*1.5;
-Xu1 = [ 0.15 -0.22;...
-       -0.50 -0.90]*1.5;
 d2 = maps(Xs1,Xu1);
-l = lyap_exp(d2,tV,[5000,20000],1,[]);
+l = lyap_exp(d2,tV,[10000,50000],1,[]);
 plot(tV,l, 'ko','markersize',1,'linewidth',1);
 axis([r mean(l)+std(l)*[-8 8]]);
 set(gca,'visible',1,'XTick',[],'YTick',round(mean(l)+std(l)*[-4 0 4],3),'fontsize',10,...
@@ -105,3 +97,4 @@ fig.PaperUnits = 'centimeters';
 fig.PaperPosition = [-1.5 -.2 flw];
 fig.PaperSize = [16.5 7.2];
 saveas(fig, ['Figures/' fName], 'pdf');
+set(gcf, 'Renderer', 'opengl'); 

@@ -34,15 +34,15 @@ line(L*s2/2*[1 0]+cSh(1), [0 c]+cSh(2),...
  
 line(L*s2/2*[-1 0 1 0 -1]+cSh(1), L*s2/2*[0 1 0 -1 0]+cSh(2),...
      'linewidth',lw_o,'color','k');
-line_coordinates(L*s2/2*[0 0; -1 1]+cSh,L*.85,L/30,lw_c);
-line_coordinates(L*s2/2*[-1 1; 0 0]+cSh,L*.85,L/30,lw_c);
-line_coordinates([0 0; L*s2/2 c]+cSh,L*.1,L/30,lw_c);
-line_coordinates(L*s2/2*[0 1; -1 0]+cSh,-L*.1,L/30,lw_c);
+line_coordinates(L*s2/2*[0 0; -1 1]+cSh,'lSh',L*.85,'nw',L/30,'lw',lw_c);
+line_coordinates(L*s2/2*[-1 1; 0 0]+cSh,'lSh',L*.85,'nw',L/30,'lw',lw_c);
+line_coordinates([0 0; L*s2/2 c]+cSh,'lSh',L*.1,'nw',L/30,'lw',lw_c);
+line_coordinates(L*s2/2*[0 1; -1 0]+cSh,'lSh',-L*.1,'nw',L/30,'lw',lw_c);
 hold on;
 plot(cSh(1), c+cSh(2),'ko', 'linewidth',1,'markersize',5);
 hold off;
-text(0.0,2,'$\mathrm{d_1}$','fontsize',10);
-text(2.0,3.9,'$\mathrm{d_2}$','fontsize',10);
+text(0.05,2,'$\mathrm{l_1}$','fontsize',10);
+text(2.0,3.9,'$\mathrm{l_2}$','fontsize',10);
 text(2.3,3.3,'$\mathrm{\frac{L}{1+\sqrt{2}}}$','fontsize',10);
 text(3.0,1,'$\mathrm{L}$','fontsize',10);
 text(-0.05,0.98,'\textbf{a}','units','normalized','fontsize',10);
@@ -90,8 +90,8 @@ for i = 1:length(pIndL)
               XC(3,pIndsTr(j,:),pInd)*nSc+vSh(3),...
               [160 220 255]/255);
     end
-    visualize_network(XC(:,:,pInd)*nSc+vSh,[],conn2,.3,...
-                      [255 100 100]/255, [255 100 100]/255);
+    visualize_network(XC(:,:,pInd)*nSc+vSh,[],conn2,'scale',.3,...
+                      'scolor',[200 100 100]/255, 'ucolor',[255 100 100]/255);
 
 end
 hold on;
@@ -115,13 +115,13 @@ axis([pLim,pLim,pLim-mean(pLim)]);
 camlight(40, 30); lighting gouraud; material([.4 1 0]);
 
 text(-0.05,0.98,'\textbf{b}','units','normalized','fontsize',10);
-text(d1(size(XCa,3))-.10,d2(size(XCa,3))+.16,zSh,'$\mathrm{D_1^*}$','fontsize',10);
-text(d1(dInd)+.2,d2(dInd)-.14,zSh,'$\mathrm{D_2^*}$','fontsize',10);
+text(d1(size(XCa,3))-.10,d2(size(XCa,3))+.16,zSh,'$\mathrm{l^\bullet}$','fontsize',10);
+text(d1(dInd)+.2,d2(dInd)-.14,zSh,'$\mathrm{l^\circ}$','fontsize',10);
 
 set(gca,'visible',1,'XTick',[],'YTick',[],'fontsize',10,...
                     'XTickLabel',[],'YTickLabel',[]);
-xlabel('$\mathrm{d_1}$','fontsize',10);
-ylabel('$\mathrm{d_2}$','fontsize',10);
+xlabel('$\mathrm{l_1}$','fontsize',10);
+ylabel('$\mathrm{l_2}$','fontsize',10);
 
 
 %% Size and Save Figure

@@ -61,7 +61,7 @@ delX = zeros([2*N, n]); delX(:,1) = X0(:);
 
 % Print Total Progress
 fprintf([repmat('.',1,100) '\n\n']);
-nTh = .01;
+nTh = 0;
 for i = 2:n
     % Indicate Progress
     if(i/n >= nTh)

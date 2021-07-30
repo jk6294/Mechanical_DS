@@ -1,4 +1,5 @@
-function [] = visualize_conic(Xs, Xsdot, R, nC, nP, vS, vU, oV)
+function [] = visualize_conic(Xs, Xsdot, R, varargin)
+% Xs, Xsdot, R, nC, nP, vS, vU, oV
 % Function for visualizing solution spaces in 2D and 3D spatial coordinates
 % Solution space must be 1 or 2 dimensional
 %
@@ -12,23 +13,46 @@ function [] = visualize_conic(Xs, Xsdot, R, nC, nP, vS, vU, oV)
 % vU:    1 x 1 scalar: scales the unspecified arrows by this amount
 % oV:    1 x 1 scalar: Optional if plotting for overlay
 
-% Optional Arguments
-if(nargin==7)
-    oV = 1;
-end
+
+p = inputParser;
+addParameter(p,'numsamp',repmat(200,size(Xs,1),1));
+addParameter(p,'numpoints',0);
+addParameter(p,'lw',1);
+addParameter(p,'scalesp',0);
+addParameter(p,'scaleun',0);
+addParameter(p,'overlay',1);
+addParameter(p,'scale',1);
+addParameter(p,'scolori',repmat([230 225 225]/255,max(size(Xs,2),1),1));
+addParameter(p,'scolorf',repmat([225 225 230]/255,max(size(Xs,2),1),1));
+addParameter(p,'ucolori',[100 100 225]/255);
+addParameter(p,'ucolorf',[100 200 230]/255);
+parse(p,varargin{:});
+
+nC = p.Results.numsamp;
+nP = p.Results.numpoints;
+vS = p.Results.scalesp;
+vU = p.Results.scaleun;
+oV = p.Results.overlay;
+nS = p.Results.scale;
+LW_SS = p.Results.lw;
+C_SNs = p.Results.scolori;
+C_SNf = p.Results.scolorf;
+C_UNs = p.Results.ucolori;
+C_UNf = p.Results.ucolorf;
 
 % Visualization Parameters
-LW_SA = 1;                      % Line Width of Specified Arrow
-LW_UA = 1;                     % Line Width of Unspecified Arrows
-LW_SS = 1;                      % Line Width of Solution Space
-BW = 0.5;                       % Width of marker border
-MS_SN = 3;                      % Marker Size of Specified Node
-MS_UN = 1.5;                      % Marker Size of Unspecified Node
-C_SN = [255 100 100]/255;       % Color of Specified Node
+LW_SA = 2*nS;                   % Line Width of Specified Arrow
+LW_UA = .7*nS;                  % Line Width of Unspecified Arrows
+LW_SS = LW_SS*nS;               % Line Width of Solution Space
+BW = 1*nS;                      % Width of marker border
+MS_SN = 4*nS;                   % Marker Size of Specified Node
+MS_UN = 4*nS;                   % Marker Size of Unspecified Node
+C_SN = [230 225 225]/255;       % Color of Specified Node
 C_SA = [76 187 23;...           % Color of Specified Arrow
         50 255 50]/255;         
 C_SS = [100 100 255;...         % Color of Solution Space
         100 200 255]/255;       
+    
 z = size(Xsdot,3);              % Total number of motions
 
 % Draw solution spaces for each motion
@@ -66,8 +90,8 @@ for j = 1:z
                 2*Q(3,1)*xx + 2*Q(3,2)*yy;
             % Generate contour along conic solution at 0
             hold on;
-            C = contour(xx,yy,F,[0 0], 'linewidth', LW_SS, 'color', C_SS(j,:).^oV);
-            contour(xx,yy,F,[0 0], 'linewidth', LW_SS/4, 'color', [1 1 1]);
+            C = contour(xx,yy,F,[0 0], 'linewidth', LW_SS, 'color', C_UNs(j,:).^oV);
+%             contour(xx,yy,F,[0 0], 'linewidth', LW_SS/4, 'color', [1 1 1]);
             Cu = C(:,floor(linspace(ceil(size(C,2)/nP),size(C,2)-1,nP)));
             % Generate motions along curve
             Uu = zeros([2, nP, z]);

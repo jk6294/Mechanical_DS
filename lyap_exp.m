@@ -19,12 +19,22 @@ fpf = matlabFunction(fp);
 
 % Throwaway Iterations
 fprintf('Throwaway Iterations\n');
-fprintf([repmat('.',1,n(1)-1) '\n\n']);
+fprintf([repmat('.',1,100) '\n\n']);
+tic
+nV = [];
+nTh = 0;
 for i = 1:n(1)
     % Indicate Progress
-    fprintf('\b=\n');
+    if(i/n(1) >= nTh)
+        fprintf(repmat('\b',1,length(nV)));
+        fprintf('\b=\n');
+        nV = num2str(floor(toc*(n(1)-i)/i));
+        fprintf(nV);
+        nTh = nTh + .01;
+    end
     d0 = f(d0);
 end
+fprintf(repmat('\b',1,length(nV)));
 
 % Compute Trajectory
 k = length(d0);
@@ -33,25 +43,35 @@ L(:,1) = d0;
 dL = zeros(k,n(2));
 dL(:,1) = fpf(d0);
 fprintf('Actual Iterations\n');
-fprintf([repmat('.',1,n(2)-1) '\n\n']);
+fprintf([repmat('.',1,100) '\n\n']);
+nTh = 0;
+nV = [];
+tic
 for i = 2:n(2)
-    fprintf('\b=\n');
+    if(i/n(2) >= nTh)
+        fprintf(repmat('\b',1,length(nV)));
+        fprintf('\b=\n');
+        nV = num2str(floor(toc*(n(2)-i)/i));
+        fprintf(nV);
+        nTh = nTh + .01;
+    end
     L(:,i) = f(L(:,i-1));
     dL(:,i) = fpf(L(:,i));
 end
+fprintf(repmat('\b',1,length(nV)));
 
 % Compute Exponent
 lamb = sum(log(abs(dL)),2)/n(2);
 
 % Plot
 if(size(c,1) > 0)
-    dV = 0.742:.0005:1.872;
+    dV = linspace(min(d0),max(d0),1000);
     hold on;
     for i = 1:k
         D = [L(i,1:nP);L(i,1:nP)]; D = D(:); D = D(1:end-1);
-        line(D(1:end-1),[.5;D(3:end)],'color',c(i,:),'linewidth',.5);
+        line(D(1:end-1),[0;D(3:end)],'color',[c(i,:) 1],'linewidth',.3);
     end
-    plot(dV,f(dV),'k-','linewidth',1);
+%     plot(dV,f(dV),'k-','linewidth',.7);
     hold off;
 end
 
