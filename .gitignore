@@ -7,3 +7,7 @@
 # Matlab
 *.asv
 *.mat
+
+# Figure Directories
+Figures/
+animations/
