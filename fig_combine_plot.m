@@ -25,7 +25,7 @@ set(gcf,'renderer','opengl','Position',[fig.Position(1:2) fSize],'Units','centim
 set(gcf,'renderer','opengl','Position',[fig.Position(1:2) fSize],'Units','centimeters');
 
 
-%% odule combination
+%% unit combination
 pInd = 1;
 subplot('position',subpN(pInd,:)); cla; hold on;
 delete(findall(gca,'type','annotation'));
@@ -54,9 +54,14 @@ line_coordinates(XCa1(:,3:4)+sh1, 'lSh',-lSh, 'lw',1,'color',CPap(2,:));
 line_coordinates(XCa1(:,5:6)+sh1, 'lSh',lSh, 'lw',1,'color',CPap(3,:));
 line_coordinates([[0;0] sh1]+XCa1(:,3), 'lSh',0, 'lw',.5,'color',o*gr,'style','--');
 line_coordinates([[0;0] sh1]+XCa1(:,4), 'lSh',0, 'lw',.5,'color',o*gr,'style','--');
-visualize_network(XCa1(:,1:4),[],conn);
-visualize_network(XCa1(:,3:6)+sh1,[],conn);
-% arrow([.15 -.15]+.84, [1 1]*.81, sRat(pInd),'color',o*gr);
+visualize_network(XCa1(:,1:4),[],conn,'ms',ms);
+visualize_network(XCa1(:,3:6)+sh1,[],conn,'ms',ms);
+for i = 1:4
+    text(XCa1(1,i), XCa1(2,i)-.002, num2str(i), NVTexth{:},...
+         'fontsize', FS2, 'color', o*gr^4);
+    text(XCa1(1,i+2)+sh1(1), XCa1(2,i+2)+sh1(2)-.002, num2str(i), NVTexth{:},...
+         'fontsize', FS2, 'color', o*gr^4);
+end
 
 % Transition 1
 sCo11 = [0.02 -0.01 0.02; 0.72 0.66 0.6];
@@ -72,9 +77,14 @@ line_coordinates(XCa2(:,5:6)+sh2, 'lSh',lSh, 'lw',1,'color',CPap(3,:));
 line_coordinates(XCa2(:,7:8)+sh2, 'lSh',lSh, 'lw',1,'color',CPap(4,:));
 line_coordinates([[0;0] sh2]+XCa2(:,5), 'lSh',0, 'lw',.5,'color',o*gr,'style','--');
 line_coordinates([[0;0] sh2]+XCa2(:,6), 'lSh',0, 'lw',.5,'color',o*gr,'style','--');
-visualize_network(XCa2(:,1:6),[],conna(1:8,:));
-visualize_network(XCa2(:,5:8)+sh2,[],conn);
-% arrow([.15 -.15]+.84, [1 1]*.445, sRat(pInd),'color',o*gr);
+visualize_network(XCa2(:,1:6),[],conna(1:8,:),'ms',ms);
+visualize_network(XCa2(:,5:8)+sh2,[],conn,'ms',ms);
+for i = 5:6
+    text(XCa2(1,i), XCa2(2,i)-.002, num2str(i-2), NVTexth{:},...
+         'fontsize', FS2, 'color', o*gr^4);
+    text(XCa2(1,i)+sh2(1), XCa2(2,i)+sh2(2)-.002, num2str(i-4), NVTexth{:},...
+         'fontsize', FS2, 'color', o*gr^4);
+end
 
 % Transition 2
 sCo11 = [0.02 -0.01 0.02; [0.75 0.7 0.65]-.3];
@@ -94,8 +104,14 @@ line_coordinates(XCa3(:,17:18)+sh3, 'lSh',lSh, 'lw',1,'color',CPap(9,:));
 line_coordinates([[0;0] sh3]+XCa3(:,15), 'lSh',0, 'lw',.5,'color',o*gr,'style','--');
 line_coordinates([[0;0] sh3]+XCa3(:,16), 'lSh',0, 'lw',.5,'color',o*gr,'style','--');
 % arrow([.15 -.15]+.84, [1 1]*.05, sRat(pInd),'color',o*gr);
-visualize_network(XCa3(:,1:16),[],conna(1:28,:));
-visualize_network(XCa3(:,15:18)+sh3,[],conn);
+visualize_network(XCa3(:,1:16),[],conna(1:28,:),'ms',ms);
+visualize_network(XCa3(:,15:18)+sh3,[],conn,'ms',ms);
+for i = 15:16
+    text(XCa3(1,i), XCa3(2,i)-.002, num2str(i-12), NVTexth{:},...
+         'fontsize', FS2, 'color', o*gr^4);
+    text(XCa3(1,i)+sh3(1), XCa3(2,i)+sh3(2)-.002, num2str(i-14), NVTexth{:},...
+         'fontsize', FS2, 'color', o*gr^4);
+end
 
 
 % Text
@@ -104,14 +120,10 @@ tsh = .05;
 text(XCa1(1,1),XCa1(2,1)+.09,'unit 1',NVTextlv{:});
 text(XCa1(1,1),XCa1(2,1)-tsh-.02,'$l_1$',NVTextlv{:},'color',CPap(1,:));
 text(XCa1(1,4),XCa1(2,4)-tsh,'$f(l_1)$',NVTextlv{:},'color',CPap(2,:));
-text(XCa1(1,3)+.035,XCa1(2,3)+.015,'3',NVTexth{:},'color',o*gr,'fontsize',8);
-text(XCa1(1,4)+.015,XCa1(2,4)+.025,'4',NVTexth{:},'color',o*gr,'fontsize',8);
 % Label 1 unit 2
 text(XCa1(1,3)+sh1(1),XCa1(2,1)+.09,'unit 2',NVTextlv{:});
 text(XCa1(1,3)+sh1(1)-.03,XCa1(2,4)-tsh,'$l_2$',NVTextlv{:},'color',CPap(2,:));
 text(XCa1(1,6)+sh1(1)-.01,XCa1(2,6)+tsh+.02,'$f(l_2)$',NVTextlv{:},'color',CPap(3,:));
-text(XCa1(1,3)+sh1(1),XCa1(2,3)-0.035,'1',NVTexth{:},'color',o*gr,'fontsize',8);
-text(XCa1(1,4)+0.035+sh1(1),XCa1(2,4),'2',NVTexth{:},'color',o*gr,'fontsize',8);
 % Label 1 combine nodes
 text(.35,XCa1(2,4)-tsh,'set $f(l_1) = l_2$',NVTextL{:},'color',CPap(2,:));
 text(.02,.67,'join nodes marked by dashed lines',NVTextL{:},'color',o*gr);
@@ -119,14 +131,10 @@ text(.02,.67,'join nodes marked by dashed lines',NVTextL{:},'color',o*gr);
 % Label 2 unit 2
 text(XCa2(1,3),XCa2(2,1)+.09,'unit 2',NVTextlv{:});
 text(XCa2(1,6)+.01,XCa2(2,6)+tsh-.01,'$f(l_2)$',NVTextlv{:},'color',CPap(3,:));
-text(XCa2(1,5)+.015,XCa2(2,5)-.035,'3',NVTexth{:},'color',o*gr,'fontsize',8);
-text(XCa2(1,6)+.015,XCa2(2,6)-.035,'4',NVTexth{:},'color',o*gr,'fontsize',8);
 % Label 2 unit 3
 text(XCa2(1,5)+sh2(1),XCa2(2,1)+.09,'unit 3',NVTextlv{:});
 text(XCa2(1,5)+sh2(1)-.02,XCa2(2,6)+tsh-.01,'$l_3$',NVTextlv{:},'color',CPap(3,:));
 text(XCa2(1,8)+sh2(1)-.02,XCa2(2,8)-tsh-.02,'$f(l_3)$',NVTextlv{:},'color',CPap(4,:));
-text(XCa2(1,5)+sh2(1),XCa2(2,5)+0.035,'1',NVTexth{:},'color',o*gr,'fontsize',8);
-text(XCa2(1,6)+0.035+sh2(1),XCa2(2,6),'2',NVTexth{:},'color',o*gr,'fontsize',8);
 % Label 2 combine nodes
 text(.40,XCa2(2,6)+tsh-.01,'set $f(l_2) = l_3$',NVTextL{:},'color',CPap(3,:));
 text(0,.275,'$\vdots$',NVTextH{:},'color',o*gr);
@@ -134,12 +142,8 @@ text(.02,.275,'join nodes marked by dashed lines',NVTextL{:},'color',o*gr);
 
 % Label 3 unit k
 text(XCa3(1,14),XCa3(2,1)+.1,'unit $k$',NVTexthv{:});
-text(XCa3(1,15),XCa3(2,15)+.06,'3',NVTexth{:},'color',o*gr,'fontsize',8);
-text(XCa3(1,16)+.025,XCa3(2,16)+.015,'4',NVTexth{:},'color',o*gr,'fontsize',8);
 % Label 3 unit k+1
 text(XCa3(1,14)+sh3(1)-.05,XCa3(2,1)+.1,'unit $k+1$',NVTextlv{:});
-text(XCa3(1,15)+sh3(1),XCa3(2,15)-0.035,'1',NVTexth{:},'color',o*gr,'fontsize',8);
-text(XCa3(1,16)+0.035+sh3(1),XCa3(2,16),'2',NVTexth{:},'color',o*gr,'fontsize',8);
 % Label 2 combine nodes
 text(.45,.07,'set $f(l_k) = l_{k+1}$',NVTextL{:},'color',CPap(8,:));
 
@@ -150,7 +154,7 @@ drawnow;
 
 
 %% Size and Save Figure
-fName = 'fig_combinea';
+fName = 'fig_combine2';
 set(gcf, 'Renderer', 'painters'); 
 fig.PaperPositionMode = 'manual';
 fig.PaperUnits = 'centimeters';

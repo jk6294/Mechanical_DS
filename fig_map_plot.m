@@ -83,7 +83,11 @@ scatter(D(1,plInd([1 4])),D(2,plInd([1 4])),40,ones(2,3),'marker','s','linewidth
 
 % Draw large template network
 XP = XC(:,:,plInd(3))*sc*2 + [D(1,pI);D(2,pI)]+[.32;.51];
-visualize_network(XP,[],conn,'lalpha',.3,'scolor',o*gr^.3);
+visualize_network(XP,[],conn,'lalpha',.3,'scolor',o*gr^.3,'ms',ms);
+for i = 1:4
+    text(XP(1,i), XP(2,i)-.002, num2str(i), NVTexth{:},...
+         'fontsize', FS2, 'color', o*gr^4);
+end
 line_coordinates(XP(:,1:2), 'lSh',-.035, 'lw',.5,'style','-','nw',.01);
 line_coordinates(XP(:,3:4), 'lSh',0.035, 'lw',.5,'style','-','nw',.01);
 
@@ -100,10 +104,6 @@ text(0,.87,'$l_{k+1}$',NVTextL{:});
 text(XP(1,3),XP(2,3)+.15,'unit $k$',NVTextl{:},'color',o*gr);
 text(.41,.79,'$l_{k+1} = f(l_k)$',NVTextL{:});
 text(.145,0.71,'$l_k$',NVTextL{:});
-text(XP(1,1),XP(2,1)-.045,'1',NVTexth{:},'color',o*gr);
-text(XP(1,2),XP(2,2)-.045,'2',NVTexth{:},'color',o*gr);
-text(XP(1,3),XP(2,3)-.045,'3',NVTexth{:},'color',o*gr);
-text(XP(1,4),XP(2,4)-.045,'4',NVTexth{:},'color',o*gr);
 
 % Axes
 axis([1.24 2.2 1.24 2.2]);
@@ -112,7 +112,7 @@ drawnow;
 
 
 %% Size and Save Figure
-fName = 'fig_mapi';
+fName = 'fig_map2';
 set(gcf, 'Renderer', 'painters'); 
 fig.PaperPositionMode = 'manual';
 fig.PaperUnits = 'centimeters';

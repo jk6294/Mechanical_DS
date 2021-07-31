@@ -7,8 +7,10 @@ delete(findall(gcf,'type','annotation'));
 
 % Plot parameters
 FS = 10;                % Fontsize
+FS2 = 6.5;                % Fontsize for node labels
 gr = 0.8;               % Ratio for gray color
 al = 0.2;               % Value of alpha transparency
+ms = 6.5;                % Marker size for labeled nodes
 
 % Text parameters
 NVTitle  = {'Units','centimeters','fontsize',FS};

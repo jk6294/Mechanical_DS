@@ -71,20 +71,24 @@ sc = .2;                 % Scale drawing
 sh = [.32;.62];          % Shift drawing
 
 % Draw network
-visualize_network(Xf*sc+sh,[],conn);
+visualize_network(Xf*sc+sh,[],conn,'ms',ms);
 
 % Text
 textb = '\textbf{b}\hspace{4mm}combine blocks';
 text(labX,subp(pInd,4)+labY-.1,textb,NVTitle{:});
 % Coordinates
-text(Xf(1,1)*sc+sh(1)-.04,Xf(2,1)*sc+sh(2),'$(0,~1)$','fontsize',FS*3/4,...
+text(Xf(1,1)*sc+sh(1)-.06,Xf(2,1)*sc+sh(2),'$(0,~1)$','fontsize',FS2,...
      'horizontalalignment','right','color',o*gr^3);
-text(Xf(1,2)*sc+sh(1)-.04,Xf(2,2)*sc+sh(2),'$(0,-1)$','fontsize',FS*3/4,...
+text(Xf(1,2)*sc+sh(1)-.06,Xf(2,2)*sc+sh(2),'$(0,-1)$','fontsize',FS2,...
      'horizontalalignment','right','color',o*gr^3);
-text(Xf(1,3)*sc+sh(1)-.04,Xf(2,3)*sc+sh(2),'$(0,~0)$','fontsize',FS*3/4,...
+text(Xf(1,3)*sc+sh(1)-.06,Xf(2,3)*sc+sh(2),'$(0,~0)$','fontsize',FS2,...
      'horizontalalignment','right','color',o*gr^3);
-text(Xf(1,4)*sc+sh(1)+.04,Xf(2,4)*sc+sh(2),'$(0,~2)$','fontsize',FS*3/4,...
+text(Xf(1,4)*sc+sh(1)+.06,Xf(2,4)*sc+sh(2),'$(0,~2)$','fontsize',FS2,...
      'horizontalalignment','left','color',o*gr^3);
+% Node labels
+for i = 1:4
+    text(Xf(1,i)*sc+sh(1),Xf(2,i)*sc+sh(2)-.005,num2str(i),NVTexth{:},'fontsize',FS2);
+end
 % DOF equation
 text(-.05,.28,'$4$ nodes:',NVTextL{:});
 text(-.05,.16,'$4$ edges:',NVTextL{:});
@@ -198,7 +202,7 @@ drawnow;
 
 
 %% Size and Save Figure
-fName = 'fig_dofa';
+fName = 'fig_dof2';
 set(gcf, 'Renderer', 'painters'); 
 fig.PaperPositionMode = 'manual';
 fig.PaperUnits = 'centimeters';

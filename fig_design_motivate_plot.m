@@ -31,7 +31,7 @@ set(gcf,'renderer','opengl','Position',[fig.Position(1:2) fSize],'Units','centim
 fig = figure(6); clf;
 % Parameters
 sc = .3;
-lSh1 = .08;
+lSh1 = .1;
 nw = .015;
 lw = .5;
 
@@ -44,12 +44,13 @@ line_coordinates(Xs(:,1:2)*sc+sh,'lSh',lSh1,'nw',nw,'style','-','lw',lw);
 line_coordinates(Xs(:,2:3)*sc+sh,'lSh',lSh1,'nw',nw,'style','-','lw',lw);
 line_coordinates(Xs(:,[1 3])*sc+sh,'lSh',-lSh1,'nw',nw,'style','-','lw',lw);
 % Draw network
-visualize_network(Xs*sc+sh,[],[1 1]);
+visualize_network(Xs*sc+sh,[],[1 1],'ms',ms);
 % Text
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY,'unit $k$',NVTitleH{:});
-text(Xs(1,1)*sc+sh(1)-.09,Xs(2,1)*sc+sh(2)-.06,'$1$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xs(1,2)*sc+sh(1),Xs(2,2)*sc+sh(2)-.14,'$2$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xs(1,3)*sc+sh(1)+.09,Xs(2,3)*sc+sh(2)-.06,'$3$',NVTexth{:},'color',o*gr,'fontsize',8);
+% Node labels
+for i = 1:3
+    text(Xs(1,i)*sc+sh(1),Xs(2,i)*sc+sh(2)-.01,num2str(i),NVTexth{:},'fontsize',FS2);
+end
 text(Xs(1,1)*sc+sh(1),Xs(2,1)*sc+sh(2)+.3,'$l_k$',NVTextr{:});
 text(Xs(1,3)*sc+sh(1),Xs(2,3)*sc+sh(2)+.3,'$l_{k+1}$',NVTextl{:});
 text(Xs(1,2)*sc+sh(1),Xs(2,1)*sc+sh(2)-.15,'$c_k$',NVTexth{:});
@@ -75,15 +76,16 @@ subplot('position',subpN(pInd,:)); cla; hold on;
 line_coordinates(Xs(:,1:2)*sc+sh1,'lSh',lSh2,'lw',1,'color',C1a);
 line_coordinates(Xs(:,2:3)*sc+sh1,'lSh',lSh2,'lw',1,'color',C1a);
 % Draw network
-visualize_network(Xs*sc+sh1,[],[1 1]);
+visualize_network(Xs*sc+sh1,[],[1 1],'ms',ms);
 % Text
 text(labX,subp(pInd,4)+labY,'\textbf{a}',NVTitle{:});
+% Node labels
+for i = 1:3
+    text(Xs(1,i)*sc+sh1(1),Xs(2,i)*sc+sh1(2)-.01,num2str(i),NVTexth{:},'fontsize',FS2);
+end
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY-tsh,'\underline{~property 1~}',NVTitleH{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY-.5-tsh,'start and end at',NVTitleH{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY-.9-tsh,'fixed points',NVTitleH{:});
-text(Xs(1,1)*sc+sh1(1)-.09,Xs(2,1)*sc+sh1(2)-.06,'$1$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xs(1,2)*sc+sh1(1),Xs(2,2)*sc+sh1(2)-.14,'$2$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xs(1,3)*sc+sh1(1)+.09,Xs(2,3)*sc+sh1(2)-.06,'$3$',NVTexth{:},'color',o*gr,'fontsize',8);
 text(Xs(1,1)*sc+sh1(1),Xs(2,1)*sc+sh1(2)+.25,'$l^\bullet$',NVTexth{:},'color',C1a);
 text(Xs(1,3)*sc+sh1(1)+.04,Xs(2,3)*sc+sh1(2)+.25,'$l^\bullet$',NVTexth{:},'color',C1a);
 
@@ -92,11 +94,11 @@ text(Xs(1,3)*sc+sh1(1)+.04,Xs(2,3)*sc+sh1(2)+.25,'$l^\bullet$',NVTexth{:},'color
 line_coordinates(Xf(:,1:2)*sc+sh2,'lSh',lSh2,'lw',1,'color',C1c);
 line_coordinates(Xf(:,2:3)*sc+sh2,'lSh',lSh2,'lw',1,'color',C1c);
 % Draw network
-visualize_network(Xf*sc+sh2,[],[1 1]);
-% Text
-text(Xf(1,1)*sc+sh2(1)-.09,Xf(2,1)*sc+sh2(2)-.06,'$1$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xf(1,2)*sc+sh2(1),Xf(2,2)*sc+sh2(2)-.14,'$2$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xf(1,3)*sc+sh2(1)+.09,Xf(2,3)*sc+sh2(2)-.06,'$3$',NVTexth{:},'color',o*gr,'fontsize',8);
+visualize_network(Xf*sc+sh2,[],[1 1],'ms',ms);
+% Node labels
+for i = 1:3
+    text(Xf(1,i)*sc+sh2(1),Xf(2,i)*sc+sh2(2)-.01,num2str(i),NVTexth{:},'fontsize',FS2);
+end
 text(Xf(1,1)*sc+sh2(1)+.1,Xf(2,1)*sc+sh2(2)+.4,'$l^\circ$',NVTexth{:},'color',C1c);
 text(Xf(1,3)*sc+sh2(1)-.05,Xf(2,3)*sc+sh2(2)+.4,'$l^\circ$',NVTexth{:},'color',C1c);
 text(sh1(1),1.3,'start',NVTexth{:});
@@ -126,26 +128,27 @@ subplot('position',subpN(pInd,:)); cla; hold on;
 % Lengths
 line_coordinates(Xs(:,[1 3])*sc+sh1,'lSh',-lSh2,'lw',1,'color',CP2s);
 % Draw network
-visualize_network(Xs*sc+sh1,[],[1 1]);
+visualize_network(Xs*sc+sh1,[],[1 1],'ms',ms);
 % Text
 text(labX,subp(pInd,4)+labY,'\textbf{b}',NVTitle{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY-tsh,'\underline{~property 2~}',NVTitleH{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY-.5-tsh,'design unit shape',NVTitleH{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY-.9-tsh,'through $c$',NVTitleH{:});
-text(Xs(1,1)*sc+sh1(1)-.09,Xs(2,1)*sc+sh1(2)-.06,'$1$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xs(1,2)*sc+sh1(1),Xs(2,2)*sc+sh1(2)-.14,'$2$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xs(1,3)*sc+sh1(1)+.09,Xs(2,3)*sc+sh1(2)-.06,'$3$',NVTexth{:},'color',o*gr,'fontsize',8);
+% Node labels
+for i = 1:3
+    text(Xs(1,i)*sc+sh1(1),Xs(2,i)*sc+sh1(2)-.01,num2str(i),NVTexth{:},'fontsize',FS2);
+end
 text(Xs(1,2)*sc+sh1(1),Xs(2,3)*sc+sh1(2)-.13,'$c^\bullet$',NVTexth{:},'color',CP2s);
 
 % Draw end conformation
 % Lengths
 line_coordinates(Xf(:,[1 3])*sc+sh2,'lSh',-lSh2,'lw',1,'color',CP2e);
 % Draw network
-visualize_network(Xf*sc+sh2,[],[1 1]);
-% Text
-text(Xf(1,1)*sc+sh2(1)-.09,Xf(2,1)*sc+sh2(2)-.06,'$1$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xf(1,2)*sc+sh2(1),Xf(2,2)*sc+sh2(2)-.14,'$2$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xf(1,3)*sc+sh2(1)+.09,Xf(2,3)*sc+sh2(2)-.06,'$3$',NVTexth{:},'color',o*gr,'fontsize',8);
+visualize_network(Xf*sc+sh2,[],[1 1],'ms',ms);
+% Node labels
+for i = 1:3
+    text(Xf(1,i)*sc+sh2(1),Xf(2,i)*sc+sh2(2)-.01,num2str(i),NVTexth{:},'fontsize',FS2);
+end
 text(Xf(1,2)*sc+sh2(1),Xf(2,3)*sc+sh2(2)-.13,'$c^\circ$',NVTexth{:},'color',CP2e);
 
 % Distance colorbar
@@ -164,27 +167,24 @@ pInd = 4;
 subplot('position',subpN(pInd,:)); cla; hold on;
 
 % Draw start conformation
-visualize_network(Xs*sc+sh1,Xu*sc+sh1,conn,'ucolor',CP2e);
+visualize_network(Xs*sc+sh1,Xu*sc+sh1,conn,'ucolor',CP2e,'ms',ms);
 % Text
 text(labX,subp(pInd,4)+labY,'\textbf{c}',NVTitle{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY-tsh,'\underline{~property 3~}',NVTitleH{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY-.5-tsh,'move through one',NVTitleH{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY-.9-tsh,'conformational',NVTitleH{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY-1.3-tsh,'motion',NVTitleH{:});
-text(Xs(1,1)*sc+sh1(1)-.09,Xs(2,1)*sc+sh1(2)-.06,'$1$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xs(1,2)*sc+sh1(1)+.10,Xs(2,2)*sc+sh1(2),'$2$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xs(1,3)*sc+sh1(1)+.09,Xs(2,3)*sc+sh1(2)-.06,'$3$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(XC(1,4,1)*sc+sh1(1)-.09,XC(2,4,1)*sc+sh1(2),'$4$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(XC(1,5,1)*sc+sh1(1)-.09,XC(2,5,1)*sc+sh1(2),'$5$',NVTexth{:},'color',o*gr,'fontsize',8);
+% Node labels
+for i = 1:5
+    text(XC(1,i,1)*sc+sh1(1),XC(2,i,1)*sc+sh1(2)-.01,num2str(i),NVTexth{:},'fontsize',FS2);
+end
 
 % Draw end conformation
-visualize_network(XC(:,1:3,end)*sc+sh2,XC(:,4:5,end)*sc+sh2,conn,'ucolor',CP2e);
-% Text
-text(Xf(1,1)*sc+sh2(1)-.09,Xf(2,1)*sc+sh2(2)-.06,'$1$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xf(1,2)*sc+sh2(1)+.10,Xf(2,2)*sc+sh2(2),'$2$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(Xf(1,3)*sc+sh2(1)+.09,Xf(2,3)*sc+sh2(2)-.06,'$3$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(XC(1,4,end)*sc+sh2(1)-.09,XC(2,4,end)*sc+sh2(2),'$4$',NVTexth{:},'color',o*gr,'fontsize',8);
-text(XC(1,5,end)*sc+sh2(1)-.05,XC(2,5,end)*sc+sh2(2)+.09,'$5$',NVTexth{:},'color',o*gr,'fontsize',8);
+visualize_network(XC(:,1:3,end)*sc+sh2,XC(:,4:5,end)*sc+sh2,conn,'ucolor',CP2e,'ms',ms);
+% Node labels
+for i = 1:5
+    text(XC(1,i,end)*sc+sh2(1),XC(2,i,end)*sc+sh2(2)-.01,num2str(i),NVTexth{:},'fontsize',FS2);
+end
 
 % Axes
 axis([0 sRat(pInd) 0 1]);
@@ -193,7 +193,7 @@ drawnow;
 
 
 %% Size and Save Figure
-fName = 'fig_design_motivate1';
+fName = 'fig_design_motivate2';
 set(gcf, 'Renderer', 'painters'); 
 fig.PaperPositionMode = 'manual';
 fig.PaperUnits = 'centimeters';
