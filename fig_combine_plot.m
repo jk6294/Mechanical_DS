@@ -125,8 +125,9 @@ text(XCa1(1,3)+sh1(1),XCa1(2,1)+.09,'unit 2',NVTextlv{:});
 text(XCa1(1,3)+sh1(1)-.03,XCa1(2,4)-tsh,'$l_2$',NVTextlv{:},'color',CPap(2,:));
 text(XCa1(1,6)+sh1(1)-.01,XCa1(2,6)+tsh+.02,'$f(l_2)$',NVTextlv{:},'color',CPap(3,:));
 % Label 1 combine nodes
-text(.35,XCa1(2,4)-tsh,'set $f(l_1) = l_2$',NVTextL{:},'color',CPap(2,:));
-text(.02,.67,'join nodes marked by dashed lines',NVTextL{:},'color',o*gr);
+text(.43,XCa1(2,4)-tsh,'set $f(l_1) = l_2$',NVTextH{:},'color',CPap(2,:));
+text(.43,.91,'join nodes 4 and 2',NVTextH{:},'color',o*gr);
+text(.43,.755,'join nodes 3 and 1',NVTextH{:},'color',o*gr);
 
 % Label 2 unit 2
 text(XCa2(1,3),XCa2(2,1)+.09,'unit 2',NVTextlv{:});
@@ -136,16 +137,19 @@ text(XCa2(1,5)+sh2(1),XCa2(2,1)+.09,'unit 3',NVTextlv{:});
 text(XCa2(1,5)+sh2(1)-.02,XCa2(2,6)+tsh-.01,'$l_3$',NVTextlv{:},'color',CPap(3,:));
 text(XCa2(1,8)+sh2(1)-.02,XCa2(2,8)-tsh-.02,'$f(l_3)$',NVTextlv{:},'color',CPap(4,:));
 % Label 2 combine nodes
-text(.40,XCa2(2,6)+tsh-.01,'set $f(l_2) = l_3$',NVTextL{:},'color',CPap(3,:));
+text(.46,XCa2(2,6)+tsh-.01,'set $f(l_2) = l_3$',NVTextH{:},'color',CPap(3,:));
+text(.46,.546,'join nodes 3 and 1',NVTextH{:},'color',o*gr);
+text(.46,.402,'join nodes 4 and 2',NVTextH{:},'color',o*gr);
 text(0,.275,'$\vdots$',NVTextH{:},'color',o*gr);
-text(.02,.275,'join nodes marked by dashed lines',NVTextL{:},'color',o*gr);
 
 % Label 3 unit k
 text(XCa3(1,14),XCa3(2,1)+.1,'unit $k$',NVTexthv{:});
 % Label 3 unit k+1
 text(XCa3(1,14)+sh3(1)-.05,XCa3(2,1)+.1,'unit $k+1$',NVTextlv{:});
 % Label 2 combine nodes
-text(.45,.07,'set $f(l_k) = l_{k+1}$',NVTextL{:},'color',CPap(8,:));
+text(.56,.07,'set $f(l_k) = l_{k+1}$',NVTextH{:},'color',CPap(8,:));
+text(.56,.14,'join 4 and 2',NVTextH{:},'color',o*gr);
+text(.56,.005,'join 3 and 1',NVTextH{:},'color',o*gr);
 
 % Axes
 axis([0 sRat(pInd) 0 1]);

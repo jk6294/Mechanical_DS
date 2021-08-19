@@ -51,3 +51,6 @@ D = D([1,3],:);
 Da = squeeze(sqrt(sum(diff(XCa,1,2).^2)));              % CHain
 Da = Da(1:2:end,:);
 DLin = linspace(sqrt(2)-.01,2+.01,nT);
+
+% Save
+save('4bar.mat','XCa','conna');

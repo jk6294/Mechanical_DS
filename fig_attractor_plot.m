@@ -1,4 +1,4 @@
-% Figure 2: Networks form crystals at attractors
+% Attractors
 %% Prepare Space
 clear; clc;
 fig = figure(4); clf;
@@ -13,12 +13,12 @@ fSize = [17.8 7.5];
 fMarg = [.2 .0 .2 .0];
 % Subplot position in cm [x,y,w,h]
 subp = [[ 0.00  0.00  7.50  7.50];...
-        [ 7.50  5.00  2.50  2.50];...
-        [ 7.50  2.50  2.50  2.50];...
-        [ 7.50  0.00  2.50  2.50];...
-        [10.00  5.00  9.00  2.50];...
-        [10.00  2.50  9.00  2.50];...
-        [10.00  0.00  9.00  2.50]];
+        [ 7.30  5.00  2.50  2.50];...
+        [ 7.30  2.50  2.50  2.50];...
+        [ 7.30  0.00  2.50  2.50];...
+        [ 9.70  5.00  9.00  2.50];...
+        [ 9.70  2.50  9.00  2.50];...
+        [ 9.70  0.00  9.00  2.50]];
 % Adjust Position
 subp = subp + [fMarg(1) fMarg(3) -sum(fMarg(1:2)) -sum(fMarg(3:4))];
 sRat = subp(:,3) ./ subp(:,4);
@@ -123,7 +123,7 @@ cobweb(Da(:,1),aX0,'mdecay',0,'msize',2,'lcolor',CPa,'ncolor',o*0,...
        'arrowind',[1 4],'mtype','o','linestyle','--','linewidth',.5,...
        'headwidth',4,'headlength',3);
 % Title
-textb = '\textbf{b}\hspace{2.47cm}at a fixed point, every unit repeats because $l^\bullet = f(l^\bullet)$';
+textb = '\textbf{b}\hspace{2.22cm}fixed point: every unit repeats because $l^\bullet = f(l^\bullet)$';
 text(labX,subp(pInd,4)+labY,textb,NVTitle{:});
 % Axes
 axis([1.24 2.2 1.24 2.2] - [0 0 1 1]*.05);
@@ -149,7 +149,7 @@ cobweb(Da(:,mInd),aX0,'mdecay',0,'msize',2,'lcolor',CPb,'ncolor',o*0,...
        'arrowind',[1 4],'mtype','o','linestyle','--','linewidth',.5,...
        'headwidth',4,'headlength',3);
 % Text
-textc = '\textbf{c}\hspace{2.47cm}units move from unstable fixed points to stable ones';
+textc = '\textbf{c}\hspace{2.22cm}units move from unstable fixed points to stable ones';
 text(labX,subp(pInd,4)+labY,textc,NVTitle{:});
 % Axes
 axis([1.24 2.2 1.24 2.2] - [0 0 1 1]*.05);
@@ -175,7 +175,7 @@ cobweb(Da(:,end),aX0,'mdecay',0,'msize',2,'lcolor',CPc,'ncolor',o*0,...
        'arrowind',[1 4],'mtype','o','linestyle','--','linewidth',.5,...
        'headwidth',4,'headlength',3);
 % Title
-textd = '\textbf{d}\hspace{2.47cm}at a fixed point, every unit repeats because $l^\circ = f(l^\circ)$';
+textd = '\textbf{d}\hspace{2.22cm}fixed point: every unit repeats because $l^\circ = f(l^\circ)$';
 text(labX,subp(pInd,4)+labY,textd,NVTitle{:});
 % Axes
 axis([1.24 2.2 1.24 2.2] - [0 0 1 1]*.05);
@@ -185,8 +185,8 @@ drawnow;
 
 %% Actual networks
 % Parameters
-sc = .24;
-sh1 = [.05;.5];
+sc = .255;
+sh1 = [.0;.5];
 lSh = .025;
 
 % Scale and shift networks for drawing
@@ -246,7 +246,7 @@ drawnow;
 
 
 %% Size and Save Figure
-fName = 'fig_attractora';
+fName = 'fig_attractor2';
 set(gcf, 'Renderer', 'painters'); 
 fig.PaperPositionMode = 'manual';
 fig.PaperUnits = 'centimeters';

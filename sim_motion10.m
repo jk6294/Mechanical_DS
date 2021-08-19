@@ -1,4 +1,4 @@
-function [XC, fC] = sim_motion10(Xs, Xu, conn, delS, n, X0, pV)
+function [XC, fC, dE, dV] = sim_motion10(Xs, Xu, conn, delS, n, X0, pV)
 % Function for simulating the motion of frames in 2-dimensions
 % with one degree of freedom
 % 
@@ -67,8 +67,9 @@ r2 = [zeros([N,1]); ones([N,1])];           % y-translation
 fR3 = @(xP, yP) [sqrt(xP.^2 + yP.^2); sqrt(xP.^2 + yP.^2)] .*...
                 [-sin(atan2(yP, xP)); cos(atan2(yP, xP))];
             
-% Error threshhold 
-eTh = 1e-14;
+% Error threshhold
+dE = zeros(size(conn,1),n);
+dV = zeros(2*N,n);
 
 
 %% RK10 Approximation
@@ -100,8 +101,12 @@ for i = 2:n
         % Evaluate derivative
         R = [r1 r2 fR3(XK(1:N,k-1), XK(N+1:end,k-1))];
         XAC = num2cell(XK(:,k-1));
-        K = full(Jf(XAC{:}));
-        V = null(K);
+%         K = full(Jf(XAC{:}));
+%         V = null(K);
+        K = Jf(XAC{:});
+        [q,~] = qr(K');
+        V = q(:,end-5:end);
+        V = V(:,sum((K*V).^2)<1e-16);
         kp = double(V*null(R'*V));
         if(size(kp,2)>1)
             kp = kp*(kp'*delX(:,i-1));
@@ -126,6 +131,9 @@ for i = 2:n
     % Evaluate energy
     XAC = num2cell(xC(:,i));
     fC(i) = Ef(XAC{:});
+    [u,s,v] = svd(full(K),'econ');
+    dE(:,i) = diag(s);
+    dV(:,i) = v(:,end);
 end
 fprintf('\b');
 XC = zeros(2, N, n);

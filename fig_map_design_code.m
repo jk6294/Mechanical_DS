@@ -16,12 +16,14 @@ Ls = sqrt(3);
 Le = 1.7*Ls;
 
 % Module
-th = 20;
+th = 30;
 Xs = [-Ls/2 0 Ls/2;...
       -Ls*sq 0 -Ls*sq];
 Xf = Le*[[-sind(th);-cosd(th)] [0;0] [sind(th);-cosd(th)]];
 conn = [1 4; 2 4; 3 4; 1 5; 2 5; 3 5];
-Xu = construct_network(Xs,Xf,[-Ls/2 .566; -Ls/2 -2.203]',conn,0,1);
+Xu0 = [-Ls/2  sqrt(Le^2/3-Ls^2/4)-Ls/sqrt(3);...
+       -Ls/2 -sqrt(Le^2/3-Ls^2/4)-Ls/sqrt(3)]';
+Xu = construct_network(Xs,Xf,Xu0,conn,0,1);
 Xu = Xu(1:2,:);
 
 % Tesselate network
@@ -34,8 +36,8 @@ nRep = 8; ns = nRep+2;
 conna = sortrows(conna,2);
 
 % Simulate networks
-[XC,fC] = sim_motion10(Xs,Xu,conn,.019,100,[Xs Xu],0);
-[XCa,fCa] = sim_motion10([Xsa Xua],[],conna,.091327,100,[Xsa Xua],0);
+[XC,fC] = sim_motion10(Xs,Xu,conn,.018265,100,[Xs Xu],0);
+[XCa,fCa] = sim_motion10([Xsa Xua],[],conna,.116417,100,[Xsa Xua],0);
 
 % Translate networks to align with origin
 for i = 1:size(XC,3)
