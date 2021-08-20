@@ -76,8 +76,8 @@ XCc0(1,1) = -1;
                                       
 
 %% For loop iteration
-nV = 0.002;
-nIt = 100;
+nV = 0.00024;
+nIt = 200;
 XCcc = zeros([size(XCc0) 2000 nIt]);
 fCcc = zeros(2000,nIt);
 parfor i = 1:nIt
@@ -89,7 +89,7 @@ parfor i = 1:nIt
     XCcc(:,:,:,i) = XCccp;
     fCcc(:,i) = fCccp;
 end
-save('quad_disorder.mat', 'XCcc','fCcc');
+save('quad_disorder.mat', 'XCcc','fCcc', '-v7.3');
 
                                       
 %% Simulate quadrifolium
