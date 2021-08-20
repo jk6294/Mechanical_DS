@@ -78,31 +78,46 @@ XCc0(1,1) = -1;
 %% For loop iteration
 nV = 0.00024;
 nIt = 200;
-XCcc = zeros([size(XCc0) 2000 nIt]);
-fCcc = zeros(2000,nIt);
-parfor i = 1:nIt
-    disp(i);
-    % Add noise
-    Xscc = Xscca + (rand(size(Xscca))-.5)*nV*i;
-    Xucc = Xucca + (rand(size(Xucca))-.5)*nV*i;
-    [XCccp,fCccp,~,~] = sim_motion10(Xscc,Xucc,conncc,1,2000,XCc0,0);
-    XCcc(:,:,:,i) = XCccp;
-    fCcc(:,i) = fCccp;
-end
-save('quad_disorder.mat', 'XCcc','fCcc', '-v7.3');
 
-                                      
-%% Simulate quadrifolium
-% find cutoff
-DList1 = sqrt(squeeze(sum(diff(XCcc(:,(Ns-2:Ns-1),:),1,2).^2)));
-DList2 = sqrt(squeeze(sum(diff(XCcc(:,(Ns-1:Ns),:),1,2).^2)));
-disp(['mean simulation error: ' num2str(mean(fCcc))]);
+load quad_disorder2.mat
+% XCcc = zeros([size(XCc0) 2000 nIt]);
+% fCcc = zeros(2000,nIt);
+% parfor i = 1:nIt
+%     disp(i);
+%     % Add noise
+%     Xscc = Xscca + (rand(size(Xscca))-.5)*nV*i;
+%     Xucc = Xucca + (rand(size(Xucca))-.5)*nV*i;
+%     [XCccp,fCccp,~,~] = sim_motion10(Xscc,Xucc,conncc,1,2000,XCc0,0);
+%     XCcc(:,:,:,i) = XCccp;
+%     fCcc(:,i) = fCccp;
+% end
+% save('quad_disorder.mat', 'XCcc','fCcc');
 
-% Correct rotation
-XCcc = XCcc - XCcc(:,Ns,:);
-XCcc(1,:,:) = -XCcc(1,:,:);
-for i = 1:size(XCcc,3)
-    Rz = rotz(atan2d(diff(XCcc(2,[-2 0]+Ns,i)),diff(XCcc(1,[-2 0]+Ns,i))));
-    XCcc(:,:,i) = Rz(1:2,1:2)'*XCcc(:,:,i);
+
+%% Distribution of bond lengths
+% Center trace
+xPc = xP - mean(xP,2);
+
+% Iterate
+nIter = size(XCcc,4);
+nStep = size(XCcc,3);
+BLena = sqrt(sum((Xscca(:,conncc(:,1)) - Xucca(:,conncc(:,2)-Ns)).^2));
+DMat = zeros([nIter, nStep]);
+BLenM = zeros([nIter,size(conncc,1)]);
+
+for j = 1:nIter
+    xCcc = XCcc(:,:,:,j);
+    BLenM(j,:) = sqrt(sum((xCcc(:,conncc(:,1),1) - xCcc(:,conncc(:,2),1)).^2));
+    for i = 1:nStep
+        xprox = xCcc(:,1:Ns,i) - mean(xCcc(:,1:Ns,i),2);
+        [u,s,v] = svd(xPc * xprox');
+        Rp = u*v';
+        thp = atan2d(Rp(2,1),Rp(2,2));
+        Rz = rotz(thp); Rz = Rz(1:2,1:2);
+        XDiff = Rz * xprox - xPc;
+        DMat(j,i) = mean(sqrt(sum(XDiff.^2)));
+    end
 end
-XCcc(2,:,:) = -XCcc(2,:,:);
+
+BLenDel = mean(abs((BLenM - BLena) ./ BLena),2);
+DMatMin = min(DMat,[],2);
