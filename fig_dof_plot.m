@@ -1,5 +1,5 @@
-% Figure 1: Motivation and Conformational Motions
 %% Prepare Space
+% Conformational Motions and Degrees of Freedom
 clear; clc;
 fig = figure(1); clf;
 params_fig;

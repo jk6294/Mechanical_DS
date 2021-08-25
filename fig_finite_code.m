@@ -75,7 +75,9 @@ Ns = 114;               % Number of non-added nodes in quad example
 
 XCc0 = zeros(2,size([Xscc Xucc],2));
 XCc0(1,1) = -1;
-[XCcc,fCcc] = sim_motion10b(Xscc,Xucc,conncc,1.5,1157,XCc0,0);
+load quadrifolium.mat
+% Uncomment to run simulation
+% [XCcc,fCcc] = sim_motion10(Xscc,Xucc,conncc,1.5,1157,XCc0,0);
 disp(['mean simulation error: ' num2str(mean(fCcc))]);
 
 % Correct rotation
@@ -87,4 +89,4 @@ for i = 1:size(XCcc,3)
 end
 
 % Uncomment to save
-save('quadrifolium.mat','Xscc','Xucc','conncc','XCcc','fCcc','CSSc');
+% save('quadrifolium.mat','Xscc','Xucc','conncc','XCcc','fCcc','CSSc');

@@ -1,5 +1,5 @@
-% Figure 1: Motivation and Conformational Motions
 %% Prepare Space
+% Design large network
 clear; clc;
 fig = figure(9); clf;
 params_fig;
@@ -62,7 +62,7 @@ visualize_network(xP(:,plRange)*sc+sh,[],[1 1]);
 
 % Text
 text(labX,subp(pInd,4)+labY,'\textbf{a}',NVTitle{:});
-text(subp(pInd,3)/2,subp(pInd,4)+labY,'tesselate curve',NVTitleH{:});
+text(subp(pInd,3)/2,subp(pInd,4)+labY,'tesselate curve with isosceles triangles',NVTitleH{:});
 
 % Axis
 axis([0 sRat(pInd) 0 1]);
@@ -144,6 +144,9 @@ plot_spline(sC3,'head',1,'headpos',1,'ratio',sRat(pInd),...
 plot_spline(sC4,'head',1,'headpos',1,'ratio',sRat(pInd),...
             'linewidth',.5,'headwidth',5,'headlength',5,'color',o*gr);
 
+% Text
+text(labX,subp(pInd,4)+labY,'\textbf{b}',NVTitle{:});
+
 % Axis
 axis([0 sRat(pInd) 0 1]);
 set(gca,'visible',0);
@@ -183,9 +186,8 @@ visualize_network(Rz*XCcc(:,1:size(Xscc,2),end)*sc+sh,...
                   conncc,'msize',2,'ucolor',CSSc);
 
 % Text
-% textc = '...to design folding sequences?';
-% text(labX,subp(pInd,4)+labY-.1,'\textbf{c}',NVTitle{:});
-% text(fSize(1)-fMarg(1),subp(pInd,4)+labY-.1,textc,NVTitleR{:});
+text(labX,subp(pInd,4)+labY+1.5,'\textbf{c}',NVTitle{:});
+text(subp(pInd,3)/2,subp(pInd,4)+labY+1.5,'quadrifolium folding sequence',NVTitleH{:});
 
 % Axes
 axis([0 sRat(pInd) 0 1]);

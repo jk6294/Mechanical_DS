@@ -1,5 +1,5 @@
-% Figure 2: Networks form crystals at attractors
 %% Prepare Space
+% Unit design process
 clear; clc;
 fig = figure(7); clf;
 params_fig;
@@ -37,8 +37,6 @@ sc = .23;
 sh = [.4;.65];
 lSh1 = .015;
 lSh2 = .03;
-nw = .015;
-lw = .5;
 CP20 = interp1(DLin2,CP2,sqrt(sum(diff(Xs(:,[1,3]),1,2).^2)));
 CP2a = interp1(DLin2,CP2,sqrt(sum(diff(Xf(:,[1,3]),1,2).^2)));
 
@@ -77,6 +75,10 @@ text(Xf(1,2)*sc+sh(1)+.12,Xf(2,2)*sc+sh(2)+.09,'$(x_2^\circ,y_2^\circ)$',NVTexth
      'fontsize', FS2, 'color', o*gr^2);
 text(Xf(1,3)*sc+sh(1)-.00,Xf(2,3)*sc+sh(2)-.09,'$(x_3^\circ,y_3^\circ)$',NVTexth{:},...
      'fontsize', FS2, 'color', o*gr^2);
+text(.35,.45,'$l^\bullet$',NVTexth{:},'color',C1a);
+text(.46,.45,'$l^\bullet$',NVTexth{:},'color',C1a);
+text(.2,.45,'$l^\circ$',NVTexth{:},'color',C1c);
+text(.62,.45,'$l^\circ$',NVTexth{:},'color',C1c);
 % Axes
 axis([0 sRat(pInd) 0 1]);
 set(gca,'visible',0,'xtick',[],'ytick',[]);
@@ -85,9 +87,6 @@ drawnow;
 
 pInd = 2;
 subplot('position',subpN(pInd,:)); cla; hold on;
-% Lengths
-% line_coordinates(Xs(:,1:2)*sc+sh,'lSh',lSh1,'color',C1a);
-% line_coordinates(Xs(:,2:3)*sc+sh,'lSh',lSh1,'color',C1a);
 % Draw network
 R = [-1 1; -2 1.3]*1.7;     % Solution space ranges
 visualize_conic_finite(Xs*sc+sh,Xf*sc+sh,R*sc+sh,'ucolori',CP2a,...
@@ -115,7 +114,7 @@ end
 % Text
 text(labX,subp(pInd,4)+labY,'\textbf{b}',NVTitle{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY,'add extra nodes',NVTitleH{:});
-text(subp(pInd,3)/2-fMarg(1),subp(pInd,2)+labY,'fix rigid rod lengths',...
+text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY-3.2,'fix rigid rod lengths',...
      NVTitleH{:},'color',o*gr);
 % Axes
 axis([0 sRat(pInd) 0 1]);
@@ -160,8 +159,6 @@ sc = .23;
 sh = [.4;.65];
 lSh1 = .015;
 lSh2 = .03;
-nw = .015;
-lw = .5;
 CP2b = interp1(DLin2,CP2,sqrt(sum(diff(Xf2(:,[1,3]),1,2).^2)));
 
 pInd = 4;
@@ -177,7 +174,7 @@ line_coordinates(Xf2(:,[1 3])*sc+sh,'lSh',-lSh2,'color',C2b);
 visualize_network(Xf2*sc+sh,[],[1 1],'ms',ms,'scolor',o);
 visualize_network(Xs2*sc+sh,[],[1 1],'ms',ms,'scolor',o*gr^4);
 % Text
-text(labX,subp(pInd,4)+labY,'\textbf{a}',NVTitle{:});
+text(labX,subp(pInd,4)+labY,'\textbf{d}',NVTitle{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY,'unit $k$',NVTitleH{:});
 % Node nabels
 for i = 1:3
@@ -186,6 +183,10 @@ for i = 1:3
     text(Xs2(1,i)*sc+sh(1),Xs2(2,i)*sc+sh(2)-.005, num2str(i),NVTexth{:},...
          'fontsize', FS2, 'color', o);
 end
+text(.2,.45,'$l^\bullet$',NVTexth{:},'color',C1a);
+text(.63,.45,'$l^\bullet$',NVTexth{:},'color',C1a);
+text(.2,.15,'$l^\circ$',NVTexth{:},'color',C1c);
+text(.63,.15,'$l^\circ$',NVTexth{:},'color',C1c);
 % Axes
 axis([0 sRat(pInd) 0 1]);
 set(gca,'visible',0,'xtick',[],'ytick',[]);
@@ -222,7 +223,7 @@ for i = 1:size(conn,1)
 end
 
 % Text
-text(labX,subp(pInd,4)+labY,'\textbf{b}',NVTitle{:});
+text(labX,subp(pInd,4)+labY,'\textbf{e}',NVTitle{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY,'add extra nodes',NVTitleH{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,2)+labY,'fix rigid rod lengths',...
      NVTitleH{:},'color',o*gr);
@@ -255,7 +256,7 @@ for i = 1:size(conn,1)
          mean(XC2(2,conn(i,:),end))*sc+sh(2)+shLy(i),...
          sprintf('%0.1f',L2(i)),NVTextr{:},'fontsize',8,'color',o*gr); 
 end
-text(labX,subp(pInd,4)+labY,'\textbf{c}',NVTitle{:});
+text(labX,subp(pInd,4)+labY,'\textbf{f}',NVTitle{:});
 text(subp(pInd,3)/2-fMarg(1),subp(pInd,4)+labY,'end position',NVTitleH{:});
 % Axes
 axis([0 sRat(pInd) 0 1]);

@@ -1,7 +1,15 @@
 function [cV,lc,LC,dlc] = period_double(Xs,Xui,Xuf,nS,x0,nW)
-% Function to compute a period doubling map route to chaos.
-%
-%
+% Function to compute a period doubling map route to chaos. Performs a
+% linear interpolation between the final node positions Xui and Xuf
+% sampled at nonlinear intervals to have higher precision at later points.
+% 
+% Inputs:
+% Xs: Specified node positions              2 x 3
+% Xui: Initial added node positions         2 x 2
+% Xuf: Final added node positions           2 x 2
+% nS: Number of points to sample            1 x 1
+% x0: 
+% 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Parameterize added node positions with single variable
 syms('c','d1','real');

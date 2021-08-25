@@ -1,6 +1,6 @@
 %% Node positions
 sq = sqrt(3)/2;
-L}s = sqrt(3);
+Ls = sqrt(3);
 Le = 1.7*Ls;
 
 % Unit 1

@@ -280,6 +280,8 @@ load period_double_params.mat;
 % Uncomment to get period doubling bifurcation values in real time
 % [cV,lc,LC,dlc] = period_double(Xs,Xupd(.01),Xupd(nValpd),nS,1.2,nW);
 
+% Normalize 
+
 % Find boundaries
 nStr = 1; nEnd = 0;
 cVp = cV(nStr:(end-nEnd));
@@ -301,8 +303,8 @@ XCc1 = [Xsc1, Xuc1];
 [XCc3,fC3] = sim_motion10(Xsc3,Xuc3,connc3,.005,400,[Xsc3,Xuc3],0);
 [XCc4,fC4] = sim_motion10(Xsc4,Xuc4,connc4,.005,1000,[Xsc4,Xuc4],0);
 % Uncomment to run simulation in real-time
-% [XCc5,fC5] = sim_motion10(Xsc5,Xuc5,connc5,.01,12500,[Xsc5,Xuc5],0);
 load chaos_network.mat;
+% [XCc5,fC5] = sim_motion10(Xsc5,Xuc5,connc5,.01,12500,[Xsc5,Xuc5],0);
 disp(['mean simulation error: ' [num2str(mean(fC2)) '  ',...
        num2str(mean(fC3)) ' ' num2str(mean(fC4)) ' ' num2str(mean(fC5))]]);
 % Distances
@@ -326,13 +328,13 @@ subplot('position',subpN(pInd,:)); cla;
 
 cVP = -(linspace(.26,.475,length(cVp))).^(1);
 DLin = linspace(.4,1.5,size(CP1,1));
+% Equation for the slope. Maps sample index cV to slope. 
 slC = @(xP) 1./(8.*xP.^2 - 1);
 
-lcDI = [0 find(diff(lcp)>0)];
+lcDI = [1 find(diff(lcp)>0)];
 % Compute Feigenbaum constant
-fc = (slC(cV(lcDI(3:end-1))*nValpd)-slC(cV(lcDI(2:end-2))*nValpd)) ./...
-     (slC(cV(lcDI(4:end))*nValpd)-slC(cV(lcDI(3:end-1))*nValpd));
-
+fc = (slC(cV(lcDI(2:end-1))*nValpd)-slC(cV(lcDI(1:end-2))*nValpd)) ./...
+     (slC(cV(lcDI(3:end))*nValpd)-slC(cV(lcDI(2:end-1))*nValpd));
 
 hold on;
 nF = [1 1.85 1.5 1.57*ones(1,length(lcDI))];
@@ -504,29 +506,27 @@ line(axV([1 1 2]),axV([4 3 3]),'linewidth',.5,'color','k');
 % e: Feigenbaum constant
 fcInf = 4.669201609;
 axV2 = [0 .98 0 .7] + [3.24 3.24 0 0];
-scf = .22;
-shf = [3.16;-.95];
-plx = (1:length(fc))*.19+shf(1);
+scf = .1;
+shf = [3.16;-.38];
+plx = (1:length(fc))*.17+shf(1);
 line(axV2(1:2)',[1;1]*fcInf*scf+shf(2),'color',o*gr,...
      'linewidth',.5,'linestyle','--');
 text(.79,.15,'$\delta_{\infty}$',NVTextH{:},'color',o*gr);
 scatter(plx,fc*scf+shf(2),20,'k','filled','clipping',0);
 % Ticks
 line([1;1].*plx, [0;.03].*ones(1,length(plx)) + axV2(3),'color','k','linewidth',.5);
-line([0;.03].*[1 1 1]+axV2(1),[1;1].*[5 6 7]*scf+shf(2),'color','k');
+line([0;.03].*[1 1 1]+axV2(1),[1;1].*[5 7 9]*scf+shf(2),'color','k');
 line(axV2([1 1 2]),axV2([4 3 3]),'linewidth',.5,'color','k');
 % Text
 text(axV2(1)/sRat(pInd)-.015,5*scf+shf(2),'$5$',NVTextH{:});
-text(axV2(1)/sRat(pInd)-.015,6*scf+shf(2),'$6$',NVTextH{:});
 text(axV2(1)/sRat(pInd)-.015,7*scf+shf(2),'$7$',NVTextH{:});
+text(axV2(1)/sRat(pInd)-.015,9*scf+shf(2),'$9$',NVTextH{:});
 text(axV2(1)/sRat(pInd)-.01,axV2(4)+.06,...
      '$\delta_n = \frac{s_{n-1}-s_{n-2}}{s_n - s_{n-1}}$',NVTextR{:});
 text(axV2(2)/sRat(pInd)+.005,0,'$n$',NVTextR{:});
-text(plx(1)/sRat(pInd),-.08,'$2$',NVTextH{:});
-text(plx(2)/sRat(pInd),-.08,'$3$',NVTextH{:});
-text(plx(3)/sRat(pInd),-.08,'$4$',NVTextH{:});
-text(plx(4)/sRat(pInd),-.08,'$5$',NVTextH{:});
-text(plx(5)/sRat(pInd),-.08,'$6$',NVTextH{:});
+for i = 1:length(plx)
+    text(plx(i)/sRat(pInd),-.08,['$' num2str(i+1) '$'],NVTextH{:});
+end
 
 
 % Text
@@ -542,7 +542,7 @@ set(gca,'visible',0);
 
 
 %% Save
-fName = 'fig_chaos1';
+fName = 'fig_chaos2';
 set(gcf, 'Renderer', 'painters');
 fig.PaperPositionMode = 'manual';
 fig.PaperUnits = 'centimeters';

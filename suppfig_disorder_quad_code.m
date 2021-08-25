@@ -76,7 +76,7 @@ XCc0(1,1) = -1;
                                       
 
 %% For loop iteration
-nV = 0.00024;
+nV = 0.00022;
 nIt = 200;
 
 load quad_disorder2.mat

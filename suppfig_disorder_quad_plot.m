@@ -51,7 +51,7 @@ set(gca,'visible',0,'xtick',[],'ytick',[]);
 drawnow;
 
 
-%% Compare node placements
+%% Draw worst case network
 pInd = 2;
 subplot('position',subpN(pInd,:)); cla; hold on;
 
@@ -65,11 +65,19 @@ Xcce = Xcce - mean(Xcce(:,1:Ns),2);
 Rp = u*v';
 Xcce = Rp*Xcce;
 
+% Get min and max values
+yMin = min(Xcce(2,:));
+yMax = max(Xcce(2,:));
+xMin = min(Xcce(1,:));
+
 plot((xPc(1,1:end-1)+xPc(1,2:end))/2*sc+sh(1),...
      (xPc(2,1:end-1)+xPc(2,2:end))/2*sc+sh(2),'-','linewidth',2);
 % visualize_network(Xscca*sc+sh,Xucca*sc+sh,[1 1]);
 visualize_network(Xcce(:,1:Ns)*sc+sh,Xcce(:,Ns+1:end)*sc+sh,conncc,'ucolor',CSSc);
 % visualize_network(xPc*sc + sh,[],[1 1],'scolor',[0 0 1]);
+line_coordinates([[1 1]*-15; -15 15]*sc+sh,...
+                 'style','-','lw',.5,'nw',.01)
+text(-15*sc+sh(1),sh(2),'30',NVTextr{:});
 
 % Title
 textb = '\textbf{b}\hspace{0.4cm}drawing of the network with largest error';

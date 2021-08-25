@@ -1,5 +1,5 @@
-% Figure 2: Networks form crystals at attractors
 %% Prepare Space
+% Combining designed units
 clear; clc;
 fig = figure(8); clf;
 params_fig;

@@ -1,4 +1,5 @@
 %% Prepare Space
+% Properties of the unit design process
 clear; clc;
 fig = figure(6); clf;
 params_fig;

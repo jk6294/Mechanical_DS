@@ -1,11 +1,11 @@
-% Figure 4: Stability phase diagram
 %% Prepare Space
+% Stability phase diagram
 clear; clc;
 set(groot,'defaulttextinterpreter','latex');
 
 
 %% Figure Dimensions
-fig = figure(4); clf;
+fig = figure(10); clf;
 delete(findall(gcf,'type','annotation'));
 
 % Figure Size in cm  [w,h]

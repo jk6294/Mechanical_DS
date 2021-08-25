@@ -1,5 +1,5 @@
-% Figure 2: Networks form crystals at attractors
 %% Prepare Space
+% Map between lengths
 clear; clc;
 fig = figure(3); clf;
 params_fig;

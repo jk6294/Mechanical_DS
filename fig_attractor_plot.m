@@ -1,7 +1,7 @@
-% Attractors
 %% Prepare Space
+% Attractor states of 4-bar linkage
 clear; clc;
-fig = figure(4); clf;
+fig = figure(5); clf;
 params_fig;
 fig_attractor_code;
 

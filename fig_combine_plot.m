@@ -1,5 +1,5 @@
-% Figure 2: Networks form crystals at attractors
 %% Prepare Space
+% Combine 4-bar Linkage
 clear; clc;
 fig = figure(4); clf;
 params_fig;

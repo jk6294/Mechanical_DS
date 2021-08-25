@@ -1,5 +1,5 @@
-% Figure 1: Motivation and Conformational Motions
 %% Prepare Space
+% Motivation
 clear; clc;
 fig = figure(2); clf;
 params_fig;
@@ -201,7 +201,7 @@ drawnow;
 
 
 %% Size and Save Figure
-fName = 'fig_motivationa';
+fName = 'fig_motivation2';
 set(gcf, 'Renderer', 'painters'); 
 fig.PaperPositionMode = 'manual';
 fig.PaperUnits = 'centimeters';
